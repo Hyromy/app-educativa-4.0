@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
+        android:id="@+id/nav_prueba"
+        android:name="com.example.app.ui.prueba_fragmento.PruebaFragmento"
+        android:label="Prueba"
+        tools:layout="@layout/prueba_fragmento" />
+
+    <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.app.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
