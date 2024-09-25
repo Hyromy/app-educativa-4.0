@@ -1,9 +1,13 @@
 package com.example.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -18,9 +22,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    private DialogInterface.OnClickListener logoutListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        /*
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Esto esta en MainActivity.java", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .setAnchorView(R.id.fab).show();
-            }
-        });
-         */
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -53,10 +48,33 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        findViewById(R.id.btn_end_sesion).setOnClickListener(new View.OnClickListener() {
+        // Logout listener
+        logoutListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface di, int i) {
+                startActivity(new Intent(getApplicationContext(), Welcome.class));
+                finish();
+            }
+        };
+
+        // Logout btn
+        findViewById(R.id.btn_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Welcome.class));
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Cerrar sesión");
+                alert.setMessage("¿Estás seguro de que deseas cerrar sesión?");
+                alert.setPositiveButton(android.R.string.yes, logoutListener);
+                alert.setNegativeButton(android.R.string.no, null);
+                alert.show();
+            }
+        });
+
+        // Settings
+        findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // No disponible
+                Toast.makeText(getApplicationContext(),"Opción aún no disponible", Toast.LENGTH_SHORT).show();
             }
         });
     }
