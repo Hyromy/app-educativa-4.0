@@ -19,7 +19,7 @@
             android:name=".welcome_views.SignUp"
             android:exported="false" />
         <activity
-            android:name=".Welcome"
+            android:name=".welcome_views.Welcome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -2,7 +2,6 @@ package com.example.app.welcome_views;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.location.GnssAntennaInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -14,11 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.app.MainActivity;
 import com.example.app.R;
-import com.example.app.Welcome;
-
-import java.util.concurrent.CountDownLatch;
 
 public class SignUp extends AppCompatActivity {
     private long backPressedTime;

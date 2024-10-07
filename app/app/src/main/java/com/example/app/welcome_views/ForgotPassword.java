@@ -14,7 +14,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app.R;
-import com.example.app.Welcome;
 
 public class ForgotPassword extends AppCompatActivity {
     private long backPressedTime;

@@ -17,13 +17,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.App.PopupOverlay" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="app_bar_main.xml"
-            android:gravity="center" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />

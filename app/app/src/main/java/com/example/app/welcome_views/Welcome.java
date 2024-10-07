@@ -1,4 +1,4 @@
-package com.example.app;
+package com.example.app.welcome_views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.app.welcome_views.ForgotPassword;
-import com.example.app.welcome_views.SignUp;
+import com.example.app.MainActivity;
+import com.example.app.R;
 
 public class Welcome extends AppCompatActivity {
     private long backPressedTime;
