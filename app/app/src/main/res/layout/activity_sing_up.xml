@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Welcome">
+    tools:context=".welcome_views.SignUp">
 
     <!-- Header -->
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="Hola :D"
+            android:text="Registrarse"
             android:textSize="24dp"
             android:textColor="@color/white"/>
     </LinearLayout>
@@ -58,46 +58,65 @@
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/matricula"
+                android:id="@+id/input_matricula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="Ingresa tu matrícula"
-                android:gravity="center"
-                android:layout_marginBottom="8dp"/>
+                android:gravity="center"/>
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Ingresa tu nombre"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/input_surmane"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Ingresa tu apellido"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/input_surmane2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="Ingresa tu segundo apellido"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Ingresa tu contraseña"
+                android:hint="Escribe tu contraseña"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/input_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="Confirma tu contraseña"
                 android:gravity="center"
                 android:layout_marginBottom="64dp"/>
 
             <Button
-                android:id="@+id/btn_access"
+                android:id="@+id/btn_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Acceder"/>
+                android:text="Registrarme"/>
 
             <Button
-                android:id="@+id/btn_signup"
+                android:id="@+id/btn_to_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registrarse"/>
-
-            <Button
-                android:id="@+id/btn_forgot"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="olvidé mi contraseña"/>
-
-            <Button
-                android:id="@+id/btn_exit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Salir"/>
+                android:text="volver"/>
         </LinearLayout>
     </ScrollView>
 

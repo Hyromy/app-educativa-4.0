@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     private DialogInterface.OnClickListener logoutListener;
 
+    private long backPressedTime;
+    private Toast backToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,5 +94,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2500 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Presiona atrás otra vez para salir de la aplicación", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 }
