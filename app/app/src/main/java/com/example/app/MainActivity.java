@@ -40,14 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
         // si no agrego los fragmentos aqui se convierten en flecita hacia atras
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home,
                 R.id.nav_profile,
-                R.id.nav_prueba
+                R.id.nav_themes
         )
                 .setOpenableLayout(drawer)
                 .build();
@@ -84,13 +82,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Opción aún no disponible", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override

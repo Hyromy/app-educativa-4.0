@@ -12,15 +12,30 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_prueba"
-        android:name="com.example.app.ui.prueba_fragmento.PruebaFragmento"
-        android:label="Prueba"
-        tools:layout="@layout/prueba_fragmento" />
+        android:id="@+id/nav_themes"
+        android:name="com.example.app.ui.themes.ThemesFragment"
+        android:label="Temario"
+        tools:layout="@layout/fragment_themes">
+
+        <action
+            android:id="@+id/action_nav_themes_to_nav_theme"
+            app:destination="@id/nav_theme">
+
+            <argument
+                android:name="themeName"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_theme"
+        android:name="com.example.app.ui.themes.theme.ThemeFragment"
+        tools:layout="@layout/fragment_theme">
+    </fragment>
 
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.app.ui.profile.ProfileFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
-
 </navigation>
