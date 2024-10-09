@@ -20,6 +20,7 @@ import com.example.app.R;
 import java.util.Objects;
 
 import com.example.app.ui.themes.exercise.*;
+import com.example.app.utils.*;
 
 public class ThemeFragment extends Fragment {
 
@@ -45,7 +46,6 @@ public class ThemeFragment extends Fragment {
         }
 
         view.findViewById(R.id.btn_to_test).setOnClickListener(onExerciseClickListener);
-
         view.findViewById(R.id.btn_to_activity1).setOnClickListener(onExerciseClickListener);
     }
 
@@ -66,8 +66,6 @@ public class ThemeFragment extends Fragment {
         @Override
         public void onClick(View view) {
             String activityName = (String) view.getTag();
-
-            System.out.println("activityName: " + activityName);
 
             // meto todos los datos que necesito en el bundle
             Bundle bundle = new Bundle();
