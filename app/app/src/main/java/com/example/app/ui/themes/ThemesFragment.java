@@ -34,18 +34,7 @@ public class ThemesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.theme_1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String themeName = "{ThemeName}";
-
-                Bundle bundle = new Bundle();
-                bundle.putString("themeName", themeName);
-
-                NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.action_nav_themes_to_nav_theme, bundle);
-            }
-        });
+        view.findViewById(R.id.theme_1).setOnClickListener(onThemeClickListener);
     }
 
     @Override
@@ -54,4 +43,18 @@ public class ThemesFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ThemesViewModel.class);
         // TODO: Use the ViewModel
     }
+
+    private View.OnClickListener onThemeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String themeName = "{ThemeName}";
+
+            // meto todos los datos que necesito en el bundle
+            Bundle bundle = new Bundle();
+            bundle.putString("themeName", themeName);
+
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.action_nav_themes_to_nav_theme, bundle); // navego a la siguiente pantalla con el bundle
+        }
+    };
 }
