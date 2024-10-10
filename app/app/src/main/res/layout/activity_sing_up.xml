@@ -62,6 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
+                android:maxLength="10"
                 android:hint="Ingresa tu matrícula"
                 android:gravity="center"/>
 
@@ -70,22 +71,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:maxLength="50"
                 android:hint="Ingresa tu nombre"
                 android:gravity="center"/>
 
             <EditText
-                android:id="@+id/input_surmane"
+                android:id="@+id/input_surname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:maxLength="50"
                 android:hint="Ingresa tu apellido"
                 android:gravity="center"/>
 
             <EditText
-                android:id="@+id/input_surmane2"
+                android:id="@+id/input_surname2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:maxLength="50"
                 android:hint="Ingresa tu segundo apellido"
                 android:gravity="center"/>
 
@@ -94,6 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:maxLength="32"
                 android:hint="Escribe tu contraseña"
                 android:gravity="center"/>
 
@@ -102,6 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:maxLength="32"
                 android:hint="Confirma tu contraseña"
                 android:gravity="center"
                 android:layout_marginBottom="64dp"/>

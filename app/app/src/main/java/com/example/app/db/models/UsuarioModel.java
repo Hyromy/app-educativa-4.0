@@ -23,8 +23,8 @@ public class UsuarioModel {
     public static final String createTable =
             "create table if not exists " + tbName + " (" +
             id + " integer primary key autoincrement, " +
-            matricula + " varchar(10), " +
-            contrasena + "varchar(32)" +
+            matricula + " varchar(10) unique, " +
+            contrasena + " varchar(32), " +
             nombre + " varchar(50), " +
             aPaterno + " varchar(50), " +
             aMaterno + " varchar(50))";
@@ -32,7 +32,14 @@ public class UsuarioModel {
     public static final String dropTable = "drop table if exists " + tbName;
 
     // ---- constructores ----
-    public UsuarioModel() {}
+    public UsuarioModel() {
+        this.idValue = 0;
+        this.matriculaValue = null;
+        this.contrasenaValue = null;
+        this.nombreValue = null;
+        this.aPaternoValue = null;
+        this.aMaternoValue = null;
+    }
 
     public UsuarioModel(
             int id,
@@ -48,5 +55,15 @@ public class UsuarioModel {
         this.nombreValue = nombre;
         this.aPaternoValue = aPaterno;
         this.aMaternoValue = aMaterno;
+    }
+
+    public String getData() {
+        return getClass().getSimpleName() + "{" +
+                id + "=" + idValue + ", " +
+                matricula + "='" + matriculaValue + "', " +
+                contrasena + "='" + contrasenaValue + "', " +
+                nombre + "='" + nombreValue + "', " +
+                aPaterno + "='" + aPaternoValue + "', " +
+                aMaterno + "='" + aMaternoValue + "'}";
     }
 }

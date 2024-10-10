@@ -58,7 +58,7 @@
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/matricula"
+                android:id="@+id/input_matricula"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -67,7 +67,7 @@
                 android:layout_marginBottom="8dp"/>
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"

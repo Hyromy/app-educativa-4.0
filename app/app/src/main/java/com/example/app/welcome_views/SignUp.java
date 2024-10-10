@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,28 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app.R;
 
+import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.models.EstudianteModel;
+import com.example.app.db.utils.crud.Usuario;
+import com.example.app.db.utils.crud.Estudiante;
+
+import com.example.app.utils.Encryptor;
+
 public class SignUp extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
+    private SingUpModel model = new SingUpModel();
+    private Usuario crudUsuario;
+    private Estudiante crudEstudiante;
+
+    private Encryptor encryptor = new Encryptor();
+
+    private EditText input_matricula;
+    private EditText input_name;
+    private EditText input_surname;
+    private EditText input_surname2;
+    private EditText input_password;
+    private EditText input_confirm_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +51,9 @@ public class SignUp extends AppCompatActivity {
             return insets;
         });
 
+        crudUsuario = new Usuario(getApplicationContext());
+        crudEstudiante = new Estudiante(getApplicationContext());
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.Greeuttec));
         }
@@ -39,13 +62,63 @@ public class SignUp extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        getEditTexts();
+        clear();
+
         findViewById(R.id.btn_sign_up).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                showAlertAndContinue("Registro", "Función aún no disponible", () -> {
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), Welcome.class);
-                    startActivity(intent);
-                });
+                Toast toast = new Toast(getApplicationContext());
+                toast.setDuration(Toast.LENGTH_SHORT);
+
+                String matricula = input_matricula.getText().toString();
+                String name = input_name.getText().toString();
+                String surname = input_surname.getText().toString();
+                String surname2 = input_surname2.getText().toString();
+                String password = input_password.getText().toString();
+                String confirmPassword = input_confirm_password.getText().toString();
+
+                try {
+                    model.valideMatricula(matricula);
+                    model.validateName(name);
+                    model.validateName(surname);
+                    model.validateName(surname2);
+                    model.validatePassword(password);
+
+                    if (!password.equals(confirmPassword)) {
+                        toast.setText("Las contraseñas no coinciden");
+                    } else {
+                        crudUsuario.open();
+                        int id = crudUsuario.nextId();
+                        String passwordHash = encryptor.toHash(password, matricula, id);
+
+                        UsuarioModel usuario = new UsuarioModel(
+                            id,
+                            matricula,
+                            passwordHash,
+                            name,
+                            surname,
+                            surname2
+                        );
+                        crudUsuario.insert(usuario);
+                        crudUsuario.close();
+
+                        crudEstudiante.open();
+                        EstudianteModel estudiante = new EstudianteModel(
+                            crudEstudiante.nextId(),
+                            usuario.idValue,
+                            0
+                        );
+                        crudEstudiante.insert(estudiante);
+                        crudEstudiante.close();
+
+                        toast.setText("Usuario registrado");
+                        clear();
+                    }
+                } catch (Exception e) {
+                    toast.setText(e.getMessage());
+                } finally {
+                    toast.show();
+                }
             }
         });
 
@@ -79,5 +152,36 @@ public class SignUp extends AppCompatActivity {
             alert.setPositiveButton(android.R.string.yes, (dialog, which) -> onContinue.run());
             alert.show();
         });
+    }
+
+    private void getEditTexts() {
+        input_matricula = findViewById(R.id.input_matricula);
+        input_name = findViewById(R.id.input_name);
+        input_surname = findViewById(R.id.input_surname);
+        input_surname2 = findViewById(R.id.input_surname2);
+        input_password = findViewById(R.id.input_password);
+        input_confirm_password = findViewById(R.id.input_confirm_password);
+    }
+
+    private void clear() {
+        input_matricula.setText("");
+        input_name.setText("");
+        input_surname.setText("");
+        input_surname2.setText("");
+        input_password.setText("");
+        input_confirm_password.setText("");
+    }
+
+    private void insertUser() {
+        // insertar
+        UsuarioModel usuario = new UsuarioModel(
+            1,
+            "A01234567",
+            "12345678",
+            "Juan",
+            "Perez",
+            "Lopez"
+        );
+        crudUsuario.insert(usuario);
     }
 }
