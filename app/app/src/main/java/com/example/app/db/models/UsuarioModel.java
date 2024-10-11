@@ -1,15 +1,18 @@
 package com.example.app.db.models;
 
-public class UsuarioModel {
+import java.io.Serializable;
+
+public class UsuarioModel implements Serializable {
     // ---- atributos ----
     public static final String tbName = "usuario";
 
-    public static final String id = "id";
+    public static final String id = "id_usuario";
     public static final String matricula = "matricula";
-    public static final String contrasena = "contrasena";
+    public static final String hashContrasena = "hash_contrasena";
     public static final String nombre = "nombre";
     public static final String aPaterno = "a_paterno";
     public static final String aMaterno = "a_materno";
+    public static final String tipoAdministrador = "tipo_administrador";
 
     // ---- valores ----
     public int idValue;
@@ -18,16 +21,18 @@ public class UsuarioModel {
     public String nombreValue;
     public String aPaternoValue;
     public String aMaternoValue;
+    public boolean tipoAdministradorValue;
 
     // ---- sentencias ----
     public static final String createTable =
             "create table if not exists " + tbName + " (" +
             id + " integer primary key autoincrement, " +
             matricula + " varchar(10) unique, " +
-            contrasena + " varchar(32), " +
+            hashContrasena + " varchar(32), " +
             nombre + " varchar(50), " +
             aPaterno + " varchar(50), " +
-            aMaterno + " varchar(50))";
+            aMaterno + " varchar(50), " +
+            tipoAdministrador + " boolean default false)";
 
     public static final String dropTable = "drop table if exists " + tbName;
 
@@ -39,6 +44,7 @@ public class UsuarioModel {
         this.nombreValue = null;
         this.aPaternoValue = null;
         this.aMaternoValue = null;
+        this.tipoAdministradorValue = false;
     }
 
     public UsuarioModel(
@@ -47,7 +53,8 @@ public class UsuarioModel {
             String contrasena,
             String nombre,
             String aPaterno,
-            String aMaterno
+            String aMaterno,
+            boolean tipoAdministrador
     ) {
         this.idValue = id;
         this.matriculaValue = matricula;
@@ -55,13 +62,14 @@ public class UsuarioModel {
         this.nombreValue = nombre;
         this.aPaternoValue = aPaterno;
         this.aMaternoValue = aMaterno;
+        this.tipoAdministradorValue = tipoAdministrador;
     }
 
     public String getData() {
         return getClass().getSimpleName() + "{" +
                 id + "=" + idValue + ", " +
                 matricula + "='" + matriculaValue + "', " +
-                contrasena + "='" + contrasenaValue + "', " +
+                hashContrasena + "='" + contrasenaValue + "', " +
                 nombre + "='" + nombreValue + "', " +
                 aPaterno + "='" + aPaternoValue + "', " +
                 aMaterno + "='" + aMaternoValue + "'}";

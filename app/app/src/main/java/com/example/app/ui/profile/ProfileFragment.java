@@ -19,8 +19,12 @@ import com.example.app.ui.home.HomeViewModel;
 import com.example.app.ui.themes.ThemesFragment;
 import com.example.app.ui.themes.ThemesViewModel;
 
+import com.example.app.db.models.UsuarioModel;
+
 public class ProfileFragment extends Fragment {
     private ThemesViewModel mViewModel;
+
+
 
     public static ThemesFragment newInstance() {
         return new ThemesFragment();
@@ -37,5 +41,15 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ThemesViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    // onCreate
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            UsuarioModel usuario = (UsuarioModel) getArguments().getSerializable("usuario");
+            System.out.println(usuario.getData());
+        }
     }
 }

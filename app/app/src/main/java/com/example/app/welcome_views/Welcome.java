@@ -16,11 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.app.MainActivity;
 import com.example.app.R;
 
-import com.example.app.db.models.EstudianteModel;
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Usuario;
-import com.example.app.db.utils.crud.Estudiante;
-// import com.example.app.db.utils.crud.Administrador;
 
 import com.example.app.utils.Encryptor;
 
@@ -28,8 +25,6 @@ public class Welcome extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
     private Usuario crudUsuario;
-    private Estudiante crudEstudiante;
-    // private Administrador crudAdministrador;
 
     private Encryptor encryptor = new Encryptor();
 
@@ -48,27 +43,11 @@ public class Welcome extends AppCompatActivity {
             return insets;
         });
 
-        inputMatricula = findViewById(R.id.input_matricula);
-        inputContrasena = findViewById(R.id.input_password);
+        setStatusBar();
+        setEditTexts();
+        setCruds();
 
-        crudUsuario = new Usuario(getApplicationContext());
-        crudEstudiante = new Estudiante(getApplicationContext());
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.Greeuttec));
-        }
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-
-        // verificar si existe un archivo de login
-        boolean logged = false;
-        if (logged) {
-            toMain();
-        } else {
-            loginForm();
-        }
+        hasSesionFile();
     }
 
     @Override
@@ -84,8 +63,38 @@ public class Welcome extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    private void toMain() {
+    private void setStatusBar() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.Greeuttec));
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+    }
+
+    private void setEditTexts() {
+        inputMatricula = findViewById(R.id.input_matricula);
+        inputContrasena = findViewById(R.id.input_password);
+    }
+
+    private void setCruds() {
+        crudUsuario = new Usuario(getApplicationContext());
+    }
+
+    private void hasSesionFile() {
+        // verificar si existe un archivo de login
+        boolean logged = false;
+        if (logged) {
+            toMain(new UsuarioModel());
+        } else {
+            loginForm();
+        }
+    }
+
+    private void toMain(UsuarioModel usuario) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("usuario", usuario);
         startActivity(intent);
         finish();
     }
@@ -108,21 +117,10 @@ public class Welcome extends AppCompatActivity {
                     UsuarioModel usuario = crudUsuario.login(matricula, contrasena);
                     crudUsuario.close();
 
-                    crudEstudiante.open();
-                    EstudianteModel estudiante = crudEstudiante.read(usuario.idValue);
-                    crudEstudiante.close();
-
                     if (usuario == null) {
                         Toast.makeText(getApplicationContext(), "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
                     } else {
-
-
-
-
-
-
-                        // enviar a la vista principal con los datos del usuario
-                        toMain();
+                        toMain(usuario);
                     }
                 }
             }

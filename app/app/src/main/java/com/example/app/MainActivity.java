@@ -4,13 +4,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.app.db.models.UsuarioModel;
 import com.example.app.welcome_views.Welcome;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
 
     private long backPressedTime;
     private Toast backToast;
+
+    private View navHeaderView;
+
+    private TextView userName;
+    private TextView userSurname;
+    private TextView userSurname2;
+    private TextView userMatricula;
+
+    private UsuarioModel usuario;
+    private Usuario crudUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        inflater(navigationView);
+        setTextViews();
+        getUserInfo();
+
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(destination.getId());
+            if (fragment != null) {
+                passDataToFragment(fragment, usuario);
+            }
+        });
 
         // Logout listener
         logoutListener = new DialogInterface.OnClickListener() {
@@ -105,5 +129,44 @@ public class MainActivity extends AppCompatActivity {
             backToast.show();
         }
         backPressedTime = System.currentTimeMillis();
+    }
+
+    private void getUserInfo() {
+        Intent intent = getIntent();
+        usuario = (UsuarioModel) intent.getSerializableExtra("usuario");
+
+        if (usuario != null) {
+            setUserInfoInViews();
+        } else {
+            // No debería llegar aquí
+            startActivity(new Intent(getApplicationContext(), Welcome.class));
+            finish();
+        }
+    }
+
+    private void inflater(NavigationView navigationView) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        navHeaderView = inflater.inflate(R.layout.nav_header_main, navigationView, false);
+        navigationView.addHeaderView(navHeaderView);
+    }
+
+    private void setTextViews() {
+        userName = navHeaderView.findViewById(R.id.user_name);
+        userSurname = navHeaderView.findViewById(R.id.user_surname);
+        userSurname2 = navHeaderView.findViewById(R.id.user_surname2);
+        userMatricula = navHeaderView.findViewById(R.id.user_matricula);
+    }
+
+    private void setUserInfoInViews() {
+        userName.setText(usuario.nombreValue);
+        userSurname.setText(usuario.aPaternoValue);
+        userSurname2.setText(usuario.aMaternoValue);
+        userMatricula.setText(usuario.matriculaValue);
+    }
+
+    private void passDataToFragment(Fragment fragment, UsuarioModel usuario) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("usuario", usuario);
+        fragment.setArguments(bundle);
     }
 }

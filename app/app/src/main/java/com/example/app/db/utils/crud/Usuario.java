@@ -43,10 +43,11 @@ public class Usuario extends AbstractCRUD<UsuarioModel> {
         ContentValues values = new ContentValues();
 
         values.put(UsuarioModel.matricula, obj.matriculaValue);
-        values.put(UsuarioModel.contrasena, obj.contrasenaValue);
+        values.put(UsuarioModel.hashContrasena, obj.contrasenaValue);
         values.put(UsuarioModel.nombre, obj.nombreValue);
         values.put(UsuarioModel.aPaterno, obj.aPaternoValue);
         values.put(UsuarioModel.aMaterno, obj.aMaternoValue);
+        values.put(UsuarioModel.tipoAdministrador, obj.tipoAdministradorValue);
 
         return db.insert(UsuarioModel.tbName, null, values);
     }
@@ -73,7 +74,8 @@ public class Usuario extends AbstractCRUD<UsuarioModel> {
                 cursor.getString(2),
                 cursor.getString(3),
                 cursor.getString(4),
-                cursor.getString(5)
+                cursor.getString(5),
+                    cursor.getInt(6) == 1
             );
             cursor.close();
 
@@ -112,7 +114,7 @@ public class Usuario extends AbstractCRUD<UsuarioModel> {
         UsuarioModel usuario = null;
         String[] colums = colums();
 
-        String selection = UsuarioModel.matricula + " = ? AND " + UsuarioModel.contrasena + " = ?";
+        String selection = UsuarioModel.matricula + " = ? AND " + UsuarioModel.hashContrasena + " = ?";
         String[] selectionArgs = {matricula, password};
 
         Cursor cursor = db.query(
@@ -132,7 +134,8 @@ public class Usuario extends AbstractCRUD<UsuarioModel> {
                 cursor.getString(2),
                 cursor.getString(3),
                 cursor.getString(4),
-                cursor.getString(5)
+                cursor.getString(5),
+                    cursor.getInt(6) == 1
             );
             cursor.close();
 

@@ -17,9 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.app.R;
 
 import com.example.app.db.models.UsuarioModel;
-import com.example.app.db.models.EstudianteModel;
 import com.example.app.db.utils.crud.Usuario;
-import com.example.app.db.utils.crud.Estudiante;
 
 import com.example.app.utils.Encryptor;
 
@@ -28,7 +26,6 @@ public class SignUp extends AppCompatActivity {
     private Toast backToast;
     private SingUpModel model = new SingUpModel();
     private Usuario crudUsuario;
-    private Estudiante crudEstudiante;
 
     private Encryptor encryptor = new Encryptor();
 
@@ -52,7 +49,6 @@ public class SignUp extends AppCompatActivity {
         });
 
         crudUsuario = new Usuario(getApplicationContext());
-        crudEstudiante = new Estudiante(getApplicationContext());
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.Greeuttec));
@@ -97,19 +93,11 @@ public class SignUp extends AppCompatActivity {
                             passwordHash,
                             name,
                             surname,
-                            surname2
+                            surname2,
+                                false
                         );
                         crudUsuario.insert(usuario);
                         crudUsuario.close();
-
-                        crudEstudiante.open();
-                        EstudianteModel estudiante = new EstudianteModel(
-                            crudEstudiante.nextId(),
-                            usuario.idValue,
-                            0
-                        );
-                        crudEstudiante.insert(estudiante);
-                        crudEstudiante.close();
 
                         toast.setText("Usuario registrado");
                         clear();
@@ -170,18 +158,5 @@ public class SignUp extends AppCompatActivity {
         input_surname2.setText("");
         input_password.setText("");
         input_confirm_password.setText("");
-    }
-
-    private void insertUser() {
-        // insertar
-        UsuarioModel usuario = new UsuarioModel(
-            1,
-            "A01234567",
-            "12345678",
-            "Juan",
-            "Perez",
-            "Lopez"
-        );
-        crudUsuario.insert(usuario);
     }
 }
