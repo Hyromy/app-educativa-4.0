@@ -13,12 +13,19 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import com.example.app.R;
+import com.example.app.db.models.views.UserViewModel;
+import com.example.app.db.models.UsuarioModel;
 
 public class ThemesFragment extends Fragment {
     private ThemesViewModel mViewModel;
+    private UserViewModel userViewModel;
+    private UsuarioModel usuario;
+
+    private TextView logout;
 
     public static ThemesFragment newInstance() {
         return new ThemesFragment();
@@ -27,13 +34,24 @@ public class ThemesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_themes, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_themes, container, false);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel.getUsuario().observe(getViewLifecycleOwner(), usuario -> {
+            if (usuario != null) {
+                this.usuario = usuario;
+
+                setWidgets(view);
+                setInfoInWidgets();
+            }
+        });
+
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         view.findViewById(R.id.theme_1).setOnClickListener(onThemeClickListener);
     }
 
@@ -57,4 +75,12 @@ public class ThemesFragment extends Fragment {
             navController.navigate(R.id.action_nav_themes_to_nav_theme, bundle); // navego a la siguiente pantalla con el bundle
         }
     };
+
+    private void setWidgets(View view) {
+        logout = view.findViewById(R.id.log);
+    }
+
+    private void setInfoInWidgets() {
+        logout.setText(usuario.getData());
+    }
 }

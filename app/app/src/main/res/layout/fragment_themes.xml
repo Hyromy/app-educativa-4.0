@@ -40,6 +40,11 @@
                 android:backgroundTint="@color/Greeuttec"
                 android:layout_marginBottom="16dp"
                 android:text="Resolución de problemas [prueba]" />
+
+            <TextView
+                android:id="@+id/log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

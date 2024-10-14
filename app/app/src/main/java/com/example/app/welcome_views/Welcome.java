@@ -21,6 +21,8 @@ import com.example.app.db.utils.crud.Usuario;
 
 import com.example.app.utils.Encryptor;
 
+import com.example.app.admin_users.Admin;
+
 public class Welcome extends AppCompatActivity {
     private long backPressedTime;
     private Toast backToast;
@@ -80,6 +82,8 @@ public class Welcome extends AppCompatActivity {
 
     private void setCruds() {
         crudUsuario = new Usuario(getApplicationContext());
+        Admin createAdmins = new Admin(getApplicationContext(), true);
+
     }
 
     private void hasSesionFile() {

@@ -13,11 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.app.R;
-import com.example.app.databinding.FragmentHomeBinding;
 import com.example.app.db.models.views.UserViewModel;
-import com.example.app.ui.home.HomeViewModel;
 import com.example.app.ui.themes.ThemesFragment;
 import com.example.app.ui.themes.ThemesViewModel;
 
@@ -52,6 +51,7 @@ public class ProfileFragment extends Fragment {
 
                 setWidgets(view);
                 setInfoInWidgets();
+                setListeners(view);
             }
         });
 
@@ -63,14 +63,6 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ThemesViewModel.class);
         // TODO: Use the ViewModel
-    }
-
-    // onCreate
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
     }
 
     private void setWidgets(View view) {
@@ -87,5 +79,24 @@ public class ProfileFragment extends Fragment {
         userName.setText(this.usuario.nombreValue);
         userSurname.setText(this.usuario.aPaternoValue);
         userSurname2.setText(this.usuario.aMaternoValue);
+    }
+
+    private void setListeners(View view) {
+        view.findViewById(R.id.btn_clear).setOnClickListener(v -> {
+            clear();
+            setInfoInWidgets();
+        });
+
+        view.findViewById(R.id.btn_save).setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void clear() {
+        userName.setText("");
+        userSurname.setText("");
+        userSurname2.setText("");
+        userNewPassword.setText("");
+        userConfirmPassword.setText("");
     }
 }

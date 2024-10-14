@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
     private UserViewModel userViewModel;
 
+    private int[] fragmentsId = {
+            R.id.nav_profile,
+            R.id.nav_themes,
+            R.id.nav_admin
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         // si no agrego los fragmentos aqui se convierten en flecita hacia atras
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home,
-                R.id.nav_profile,
-                R.id.nav_themes
+                fragmentsId
         )
                 .setOpenableLayout(drawer)
                 .build();
@@ -75,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
 
         inflater(navigationView);
         setTextViews();
-
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(destination.getId());
-            if (fragment != null) {
-                passDataToFragment(fragment, usuario);
-            }
-        });
 
         // Logout listener
         logoutListener = new DialogInterface.OnClickListener() {
@@ -142,9 +140,15 @@ public class MainActivity extends AppCompatActivity {
         usuario = (UsuarioModel) intent.getSerializableExtra("usuario");
 
         if (usuario != null) {
-            System.out.println("Main Activity: " + usuario.getData());
             userViewModel.setUsuario(usuario);
             setUserInfoInViews();
+
+            if (!usuario.tipoAdministradorValue) {
+                NavigationView navigationView = findViewById(R.id.nav_view);
+                Menu navMenu = navigationView.getMenu();
+                navMenu.findItem(R.id.nav_admin).setVisible(false);
+            }
+
         } else {
             // No debería llegar aquí
             startActivity(new Intent(getApplicationContext(), Welcome.class));
@@ -170,11 +174,5 @@ public class MainActivity extends AppCompatActivity {
         userSurname.setText(usuario.aPaternoValue);
         userSurname2.setText(usuario.aMaternoValue);
         userMatricula.setText(usuario.matriculaValue);
-    }
-
-    private void passDataToFragment(Fragment fragment, UsuarioModel usuario) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("usuario", usuario);
-        fragment.setArguments(bundle);
     }
 }

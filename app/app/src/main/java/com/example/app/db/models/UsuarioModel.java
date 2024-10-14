@@ -72,6 +72,7 @@ public class UsuarioModel implements Serializable {
                 hashContrasena + "='" + contrasenaValue + "', " +
                 nombre + "='" + nombreValue + "', " +
                 aPaterno + "='" + aPaternoValue + "', " +
-                aMaterno + "='" + aMaternoValue + "'}";
+                aMaterno + "='" + aMaternoValue + "', " +
+                tipoAdministrador + "=" + tipoAdministradorValue + "}";
     }
 }
