@@ -10,10 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.models.views.UserViewModel;
 import com.example.app.welcome_views.Welcome;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private UsuarioModel usuario;
     private Usuario crudUsuario;
 
+    private UserViewModel userViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         inflater(navigationView);
         setTextViews();
-        getUserInfo();
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             Fragment fragment = getSupportFragmentManager().findFragmentById(destination.getId());
@@ -109,6 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Opción aún no disponible", Toast.LENGTH_SHORT).show();
             }
         });
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        getUserInfo();
     }
 
     @Override
@@ -136,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
         usuario = (UsuarioModel) intent.getSerializableExtra("usuario");
 
         if (usuario != null) {
+            System.out.println("Main Activity: " + usuario.getData());
+            userViewModel.setUsuario(usuario);
             setUserInfoInViews();
         } else {
             // No debería llegar aquí
