@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
-        // si no agrego los fragmentos aqui se convierten en flecita hacia atras
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 fragmentsId
         )

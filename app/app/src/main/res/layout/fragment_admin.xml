@@ -5,10 +5,55 @@
     android:layout_height="match_parent"
     tools:context=".ui.admin.AdminFragment">
 
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="64dp"
-        android:text="Vista de administrador" />
+        android:layout_margin="16dp">
+
+        <Button
+            android:id="@+id/btn_temas"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:text="gestionar temas"
+            android:tag="temas"/>
+
+        <Button
+            android:id="@+id/btn_examenes"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:text="gestionar examenes"
+            android:tag="examenes"/>
+
+        <Button
+            android:id="@+id/btn_preguntas"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:text="gestionar preguntas"
+            android:tag="preguntas"/>
+
+        <Button
+            android:id="@+id/btn_actividades"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:text="gestionar actividades"
+            android:tag="actividades"/>
+
+        <Button
+            android:id="@+id/btn_contenidos"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:textSize="24dp"
+            android:text="gestionar contenidos"
+            android:tag="contenidos"/>
+    </LinearLayout>
 </FrameLayout>

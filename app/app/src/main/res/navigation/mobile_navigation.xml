@@ -6,12 +6,6 @@
     app:startDestination="@+id/nav_themes">
 
     <fragment
-        android:id="@+id/nav_admin"
-        android:name="com.example.app.ui.admin.AdminFragment"
-        android:label="Administración"
-        tools:layout="@layout/fragment_admin" />
-
-    <fragment
         android:id="@+id/nav_themes"
         android:name="com.example.app.ui.themes.ThemesFragment"
         android:label="Temario"
@@ -52,4 +46,26 @@
         android:name="com.example.app.ui.profile.ProfileFragment"
         android:label="Perfil"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_admin"
+        android:name="com.example.app.ui.admin.AdminFragment"
+        android:label="Administración"
+        tools:layout="@layout/fragment_admin">
+
+        <action
+            android:id="@+id/action_nav_admin_to_nav_query"
+            app:destination="@id/nav_query">
+
+            <argument
+                android:name="queryName"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_query"
+        android:name="com.example.app.ui.admin.query.QueryFragment"
+        android:label="Gestionar"
+        tools:layout="@layout/fragment_query" />
 </navigation>
