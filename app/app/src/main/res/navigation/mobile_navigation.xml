@@ -67,5 +67,21 @@
         android:id="@+id/nav_query"
         android:name="com.example.app.ui.admin.query.QueryFragment"
         android:label="Gestionar"
-        tools:layout="@layout/fragment_query" />
+        tools:layout="@layout/fragment_query">
+
+        <action
+            android:id="@+id/action_nav_query_to_nav_item"
+            app:destination="@id/nav_item">
+
+            <argument
+                android:name="itemTag"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_item"
+        android:name="com.example.app.ui.admin.query.items.ItemFragment"
+        android:label="Crear o Editar"
+        tools:layout="@layout/fragment_item"/>
 </navigation>
