@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,6 +97,13 @@ public class ItemFragment extends Fragment {
     private void loadExamen(Context context) {
         TextView textView = setLabel(context, "Título");
         layout.addView(textView);
+        EditText editText = setEntry(context, 't', "titulo", 100);
+        layout.addView(editText);
+
+        textView = setLabel(context, "Número de preguntas");
+        layout.addView(textView);
+        editText = setEntry(context, 'n', "n_preguntas", 3);
+        layout.addView(editText);
     }
 
     private void loadPregunta() {
@@ -135,8 +143,12 @@ public class ItemFragment extends Fragment {
         return tv;
     }
 
-    private EditText setEntry(Context context, char type, String id) {
+    private EditText setEntry(Context context, char type, String tag, int max) {
         EditText et = new EditText(context);
+        et.setId(View.generateViewId());
+        et.setTag(tag);
+        et.setFilters(new InputFilter[] {new InputFilter.LengthFilter(max)});
+
         if (type == 't') {
             et.setInputType(InputType.TYPE_CLASS_TEXT);
         } else if (type == 'n') {

@@ -65,6 +65,7 @@ public class UsuarioModel implements Serializable {
         this.tipoAdministradorValue = tipoAdministrador;
     }
 
+    // ---- metodos ----
     public String getData() {
         return getClass().getSimpleName() + "{" +
                 id + "=" + idValue + ", " +
