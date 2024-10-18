@@ -17,11 +17,20 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(UsuarioModel.createTable);
+        db.execSQL(RecursoModel.createTable);
+        db.execSQL(TemaModel.createTable);
+
+        db.execSQL(ExamenDiagnosticoModel.createTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(UsuarioModel.dropTable);
+        db.execSQL(RecursoModel.dropTable);
+        db.execSQL(TemaModel.dropTable);
+
+        db.execSQL(ExamenDiagnosticoModel.dropTable);
+
         onCreate(db);
     }
 }
