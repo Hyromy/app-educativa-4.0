@@ -20,7 +20,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(RecursoModel.createTable);
         db.execSQL(TemaModel.createTable);
 
+        db.execSQL(ContenidoModel.createTable);
         db.execSQL(ExamenDiagnosticoModel.createTable);
+
+        db.execSQL(ResultadoExamenModel.createTable);
+        db.execSQL(CompletaContenidoModel.createTable);
+        db.execSQL(PreguntaExamenModel.createTable);
+        db.execSQL(PreguntaActividadModel.createTable);
+        db.execSQL(ApoyoModel.createTable);
+
+        db.execSQL(RespuestaExamenModel.createTable);
+        db.execSQL(RespuestaActividadModel.createTable);
+        db.execSQL(ParrafoModel.createTable);
     }
 
     @Override
@@ -29,7 +40,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(RecursoModel.dropTable);
         db.execSQL(TemaModel.dropTable);
 
+        db.execSQL(ContenidoModel.dropTable);
         db.execSQL(ExamenDiagnosticoModel.dropTable);
+
+        db.execSQL(ResultadoExamenModel.dropTable);
+        db.execSQL(CompletaContenidoModel.dropTable);
+        db.execSQL(PreguntaExamenModel.dropTable);
+        db.execSQL(PreguntaActividadModel.dropTable);
+        db.execSQL(ApoyoModel.dropTable);
+
+        db.execSQL(RespuestaExamenModel.dropTable);
+        db.execSQL(RespuestaActividadModel.dropTable);
+        db.execSQL(ParrafoModel.dropTable);
 
         onCreate(db);
     }
