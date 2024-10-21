@@ -21,7 +21,7 @@ import com.example.app.db.utils.crud.Usuario;
 
 import com.example.app.utils.Encryptor;
 
-import com.example.app.admin_users.Admin;
+import com.example.app.preload_data.Admin;
 
 public class Welcome extends AppCompatActivity {
     private long backPressedTime;

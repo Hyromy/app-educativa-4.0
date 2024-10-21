@@ -19,8 +19,8 @@ public class TemaModel implements Serializable {
     public static final String createTable =
             "create table if not exists " + tbName + " (" +
             id + " integer primary key autoincrement, " +
-            titulo + " varchar(100) unique, " +
-            descripcion + " varchar(250)";
+            titulo + " varchar(100) unique not null, " +
+            descripcion + " varchar(250) not null)";
 
     public static final String dropTable = "drop table if exists " + tbName;
 
@@ -29,6 +29,15 @@ public class TemaModel implements Serializable {
         this.idValue = 0;
         this.tituloValue = null;
         this.descripcionValue = null;
+    }
+
+    public TemaModel(
+            String titulo,
+            String descripcion
+    ) {
+        this.idValue = 0;
+        this.tituloValue = titulo;
+        this.descripcionValue = descripcion;
     }
 
     public TemaModel(

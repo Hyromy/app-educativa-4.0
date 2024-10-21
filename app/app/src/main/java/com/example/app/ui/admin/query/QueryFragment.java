@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.db.models.TemaModel;
+import com.example.app.db.utils.crud.Tema;
 
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -32,6 +34,7 @@ import java.util.regex.Pattern;
 public class QueryFragment extends Fragment {
     private QueryViewModel mViewModel;
     private String itemsType = null;
+    private String table = null;
 
     public static QueryFragment newInstance() {
         return new QueryFragment();
@@ -58,11 +61,20 @@ public class QueryFragment extends Fragment {
         view.findViewById(R.id.btn_agregar).setOnClickListener(addListener());
         setSearchView(view);
 
-        // consultar la base de datos
+        // consultar la base de datos la tabla actual
+        table = titleToTable(itemsType);
+        if (table.equals("tema")) {
+            Tema crudTema = new Tema(requireContext());
+            crudTema.open();
+            TemaModel[] temas = crudTema.readAll();
+            crudTema.close();
 
-
-        // borrar
-        generateAutoItems(view, itemsType);
+            for (TemaModel tema : temas) {
+                generateItem(view, tema.idValue, tema.tituloValue, table);
+            }
+        } else {
+            generateAutoItems(view, itemsType);
+        }
     }
 
     @Override
@@ -74,6 +86,8 @@ public class QueryFragment extends Fragment {
 
     private void setSearchView(View view) {
         SearchView searchView = view.findViewById(R.id.search_view);
+        searchView.setOnClickListener(v -> searchView.setIconified(false));
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -107,6 +121,32 @@ public class QueryFragment extends Fragment {
         return x;
     }
 
+    private void generateItem(View view, int id, String name, String table) {
+        int dp8 = dpToPx(8);
+        int dp16 = dp8 * 2;
+        String tag = table + "_" + id;
+        LinearLayout linearLayout = view.findViewById(R.id.linear_layout);
+        Context context = getContext();
+
+        TextView textID = textView(context, "id", String.valueOf(id));
+        TextView textName = textView(context, "tx", name);
+
+        LinearLayout linearInfo = linearInfo(context);
+        linearInfo.addView(textID);
+        linearInfo.addView(textName);
+
+        ImageView trash = imageView(context, tag, R.drawable.ic_trash);
+        trash.setOnClickListener(setDelListener(trash.getTag().toString()));
+
+        LinearLayout linearContainer = linearContainer(context, dp16, dp8, tag);
+        linearContainer.addView(linearInfo);
+        linearContainer.addView(trash);
+        linearContainer.setOnClickListener(editListener(linearContainer.getTag().toString()));
+
+        linearLayout.addView(linearContainer);
+    }
+
+    // borrar despues
     private void generateAutoItems(View view, String itemsType) {
         int dp8 = dpToPx(8);
         int dp16 = dp8 * 2;
@@ -234,10 +274,26 @@ public class QueryFragment extends Fragment {
         linearLayout.removeView(view);
 
         // eliminar de la base de datos
-        mViewModel.deleteItem(tag);
+        if (tag.contains("tema")) {
+            delTema(tag);
+        } else {
 
-        // mensaje
-        messageToast("Elemento eliminado [db incompleta]");
+        }
+
+        messageToast("Elemento eliminado");
+    }
+
+    private void delTema(String tag) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        Tema crudTema = new Tema(requireContext());
+        crudTema.open();
+        TemaModel tema = crudTema.read(id);
+        crudTema.delete(tema);
+        crudTema.close();
     }
 
     private void clearList() {

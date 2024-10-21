@@ -14,17 +14,19 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.app.R;
 
 import java.util.Objects;
 
+import com.example.app.db.models.TemaModel;
 import com.example.app.ui.themes.exercise.*;
 import com.example.app.utils.*;
 
 public class ThemeFragment extends Fragment {
-
     private ThemeViewModel mViewModel;
+    private TemaModel tema;
 
     public static ThemeFragment newInstance() {
         return new ThemeFragment();
@@ -42,7 +44,8 @@ public class ThemeFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            setToolbarTitle(bundle.getString("themeName"));
+            tema = (TemaModel) bundle.getSerializable("tema");
+            setToolbarTitle(tema.tituloValue);
         }
 
         view.findViewById(R.id.btn_to_test).setOnClickListener(onExerciseClickListener);

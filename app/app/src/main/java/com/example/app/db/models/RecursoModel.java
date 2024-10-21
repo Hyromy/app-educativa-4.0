@@ -23,7 +23,7 @@ public class RecursoModel implements Serializable {
             id + " integer primary key autoincrement, " +
             nombre + " varchar(32), " +
             extension + " varchar(5), " +
-            tipo + " varchar(24)";
+            tipo + " varchar(24))";
 
     public static final String dropTable = "drop table if exists " + tbName;
 

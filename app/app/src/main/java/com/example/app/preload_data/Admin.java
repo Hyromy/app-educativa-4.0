@@ -1,4 +1,4 @@
-package com.example.app.admin_users;
+package com.example.app.preload_data;
 
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Usuario;
