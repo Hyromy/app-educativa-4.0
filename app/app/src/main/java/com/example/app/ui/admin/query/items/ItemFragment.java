@@ -15,17 +15,25 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
+import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.Tema;
 
+import org.w3c.dom.Text;
+
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ItemFragment extends Fragment {
     private String table = null;
@@ -60,7 +68,7 @@ public class ItemFragment extends Fragment {
 
             id = bundle.getInt("id");
             if (id > 0) {
-                extractData(table, id);
+                extractData(table);
                 setToolbarTitle("Editar registro");
             } else {
                 setToolbarTitle("Crear registro");
@@ -82,6 +90,9 @@ public class ItemFragment extends Fragment {
         }
     }
 
+    // -----------------------------------
+    // ---- CARGAR FORMUARIO DESDE... ----
+    // -----------------------------------
     private void loadFormOf(String table, Context context) {
         if (table.equals("tema")) {
             loadTema(context);
@@ -109,7 +120,20 @@ public class ItemFragment extends Fragment {
     }
 
     private void loadExamen(Context context) {
-        TextView textView = setLabel(context, "Título");
+        TextView textView = setLabel(context, "Tema");
+        layout.addView(textView);
+        Tema crudTema = new Tema(context);
+        crudTema.open();
+        TemaModel[] temas = crudTema.readAll();
+        String[] items = new String[temas.length];
+        for (int i = 0; i < temas.length; i++) {
+            items[i] = "(" + temas[i].idValue + ") " + temas[i].tituloValue;
+        }
+        crudTema.close();
+        Spinner spinner = setSpinner(context, items, "tema");
+        layout.addView(spinner);
+
+        textView = setLabel(context, "Título");
         layout.addView(textView);
         EditText editText = setEntry(context, 't', "titulo", 100);
         layout.addView(editText);
@@ -117,6 +141,11 @@ public class ItemFragment extends Fragment {
         textView = setLabel(context, "Número de preguntas");
         layout.addView(textView);
         editText = setEntry(context, 'n', "n_preguntas", 3);
+        layout.addView(editText);
+
+        textView = setLabel(context, "Nivel máximo");
+        layout.addView(textView);
+        editText = setEntry(context, 'n', "nivel_maximo", 1);
         layout.addView(editText);
     }
 
@@ -132,11 +161,14 @@ public class ItemFragment extends Fragment {
         Toast.makeText(getContext(), "Cargando contenido", Toast.LENGTH_SHORT).show();
     }
 
-    private void extractData(String table, int id) {
+    // --------------------------------------
+    // ---- EXTRAER INFORMACION DESDE... ----
+    // --------------------------------------
+    private void extractData(String table) {
         if (table.equals("tema")) {
             extractTema();
         } else if (table.equals("examen_diagnostico")) {
-
+            extractExamenDiagnostico();
         } else if (table.equals("pregunta_examen")) {
 
         } else if (table.equals("pregunta_actividad")) {
@@ -159,6 +191,35 @@ public class ItemFragment extends Fragment {
         descripcionET.setText(tema.descripcionValue);
     }
 
+    private void extractExamenDiagnostico() {
+        Spinner spinner = layout.findViewWithTag("tema_spinner");
+        EditText tituloET = layout.findViewWithTag("titulo");
+        EditText nPreguntasET = layout.findViewWithTag("n_preguntas");
+        EditText nivelMaximoET = layout.findViewWithTag("nivel_maximo");
+
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(getContext());
+        crudExamen.open();
+        ExamenDiagnosticoModel examen = crudExamen.read(id);
+        crudExamen.close();
+
+        Tema crudTema = new Tema(getContext());
+        crudTema.open();
+        TemaModel[] temas = crudTema.readAll();
+        crudTema.close();
+        for (int i = 0; i < temas.length; i++) {
+            if (examen.idTemaValue == temas[i].idValue) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+        tituloET.setText(examen.tituloValue);
+        nPreguntasET.setText(String.valueOf(examen.nPreguntasValue));
+        nivelMaximoET.setText(String.valueOf(examen.nivelMaximoValue));
+    }
+
+    // ----------------------------
+    // ---- ESTABLECER WIDGETS ----
+    // ----------------------------
     private TextView setLabel(Context context, String text) {
         TextView tv = new TextView(context);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -187,6 +248,29 @@ public class ItemFragment extends Fragment {
         return et;
     }
 
+    private Spinner setSpinner(Context context, String[] items, String tag) {
+        Spinner spinner = new Spinner(context);
+        spinner.setId(View.generateViewId());
+        spinner.setTag(tag + "_spinner");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 0, 0, 32);
+        spinner.setLayoutParams(params);
+
+        return spinner;
+    }
+
+    // -----------------------
+    // ---- BOTON GUARDAR ----
+    // -----------------------
     private View.OnClickListener saveItem = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -199,23 +283,26 @@ public class ItemFragment extends Fragment {
                 }
             } else if (table.equals("examen_diagnostico")) {
                 if (id > 0) {
-                    // update
+                    updateExamenDiagnostico(context);
                 } else {
-                    // insert
+                    insertExamenDiagnostico(context);
                 }
             } else if (table.equals("pregunta_examen")) {
+                notImplemented(context);
                 if (id > 0) {
                     // update
                 } else {
                     // insert
                 }
             } else if (table.equals("pregunta_actividad")) {
+                notImplemented(context);
                 if (id > 0) {
                     // update
                 } else {
                     // insert
                 }
             } else if (table.equals("contenido")) {
+                notImplemented(context);
                 if (id > 0) {
                     // update
                 } else {
@@ -260,11 +347,8 @@ public class ItemFragment extends Fragment {
     }
 
     private void updateTema(Context context) {
-        EditText tituloET = layout.findViewWithTag("titulo");
-        EditText descripcionET = layout.findViewWithTag("descripcion");
-
-        String titulo = tituloET.getText().toString().trim();
-        String descripcion = descripcionET.getText().toString().trim();
+        String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
+        String descripcion = ((EditText) layout.findViewWithTag("descripcion")).getText().toString().trim();
 
         if (titulo.isEmpty() || descripcion.isEmpty()) {
             Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
@@ -289,5 +373,109 @@ public class ItemFragment extends Fragment {
                 crudTema.close();
             }
         }
+    }
+
+    private void insertExamenDiagnostico(Context context) {
+        Spinner spinner = layout.findViewWithTag("tema_spinner");
+        String selection = spinner.getSelectedItem().toString();
+
+        String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
+        String nPreguntas = ((EditText) layout.findViewWithTag("n_preguntas")).getText().toString().trim();
+        String nivelMaximo = ((EditText) layout.findViewWithTag("nivel_maximo")).getText().toString().trim();
+
+        Pattern pattern = Pattern.compile("\\(\\d+\\)");
+        Matcher matcher = pattern.matcher(selection);
+        matcher.find();
+        int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
+
+        Tema crudTema = new Tema(context);
+        crudTema.open();
+        TemaModel tema = crudTema.read(idItem);
+        crudTema.close();
+
+        if (idItem > 0 || !nPreguntas.isEmpty() || !nivelMaximo.isEmpty()) {
+            if (titulo.isEmpty()) {
+                titulo = tema.tituloValue;
+            }
+
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            ExamenDiagnosticoModel examen = new ExamenDiagnosticoModel(
+                    idItem,
+                    titulo,
+                    Integer.parseInt(nPreguntas),
+                    Integer.parseInt(nivelMaximo)
+            );
+            crudExamen.open();
+            try {
+                crudExamen.insert(examen);
+                Toast.makeText(context, "Registro guardado", Toast.LENGTH_SHORT).show();
+
+                spinner.setSelection(0);
+                ((EditText) layout.findViewWithTag("titulo")).setText("");
+                ((EditText) layout.findViewWithTag("n_preguntas")).setText("");
+                ((EditText) layout.findViewWithTag("nivel_maximo")).setText("");
+
+            } catch (Exception e) {
+                Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                System.out.println(e.getMessage());
+
+            } finally {
+                crudExamen.close();
+            }
+        } else {
+            Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateExamenDiagnostico(Context context) {
+        Spinner spinner = layout.findViewWithTag("tema_spinner");
+        String selection = spinner.getSelectedItem().toString();
+
+        String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
+        String nPreguntas = ((EditText) layout.findViewWithTag("n_preguntas")).getText().toString().trim();
+        String nivelMaximo = ((EditText) layout.findViewWithTag("nivel_maximo")).getText().toString().trim();
+
+        Pattern pattern = Pattern.compile("\\(\\d+\\)");
+        Matcher matcher = pattern.matcher(selection);
+        matcher.find();
+        int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
+
+        Tema crudTema = new Tema(context);
+        crudTema.open();
+        TemaModel tema = crudTema.read(idItem);
+        crudTema.close();
+
+        if (idItem > 0 || !nPreguntas.isEmpty() || !nivelMaximo.isEmpty()) {
+            if (titulo.isEmpty()) {
+                titulo = tema.tituloValue;
+            }
+
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            ExamenDiagnosticoModel examen = new ExamenDiagnosticoModel(
+                    id,
+                    idItem,
+                    titulo,
+                    Integer.parseInt(nPreguntas),
+                    Integer.parseInt(nivelMaximo)
+            );
+            crudExamen.open();
+            try {
+                crudExamen.update(examen);
+                Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+                Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                System.out.println(e.getMessage());
+
+            } finally {
+                crudExamen.close();
+            }
+        } else {
+            Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void notImplemented(Context context) {
+        Toast.makeText(context, "Aún no implementado", Toast.LENGTH_SHORT).show();
     }
 }

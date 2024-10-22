@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
@@ -23,6 +24,8 @@ import java.util.Objects;
 import com.example.app.db.models.TemaModel;
 import com.example.app.ui.themes.exercise.*;
 import com.example.app.utils.*;
+
+import org.w3c.dom.Text;
 
 public class ThemeFragment extends Fragment {
     private ThemeViewModel mViewModel;
@@ -47,6 +50,12 @@ public class ThemeFragment extends Fragment {
             tema = (TemaModel) bundle.getSerializable("tema");
             setToolbarTitle(tema.tituloValue);
         }
+
+        TextView title = view.findViewById(R.id.theme_name);
+        title.setText(tema.tituloValue);
+
+        TextView description = view.findViewById(R.id.theme_description);
+        description.setText(tema.descripcionValue);
 
         view.findViewById(R.id.btn_to_test).setOnClickListener(onExerciseClickListener);
         view.findViewById(R.id.btn_to_activity1).setOnClickListener(onExerciseClickListener);

@@ -88,17 +88,65 @@ public class Usuario extends AbstractCRUD<UsuarioModel> {
 
     @Override
     public UsuarioModel[] readAll() {
-        return new UsuarioModel[0];
-    }
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+            UsuarioModel.tbName,
+            colums(),
+            null,
+            null,
+            null,
+            null,
+            null
+        );
+        int size = cursor.getCount();
+        UsuarioModel[] usuarios = new UsuarioModel[size];
 
-    @Override
-    public int delete(UsuarioModel obj) {
-        return 0;
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < size; i++) {
+                usuarios[i] = new UsuarioModel(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getString(5),
+                        cursor.getInt(6) == 1
+                );
+                cursor.moveToNext();
+            }
+        }
+
+        return usuarios;
     }
 
     @Override
     public int update(UsuarioModel obj) {
-        return 0;
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(UsuarioModel.matricula, obj.matriculaValue);
+        values.put(UsuarioModel.hashContrasena, obj.contrasenaValue);
+        values.put(UsuarioModel.nombre, obj.nombreValue);
+        values.put(UsuarioModel.aPaterno, obj.aPaternoValue);
+        values.put(UsuarioModel.aMaterno, obj.aMaternoValue);
+
+        return db.update(
+            UsuarioModel.tbName,
+            values,
+            UsuarioModel.id + " = ?",
+            new String[] {String.valueOf(obj.idValue)}
+        );
+    }
+
+    @Override
+    public int delete(UsuarioModel obj) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.delete(
+            UsuarioModel.tbName,
+            UsuarioModel.id + " = ?",
+            new String[] {String.valueOf(obj.idValue)}
+        );
     }
 
     public int nextId() {

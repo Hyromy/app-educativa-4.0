@@ -24,7 +24,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
+import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.Tema;
 
 import java.util.Objects;
@@ -61,16 +63,26 @@ public class QueryFragment extends Fragment {
         view.findViewById(R.id.btn_agregar).setOnClickListener(addListener());
         setSearchView(view);
 
+        Context context = getContext();
         // consultar la base de datos la tabla actual
         table = titleToTable(itemsType);
         if (table.equals("tema")) {
-            Tema crudTema = new Tema(requireContext());
+            Tema crudTema = new Tema(context);
             crudTema.open();
             TemaModel[] temas = crudTema.readAll();
             crudTema.close();
 
             for (TemaModel tema : temas) {
                 generateItem(view, tema.idValue, tema.tituloValue, table);
+            }
+        } else if (table.equals("examen_diagnostico")) {
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            crudExamen.open();
+            ExamenDiagnosticoModel[] examenes = crudExamen.readAll();
+            crudExamen.close();
+
+            for (ExamenDiagnosticoModel examen : examenes) {
+                generateItem(view, examen.idValue, examen.tituloValue, table);
             }
         } else {
             generateAutoItems(view, itemsType);
@@ -276,8 +288,8 @@ public class QueryFragment extends Fragment {
         // eliminar de la base de datos
         if (tag.contains("tema")) {
             delTema(tag);
-        } else {
-
+        } else if (tag.contains("examen_diagnostico")) {
+            delExamen(tag);
         }
 
         messageToast("Elemento eliminado");
@@ -294,6 +306,19 @@ public class QueryFragment extends Fragment {
         TemaModel tema = crudTema.read(id);
         crudTema.delete(tema);
         crudTema.close();
+    }
+
+    private void delExamen(String tag) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(requireContext());
+        crudExamen.open();
+        ExamenDiagnosticoModel examen = crudExamen.read(id);
+        crudExamen.delete(examen);
+        crudExamen.close();
     }
 
     private void clearList() {

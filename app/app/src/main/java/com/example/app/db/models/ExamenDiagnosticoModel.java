@@ -25,8 +25,8 @@ public class ExamenDiagnosticoModel implements Serializable {
             id + " integer primary key autoincrement, " +
             idTema + " integer not null, " +
             titulo + " varchar(100), " +
-            nPreguntas + " integer, " +
-            nivelMaximo + " integer, " +
+            nPreguntas + " integer not null, " +
+            nivelMaximo + " integer not null, " +
             "foreign key (" + idTema + ") references " + TemaModel.tbName + "(" + TemaModel.id + ") on delete cascade on update cascade)";
 
     public static final String dropTable = "drop table if exists " + tbName;
@@ -38,6 +38,19 @@ public class ExamenDiagnosticoModel implements Serializable {
         this.tituloValue = null;
         this.nPreguntasValue = 0;
         this.nivelMaximoValue = 0;
+    }
+
+    public ExamenDiagnosticoModel(
+            int idTema,
+            String titulo,
+            int nPreguntas,
+            int nivelMaximo
+    ) {
+        this.idValue = 0;
+        this.idTemaValue = idTema;
+        this.tituloValue = titulo;
+        this.nPreguntasValue = nPreguntas;
+        this.nivelMaximoValue = nivelMaximo;
     }
 
     public ExamenDiagnosticoModel(
