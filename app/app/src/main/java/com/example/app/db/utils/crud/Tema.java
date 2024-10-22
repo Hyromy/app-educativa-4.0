@@ -141,4 +141,8 @@ public class Tema extends AbstractCRUD<TemaModel> {
     public String[] colums() {
         return super.colums(TemaModel.tbName);
     }
+
+    public int[] readAllIds() {
+        return super.readAllIds(TemaModel.tbName, TemaModel.id);
+    }
 }

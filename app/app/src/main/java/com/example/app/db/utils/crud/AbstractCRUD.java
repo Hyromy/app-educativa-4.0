@@ -64,6 +64,30 @@ public abstract class AbstractCRUD<Table> {
         return colums;
     }
 
+    protected int[] readAllIds(String table, String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                table,
+                new String[] {id},
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        int size = cursor.getCount();
+        int[] ids = new int[size];
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < size; i++) {
+                ids[i] = cursor.getInt(0);
+                cursor.moveToNext();
+            }
+        }
+
+        return ids;
+    }
+
     protected abstract int getIdBy(String arg, String value);
 
     protected abstract long insert(Table obj);

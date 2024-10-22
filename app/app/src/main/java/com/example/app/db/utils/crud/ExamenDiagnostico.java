@@ -155,7 +155,7 @@ public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
         return super.colums(ExamenDiagnosticoModel.tbName);
     }
 
-    public TemaModel getTema(ExamenDiagnosticoModel examenDiagnostico) {
-        return new Tema(this.context).read(examenDiagnostico.idTemaValue);
+    public int[] realAllIds() {
+        return super.readAllIds(ExamenDiagnosticoModel.tbName, ExamenDiagnosticoModel.id);
     }
 }

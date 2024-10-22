@@ -38,7 +38,11 @@ public class ExerciseFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            setToolbarTitle(bundle.getString("activityName"));
+            String testTag = bundle.getString("testTag");
+
+            if (!testTag.isEmpty()) {
+                setToolbarTitle(testTag);
+            }
         }
     }
 
