@@ -19,9 +19,8 @@ import com.example.app.R;
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Usuario;
 
+import com.example.app.preload_data.Run;
 import com.example.app.utils.Encryptor;
-
-import com.example.app.preload_data.Admin;
 
 public class Welcome extends AppCompatActivity {
     private long backPressedTime;
@@ -82,8 +81,7 @@ public class Welcome extends AppCompatActivity {
 
     private void setCruds() {
         crudUsuario = new Usuario(getApplicationContext());
-        Admin createAdmins = new Admin(getApplicationContext(), true);
-
+        new Run(getApplicationContext());
     }
 
     private void hasSesionFile() {

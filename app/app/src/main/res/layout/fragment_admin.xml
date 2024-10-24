@@ -30,13 +30,13 @@
             android:tag="examenes"/>
 
         <Button
-            android:id="@+id/btn_preguntas"
+            android:id="@+id/btn_contenidos"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1"
             android:textSize="24dp"
-            android:text="gestionar preguntas"
-            android:tag="preguntas"/>
+            android:text="gestionar contenidos"
+            android:tag="contenidos"/>
 
         <Button
             android:id="@+id/btn_actividades"
@@ -48,12 +48,12 @@
             android:tag="actividades"/>
 
         <Button
-            android:id="@+id/btn_contenidos"
+            android:id="@+id/btn_preguntas"
             android:layout_width="match_parent"
             android:layout_height="0px"
             android:layout_weight="1"
             android:textSize="24dp"
-            android:text="gestionar contenidos"
-            android:tag="contenidos"/>
+            android:text="gestionar preguntas"
+            android:tag="preguntas"/>
     </LinearLayout>
 </FrameLayout>

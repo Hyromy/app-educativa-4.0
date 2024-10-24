@@ -37,6 +37,17 @@ public class ContenidoModel implements Serializable {
     }
 
     public ContenidoModel(
+            int idTema,
+            int nivel,
+            int nPreguntas
+    ) {
+        this.idValue = 0;
+        this.idTemaValue = idTema;
+        this.nivelValue = nivel;
+        this.nPreguntasValue = nPreguntas;
+    }
+
+    public ContenidoModel(
             int id,
             int idTema,
             int nivel,

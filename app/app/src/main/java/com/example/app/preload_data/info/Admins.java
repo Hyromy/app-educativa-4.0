@@ -1,4 +1,4 @@
-package com.example.app.preload_data;
+package com.example.app.preload_data.info;
 
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Usuario;
@@ -6,20 +6,18 @@ import com.example.app.utils.Encryptor;
 
 import android.content.Context;
 
-public class Admin {
+public class Admins {
     private Context context;
     private Usuario crud;
     private Encryptor encryptor;
     private UsuarioModel[] admins;
 
-    public Admin(Context context, boolean autoRun) {
+    public Admins(Context context) {
         this.context = context;
         this.crud = new Usuario(this.context);
         this.encryptor = new Encryptor();
 
-        if (autoRun) {
-            run();
-        }
+        run();
     }
 
     public void run() {
@@ -27,8 +25,6 @@ public class Admin {
 
         crud.open();
         int id = crud.nextId();
-
-        System.out.println("ID: " + id);
 
         UsuarioModel admin1 = new UsuarioModel(
                 id,

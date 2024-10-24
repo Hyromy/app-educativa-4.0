@@ -24,8 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
+import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.Tema;
 
@@ -66,34 +68,55 @@ public class QueryFragment extends Fragment {
         Context context = getContext();
         // consultar la base de datos la tabla actual
         table = titleToTable(itemsType);
+        getLogs(context, view);
+    }
+
+    private void getLogs(Context context, View view) {
         if (table.equals("tema")) {
-            Tema crudTema = new Tema(context);
-            crudTema.open();
-            TemaModel[] temas = crudTema.readAll();
-            crudTema.close();
+            setTemaLogs(context, view);
 
-            for (TemaModel tema : temas) {
-                generateItem(view, tema.idValue, tema.tituloValue, table);
-            }
         } else if (table.equals("examen_diagnostico")) {
-            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
-            crudExamen.open();
-            ExamenDiagnosticoModel[] examenes = crudExamen.readAll();
-            crudExamen.close();
+            setExamenLogs(context, view);
 
-            for (ExamenDiagnosticoModel examen : examenes) {
-                generateItem(view, examen.idValue, examen.tituloValue, table);
-            }
+        } else if (table.equals("contenido")) {
+            setContenidoLogs(context, view);
+
         } else {
             generateAutoItems(view, itemsType);
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(QueryViewModel.class);
-        // TODO: Use the ViewModel
+    private void setTemaLogs(Context context, View view) {
+        Tema crudTema = new Tema(context);
+        crudTema.open();
+        TemaModel[] temas = crudTema.readAll();
+        crudTema.close();
+
+        for (TemaModel tema : temas) {
+            generateItem(view, tema.idValue, tema.tituloValue, table);
+        }
+    }
+
+    private void setExamenLogs(Context context, View view) {
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+        crudExamen.open();
+        ExamenDiagnosticoModel[] examenes = crudExamen.readAll();
+        crudExamen.close();
+
+        for (ExamenDiagnosticoModel examen : examenes) {
+            generateItem(view, examen.idValue, examen.tituloValue, table);
+        }
+    }
+
+    private void setContenidoLogs(Context context, View view) {
+        Contenido crudContenido = new Contenido(context);
+        crudContenido.open();
+        ContenidoModel[] contenidos = crudContenido.readAll();
+        crudContenido.close();
+
+        for (ContenidoModel contenido : contenidos) {
+            generateItem(view, contenido.idValue, "Probando", table);
+        }
     }
 
     private void setSearchView(View view) {
@@ -120,14 +143,18 @@ public class QueryFragment extends Fragment {
 
         if (s.equals("temas")) {
             x = "tema";
+
         } else if (s.equals("examenes")) {
             x = "examen_diagnostico";
-        } else if (s.equals("preguntas")) {
-            x = "pregunta_examen";
-        } else if (s.equals("actividades")) {
-            x = "pregunta_actividad";
+
         } else if (s.equals("contenidos")) {
             x = "contenido";
+
+        } else if (s.equals("preguntas")) {
+            x = "pregunta_examen";
+
+        } else if (s.equals("actividades")) {
+            x = "pregunta_actividad";
         }
 
         return x;
@@ -266,14 +293,14 @@ public class QueryFragment extends Fragment {
                 AlertDialog.Builder alert = new AlertDialog.Builder(QueryFragment.this.getContext());
                 alert.setTitle("Eliminar");
                 alert.setMessage("¿Estás seguro de que deseas eliminar {" + tag + "}?");
-                alert.setPositiveButton(android.R.string.yes, (dialog, which) -> delItem(tag));
+                alert.setPositiveButton(android.R.string.yes, (dialog, which) -> delItem(tag, getContext()));
                 alert.setNegativeButton(android.R.string.no, null);
                 alert.show();
             }
         };
     }
 
-    private void delItem(String tag) {
+    private void delItem(String tag, Context context) {
         // encontrar contenedor padre
         Pattern pattern = Pattern.compile("(?<=_).*_[0-9]+");
         Matcher matcher = pattern.matcher(tag);
@@ -285,40 +312,60 @@ public class QueryFragment extends Fragment {
         View view = linearLayout.findViewWithTag(tag);
         linearLayout.removeView(view);
 
-        // eliminar de la base de datos
+        delFromDB(tag, context);
+    }
+
+    private void delFromDB(String tag, Context context) {
         if (tag.contains("tema")) {
-            delTema(tag);
+            delTema(tag, context);
+
         } else if (tag.contains("examen_diagnostico")) {
-            delExamen(tag);
+            delExamen(tag, context);
+
+        } else if (tag.contains("contenido")) {
+            delContenido(tag, context);
         }
 
         messageToast("Elemento eliminado");
     }
 
-    private void delTema(String tag) {
+    private void delTema(String tag, Context context) {
         Pattern pattern = Pattern.compile("[0-9]+");
         Matcher matcher = pattern.matcher(tag);
         matcher.find();
         int id = Integer.parseInt(matcher.group());
 
-        Tema crudTema = new Tema(requireContext());
+        Tema crudTema = new Tema(context);
         crudTema.open();
         TemaModel tema = crudTema.read(id);
         crudTema.delete(tema);
         crudTema.close();
     }
 
-    private void delExamen(String tag) {
+    private void delExamen(String tag, Context context) {
         Pattern pattern = Pattern.compile("[0-9]+");
         Matcher matcher = pattern.matcher(tag);
         matcher.find();
         int id = Integer.parseInt(matcher.group());
 
-        ExamenDiagnostico crudExamen = new ExamenDiagnostico(requireContext());
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
         crudExamen.open();
         ExamenDiagnosticoModel examen = crudExamen.read(id);
         crudExamen.delete(examen);
         crudExamen.close();
+    }
+
+    private void delContenido(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        Contenido crudContenido = new Contenido(context);
+        crudContenido.open();
+        ContenidoModel contenido = crudContenido.read(id);
+        crudContenido.delete(contenido);
+        crudContenido.close();
     }
 
     private void clearList() {

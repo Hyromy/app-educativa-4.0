@@ -27,6 +27,7 @@ import java.util.Objects;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
+import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.ui.themes.exercise.*;
 import com.example.app.utils.*;
@@ -106,8 +107,18 @@ public class ThemeFragment extends Fragment {
     }
 
     private void findAndSetExercises(Context context, TemaModel tema) {
-        for (int i = 1; i <= 3; i++) {
-            setActivityFrame(context, "Actividad " + i, "Actividad", "activity_frame__" + tema.idValue + "__" + i);
+        ContenidoModel contenido = null;
+
+        Contenido crudContenido = new Contenido(context);
+        crudContenido.open();
+        ContenidoModel[] contenidos = crudContenido.readAll();
+        crudContenido.close();
+
+        for (ContenidoModel iContenido : contenidos) {
+            if (iContenido.idTemaValue == tema.idValue) {
+                contenido = iContenido;
+                setActivityFrame(context, "Actividad", "Nivel " + contenido.nivelValue, "c_" + contenido.idValue);
+            }
         }
     }
 
