@@ -169,9 +169,19 @@ public class ItemFragment extends Fragment {
         Spinner spinner = setSpinner(context, items, "tema");
         layout.addView(spinner);
 
+        textView = setLabel(context, "Título");
+        layout.addView(textView);
+        EditText editText = setEntry(context, 't', "titulo", 50);
+        layout.addView(editText);
+
+        textView = setLabel(context, "Descripción");
+        layout.addView(textView);
+        editText = setEntry(context, 'a', "descripcion", 100);
+        layout.addView(editText);
+
         textView = setLabel(context, "Nivel del contenido [reemplazar por un spinner]");
         layout.addView(textView);
-        EditText editText = setEntry(context, 'n', "nivel_contenido", 1);
+        editText = setEntry(context, 'n', "nivel_contenido", 1);
         layout.addView(editText);
 
         textView = setLabel(context, "Número de preguntas");
@@ -249,6 +259,8 @@ public class ItemFragment extends Fragment {
 
     private void extractContenido() {
         Spinner spinner = layout.findViewWithTag("tema_spinner");
+        EditText tituloET = layout.findViewWithTag("titulo");
+        EditText descripcionET = layout.findViewWithTag("descripcion");
         EditText nivelContenidoET = layout.findViewWithTag("nivel_contenido");
         EditText nPreguntasET = layout.findViewWithTag("n_preguntas");
 
@@ -267,6 +279,8 @@ public class ItemFragment extends Fragment {
                 break;
             }
         }
+        tituloET.setText(contenido.tituloValue);
+        descripcionET.setText(contenido.descripcionValue);
         nivelContenidoET.setText(String.valueOf(contenido.nivelValue));
         nPreguntasET.setText(String.valueOf(contenido.nPreguntasValue));
     }
@@ -534,6 +548,9 @@ public class ItemFragment extends Fragment {
         matcher.find();
         int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
 
+        String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
+        String descripcion = ((EditText) layout.findViewWithTag("descripcion")).getText().toString().trim();
+
         // reemplazar por un spinner
         int nivelContenido = Integer.parseInt(((EditText) layout.findViewWithTag("nivel_contenido")).getText().toString().trim());
 
@@ -543,6 +560,8 @@ public class ItemFragment extends Fragment {
             Contenido crudContenido = new Contenido(context);
             ContenidoModel contenido = new ContenidoModel(
                     idItem,
+                    titulo,
+                    descripcion,
                     nivelContenido,
                     nPreguntas
             );
@@ -552,6 +571,8 @@ public class ItemFragment extends Fragment {
                 Toast.makeText(context, "Registro guardado", Toast.LENGTH_SHORT).show();
 
                 spinner.setSelection(0);
+                ((EditText) layout.findViewWithTag("titulo")).setText("");
+                ((EditText) layout.findViewWithTag("descripcion")).setText("");
                 ((EditText) layout.findViewWithTag("nivel_contenido")).setText("");
                 ((EditText) layout.findViewWithTag("n_preguntas")).setText("");
 
@@ -575,6 +596,9 @@ public class ItemFragment extends Fragment {
         matcher.find();
         int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
 
+        String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
+        String descripcion = ((EditText) layout.findViewWithTag("descripcion")).getText().toString().trim();
+
         // reemplazar por un spinner
         int nivelContenido = Integer.parseInt(((EditText) layout.findViewWithTag("nivel_contenido")).getText().toString().trim());
 
@@ -585,6 +609,8 @@ public class ItemFragment extends Fragment {
             ContenidoModel contenido = new ContenidoModel(
                     id,
                     idItem,
+                    titulo,
+                    descripcion,
                     nivelContenido,
                     nPreguntas
             );

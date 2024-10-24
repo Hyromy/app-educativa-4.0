@@ -117,7 +117,7 @@ public class ThemeFragment extends Fragment {
         for (ContenidoModel iContenido : contenidos) {
             if (iContenido.idTemaValue == tema.idValue) {
                 contenido = iContenido;
-                setActivityFrame(context, "Actividad", "Nivel " + contenido.nivelValue, "c_" + contenido.idValue);
+                setActivityFrame(context, contenido.tituloValue, contenido.descripcionValue, String.valueOf(contenido.idValue));
             }
         }
     }
@@ -127,7 +127,7 @@ public class ThemeFragment extends Fragment {
     }
 
     private void setActivityFrame(Context context, String title, String label, String tag) {
-        setFrame(context, title, "", tag);
+        setFrame(context, title, label, "c_" + tag);
     }
 
     private void setFrame(Context context, String title, String label,String tag) {

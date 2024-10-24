@@ -43,6 +43,8 @@ public class Contenido extends AbstractCRUD<ContenidoModel> {
         ContentValues values = new ContentValues();
 
         values.put(ContenidoModel.idTema, obj.idTemaValue);
+        values.put(ContenidoModel.titulo, obj.tituloValue);
+        values.put(ContenidoModel.descripcion, obj.descripcionValue);
         values.put(ContenidoModel.nivel, obj.nivelValue);
         values.put(ContenidoModel.nPreguntas, obj.nPreguntasValue);
 
@@ -68,8 +70,10 @@ public class Contenido extends AbstractCRUD<ContenidoModel> {
             contenido = new ContenidoModel(
                 cursor.getInt(0),
                 cursor.getInt(1),
-                cursor.getInt(2),
-                cursor.getInt(3)
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getInt(4),
+                cursor.getInt(5)
             );
             cursor.close();
         } else if (cursor != null) {
@@ -99,8 +103,10 @@ public class Contenido extends AbstractCRUD<ContenidoModel> {
                 contenidos[i] = new ContenidoModel(
                     cursor.getInt(0),
                     cursor.getInt(1),
-                    cursor.getInt(2),
-                    cursor.getInt(3)
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getInt(4),
+                    cursor.getInt(5)
                 );
                 cursor.moveToNext();
             }
@@ -115,7 +121,9 @@ public class Contenido extends AbstractCRUD<ContenidoModel> {
         ContentValues values = new ContentValues();
 
         values.put(ContenidoModel.idTema, obj.idTemaValue);
+        values.put(ContenidoModel.titulo, obj.tituloValue);
         values.put(ContenidoModel.nivel, obj.nivelValue);
+        values.put(ContenidoModel.descripcion, obj.descripcionValue);
         values.put(ContenidoModel.nPreguntas, obj.nPreguntasValue);
 
         return db.update(

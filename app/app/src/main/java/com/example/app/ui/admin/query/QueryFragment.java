@@ -115,7 +115,9 @@ public class QueryFragment extends Fragment {
         crudContenido.close();
 
         for (ContenidoModel contenido : contenidos) {
-            generateItem(view, contenido.idValue, "Probando", table);
+            // extraer el nombre del tema
+
+            generateItem(view, contenido.idValue, contenido.tituloValue + " (from {theme})", table);
         }
     }
 
