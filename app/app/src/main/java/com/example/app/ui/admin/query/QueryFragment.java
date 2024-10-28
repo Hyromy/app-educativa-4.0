@@ -112,13 +112,13 @@ public class QueryFragment extends Fragment {
         Contenido crudContenido = new Contenido(context);
         crudContenido.open();
         ContenidoModel[] contenidos = crudContenido.readAll();
-        crudContenido.close();
 
+        String title = null;
         for (ContenidoModel contenido : contenidos) {
-            // extraer el nombre del tema
-
-            generateItem(view, contenido.idValue, contenido.tituloValue + " (from {theme})", table);
+            title = crudContenido.getTitleFromTheme(contenido.idTemaValue);
+            generateItem(view, contenido.idValue, contenido.tituloValue + " (" + title + ")", table);
         }
+        crudContenido.close();
     }
 
     private void setSearchView(View view) {
