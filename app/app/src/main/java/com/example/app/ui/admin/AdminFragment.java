@@ -14,17 +14,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.app.R;
 
 public class AdminFragment extends Fragment {
-    private AdminViewModel mViewModel;
-    private Button btnTemas;
-    private Button btnExamenes;
-    private Button btnPreguntas;
-    private Button btnActividades;
-    private Button btnContenidos;
+    private LinearLayout Temas;
+    private LinearLayout Examenes;
+    private LinearLayout Contenidos;
+    private LinearLayout Preguntas;
+    private LinearLayout Respuestas;
+    private LinearLayout Apoyos;
+    private LinearLayout Recursos;
 
     public static AdminFragment newInstance() {
         return new AdminFragment();
@@ -39,7 +41,6 @@ public class AdminFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AdminViewModel.class);
 
         View view = getView();
         setButtons(view);
@@ -47,41 +48,55 @@ public class AdminFragment extends Fragment {
     }
 
     private void setButtons(View view) {
-        btnTemas = view.findViewById(R.id.btn_temas);
-        btnExamenes = view.findViewById(R.id.btn_examenes);
-        btnPreguntas = view.findViewById(R.id.btn_preguntas);
-        btnActividades = view.findViewById(R.id.btn_actividades);
-        btnContenidos = view.findViewById(R.id.btn_contenidos);
+        Temas = view.findViewById(R.id.gst_temas);
+        Examenes = view.findViewById(R.id.gst_examenes);
+        Contenidos = view.findViewById(R.id.gst_contenidos);
+        Preguntas = view.findViewById(R.id.gst_preguntas);
+        Respuestas = view.findViewById(R.id.gst_respuestas);
+        Apoyos = view.findViewById(R.id.gst_apoyos);
+        Recursos = view.findViewById(R.id.gst_recursos);
     }
 
     private void setListeners() {
-        btnTemas.setOnClickListener(new View.OnClickListener() {
+        Temas.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 toQuery(view, "temas");
             }
         });
 
-        btnExamenes.setOnClickListener(new View.OnClickListener() {
+        Examenes.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 toQuery(view, "examenes");
             }
         });
 
-        btnPreguntas.setOnClickListener(new View.OnClickListener() {
+        Contenidos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                toQuery(view, "contenidos");
+            }
+        });
+
+        Preguntas.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 toQuery(view, "preguntas");
             }
         });
 
-        btnActividades.setOnClickListener(new View.OnClickListener() {
+        Respuestas.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                toQuery(view, "actividades");
+                toQuery(view, "respuestas");
             }
         });
 
-        btnContenidos.setOnClickListener(new View.OnClickListener() {
+        Apoyos.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                toQuery(view, "contenidos");
+                toQuery(view, "apoyos");
+            }
+        });
+
+        Recursos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                toQuery(view, "recursos");
             }
         });
     }

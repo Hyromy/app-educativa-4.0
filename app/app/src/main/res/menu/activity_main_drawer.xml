@@ -6,6 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_themes"
+            android:icon="@drawable/ic_books"
             android:title="Temario" />
         <item
             android:id="@+id/nav_profile"
@@ -13,6 +14,7 @@
             android:title="Perfil" />
         <item
             android:id="@+id/nav_admin"
+            android:icon="@drawable/ic_config"
             android:title="Administración"/>
     </group>
 </menu>

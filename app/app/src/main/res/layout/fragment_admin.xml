@@ -5,55 +5,191 @@
     android:layout_height="match_parent"
     tools:context=".ui.admin.AdminFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_temas"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textSize="24dp"
-            android:text="gestionar temas"
-            android:tag="temas"/>
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
 
-        <Button
-            android:id="@+id/btn_examenes"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textSize="24dp"
-            android:text="gestionar examenes"
-            android:tag="examenes"/>
+            <LinearLayout
+                android:id="@+id/gst_temas"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/Greeuttec"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
 
-        <Button
-            android:id="@+id/btn_contenidos"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textSize="24dp"
-            android:text="gestionar contenidos"
-            android:tag="contenidos"/>
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_books"/>
 
-        <Button
-            android:id="@+id/btn_actividades"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textSize="24dp"
-            android:text="gestionar actividades"
-            android:tag="actividades"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar temas"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_examenes"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/Greeuttec"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
 
-        <Button
-            android:id="@+id/btn_preguntas"
-            android:layout_width="match_parent"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textSize="24dp"
-            android:text="gestionar preguntas"
-            android:tag="preguntas"/>
-    </LinearLayout>
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_test"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar examenes"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_contenidos"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/Greeuttec"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_open_book"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar contenidos"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_preguntas"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/Bluttec"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_pen_pencil"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar preguntas"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_respuestas"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/red"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_chat"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar respuestas"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_apoyos"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/red"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_paragraph"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar material de apoyo"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/gst_recursos"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_box"
+                android:backgroundTint="@color/red"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_menu_gallery"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gestionar recursos"
+                    android:paddingLeft="16dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>
