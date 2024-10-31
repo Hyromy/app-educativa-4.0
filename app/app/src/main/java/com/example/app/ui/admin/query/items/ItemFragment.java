@@ -79,11 +79,10 @@ public class ItemFragment extends Fragment {
         } else if (table.equals("contenido")) {
             drawer.loadContenido(context, layout);
 
-        } else if (table.equals("pregunta_examen")) {
+        } else if (table.equals("pregunta_")) {
+            // aqui
             drawer.loadPregunta(context, layout);
 
-        } else if (table.equals("pregunta_actividad")) {
-            drawer.loadActividad(context, layout);
         }
     }
 
@@ -98,11 +97,9 @@ public class ItemFragment extends Fragment {
         } else if (table.equals("contenido")) {
             drawer.extractContenido(context, layout, id);
 
-        } else if (table.equals("pregunta_examen")) {
+        } else if (table.equals("pregunta_")) {
             drawer.extractPreguntaExamen(context, layout, id);
 
-        } else if (table.equals("pregunta_actividad")) {
-            drawer.extractPreguntaActividad(context, layout, id);
         }
     }
 

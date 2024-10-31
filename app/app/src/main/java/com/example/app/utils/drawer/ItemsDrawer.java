@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.Tema;
+
+import org.w3c.dom.Text;
 
 public class ItemsDrawer {
     private TextView setLabel(Context context, String text) {
@@ -65,6 +69,44 @@ public class ItemsDrawer {
         spinner.setLayoutParams(params);
 
         return spinner;
+    }
+
+    private RadioGroup rGroup(Context context, RadioButton[] radios, String tag, LinearLayout layout) {
+        RadioGroup rg = new RadioGroup(context);
+        rg.setTag("rg_" + tag);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.setMargins(0, 32, 0, 0);
+        rg.setLayoutParams(params);
+
+        for (RadioButton radio : radios) {
+            rg.addView(radio);
+        }
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton rb = group.findViewById(checkedId);
+                String tag = rb.getTag().toString();
+                if (tag.equals("rb_examen")) {
+                    loadPreguntaExamen(context, layout);
+                } else if (tag.equals("rb_actividad")) {
+                    loadPreguntaActividad(context, layout);
+                }
+            }
+        });
+
+        return rg;
+    }
+
+    private RadioButton setRadio(Context context, String text, String tag) {
+        RadioButton rb = new RadioButton(context);
+        rb.setId(View.generateViewId());
+        rb.setTag("rb_" + tag);
+        rb.setText(text);
+
+        return rb;
     }
 
     public void loadTema(Context context, LinearLayout layout) {
@@ -145,7 +187,22 @@ public class ItemsDrawer {
     }
 
     public void loadPregunta(Context context, LinearLayout layout) {
-        Toast.makeText(context, "Cargando pregunta", Toast.LENGTH_SHORT).show();
+        TextView textView = setLabel(context, "Tipo de pregunta");
+        layout.addView(textView);
+        RadioButton[] radios = {
+            setRadio(context, "Exámen", "examen"),
+            setRadio(context, "Actividad", "actividad")
+        };
+        RadioGroup rg = rGroup(context, radios, "tipoPregunta", layout);
+        layout.addView(rg);
+    }
+
+    private void loadPreguntaExamen(Context context, LinearLayout layout) {
+        Toast.makeText(context, "Cargando pregunta de examen", Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadPreguntaActividad(Context context, LinearLayout layout) {
+        Toast.makeText(context, "Cargando pregunta de actividad", Toast.LENGTH_SHORT).show();
     }
 
     public void loadActividad(Context context, LinearLayout layout) {

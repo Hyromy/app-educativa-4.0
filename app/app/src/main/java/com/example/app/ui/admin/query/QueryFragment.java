@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
@@ -37,6 +38,7 @@ public class QueryFragment extends Fragment {
     private String table = null;
 
     private QueryDrawer drawer = new QueryDrawer();
+    private QueryModel model = new QueryModel();
 
     public static QueryFragment newInstance() {
         return new QueryFragment();
@@ -58,11 +60,11 @@ public class QueryFragment extends Fragment {
             setToolbarTitle(itemsType);
         }
 
-        view.findViewById(R.id.btn_agregar).setOnClickListener(addListener());
+        view.findViewById(R.id.btn_agregar).setOnClickListener(saveListener());
         setSearchView(view);
 
         Context context = getContext();
-        table = titleToTable(itemsType);
+        table = model.titleToTable(itemsType);
         getLogs(context, view);
     }
 
@@ -76,6 +78,17 @@ public class QueryFragment extends Fragment {
         } else if (table.equals("contenido")) {
             setContenidoLogs(context, view);
 
+        } else if (table.equals("pregunta_")) {
+            // setPreguntaLogs(context, view);
+
+        } else if (table.equals("respuesta_")) {
+            // setPreguntaLogs(context, view);
+
+        } else if (table.equals("apoyo")) {
+            // setApoyoLogs(context, view);
+
+        } else if (table.equals("recurso")) {
+            // setRecursoLogs(context, view);
         }
     }
 
@@ -129,28 +142,6 @@ public class QueryFragment extends Fragment {
                 return false;
             }
         });
-    }
-
-    private String titleToTable(String s) {
-        String x = null;
-
-        if (s.equals("temas")) {
-            x = "tema";
-
-        } else if (s.equals("examenes")) {
-            x = "examen_diagnostico";
-
-        } else if (s.equals("contenidos")) {
-            x = "contenido";
-
-        } else if (s.equals("preguntas")) {
-            x = "pregunta_examen";
-
-        } else if (s.equals("actividades")) {
-            x = "pregunta_actividad";
-        }
-
-        return x;
     }
 
     private void generateItem(View view, int id, String name, String table) {
@@ -277,7 +268,7 @@ public class QueryFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putChar("action", 'e');
-                bundle.putString("table", titleToTable(itemsType));
+                bundle.putString("table", model.titleToTable(itemsType));
 
                 Pattern pattern = Pattern.compile("_[0-9]+");
                 Matcher matcher = pattern.matcher(tag);
@@ -290,13 +281,13 @@ public class QueryFragment extends Fragment {
         };
     }
 
-    private View.OnClickListener addListener() {
+    private View.OnClickListener saveListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putChar("action", 'c');
-                bundle.putString("table", titleToTable(itemsType));
+                bundle.putString("table", model.titleToTable(itemsType));
                 bundle.putInt("id", 0);
 
                 Navigation.findNavController(view).navigate(R.id.action_nav_query_to_nav_item, bundle);
