@@ -20,8 +20,9 @@ import com.example.app.R;
 import com.example.app.utils.drawer.ItemsDrawer;
 
 public class ItemFragment extends Fragment {
-    private String table = null;
+    public static String table = null;
     private int id;
+    private String itemTag;
     private LinearLayout layout;
     private Button btnSave;
 
@@ -50,7 +51,8 @@ public class ItemFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             table = bundle.getString("table");
-            loadFormOf(table, getContext());
+            itemTag = bundle.getString("itemTag");
+            loadFormOf(table, getContext(), view);
 
             id = bundle.getInt("id");
             if (id > 0) {
@@ -69,7 +71,7 @@ public class ItemFragment extends Fragment {
         }
     }
 
-    private void loadFormOf(String table, Context context) {
+    private void loadFormOf(String table, Context context, View view) {
         if (table.equals("tema")) {
             drawer.loadTema(context, layout);
 
@@ -80,8 +82,7 @@ public class ItemFragment extends Fragment {
             drawer.loadContenido(context, layout);
 
         } else if (table.equals("pregunta_")) {
-            // aqui
-            drawer.loadPregunta(context, layout);
+            drawer.loadPregunta(context, layout, view.findViewById(R.id.btn_save));
 
         }
     }
@@ -98,8 +99,15 @@ public class ItemFragment extends Fragment {
             drawer.extractContenido(context, layout, id);
 
         } else if (table.equals("pregunta_")) {
-            drawer.extractPreguntaExamen(context, layout, id);
+            if (itemTag.contains("examen")) {
+                drawer.extractPreguntaExamen(context, layout, id);
+            } else if (itemTag.contains("actividad")) {
+                // pendiente
 
+
+
+
+            }
         }
     }
 
@@ -126,25 +134,18 @@ public class ItemFragment extends Fragment {
                     model.updateContenido(context, layout, id);
                 }
             } else if (table.equals("pregunta_examen")) {
-                notImplemented(context);
                 if (id <= 0) {
-                    // insert
+                    model.insertPreguntaExamen(context, layout);
                 } else {
-                    // update
+                    model.updatePreguntaExamen(context, layout, id);
                 }
             } else if (table.equals("pregunta_actividad")) {
-                notImplemented(context);
                 if (id <= 0) {
-                    // insert
+                    model.insertPreguntaActividad(context, layout);
                 } else {
-                    // update
+                    model.updatePreguntaActividad(context, layout, id);
                 }
             }
         }
     };
-
-    // borrar despues
-    private void notImplemented(Context context) {
-        Toast.makeText(context, "Aún no implementado", Toast.LENGTH_SHORT).show();
-    }
 }

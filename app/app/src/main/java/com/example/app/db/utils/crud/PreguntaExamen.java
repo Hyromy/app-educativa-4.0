@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaExamenModel;
 
 public class PreguntaExamen extends AbstractCRUD<PreguntaExamenModel> {
@@ -143,5 +144,30 @@ public class PreguntaExamen extends AbstractCRUD<PreguntaExamenModel> {
 
     public String[] colums() {
         return super.colums(PreguntaExamenModel.tbName);
+    }
+
+    public String getTitleFromExam(int id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String title = null;
+
+        String query = "select " + ExamenDiagnosticoModel.tbName + "." + ExamenDiagnosticoModel.titulo +
+                " from " + ExamenDiagnosticoModel.tbName +
+                " inner join " + PreguntaExamenModel.tbName +
+                " on " + ExamenDiagnosticoModel.tbName + "." + ExamenDiagnosticoModel.id + " = " + PreguntaExamenModel.tbName + "." + PreguntaExamenModel.idExamen +
+                " where " + PreguntaExamenModel.tbName + "." + PreguntaExamenModel.id + " = ?";
+
+        Cursor cursor = db.rawQuery(
+                query,
+                new String[] {String.valueOf(id)}
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            title = cursor.getString(0);
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return title;
     }
 }

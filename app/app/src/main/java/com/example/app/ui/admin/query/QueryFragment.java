@@ -23,10 +23,13 @@ import android.widget.Toast;
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
+import com.example.app.db.utils.crud.PreguntaExamen;
 import com.example.app.db.utils.crud.Tema;
+import com.example.app.ui.admin.query.items.ItemFragment;
 import com.example.app.utils.drawer.QueryDrawer;
 
 import java.util.Objects;
@@ -79,7 +82,7 @@ public class QueryFragment extends Fragment {
             setContenidoLogs(context, view);
 
         } else if (table.equals("pregunta_")) {
-            // setPreguntaLogs(context, view);
+            setPreguntaLogs(context, view);
 
         } else if (table.equals("respuesta_")) {
             // setPreguntaLogs(context, view);
@@ -125,6 +128,19 @@ public class QueryFragment extends Fragment {
             generateItem(view, contenido.idValue, contenido.tituloValue + " (" + title + ")", table);
         }
         crudContenido.close();
+    }
+
+    private void setPreguntaLogs(Context context, View view) {
+        PreguntaExamen crudPregunta = new PreguntaExamen(context);
+        crudPregunta.open();
+        PreguntaExamenModel[] preguntas = crudPregunta.readAll();
+        crudPregunta.close();
+
+        String exam = null;
+        for (PreguntaExamenModel pregunta : preguntas) {
+            exam = crudPregunta.getTitleFromExam(pregunta.idValue);
+            generateItem(view, pregunta.idValue, "D: " + exam + " -> " + pregunta.textoValue, table + "examen");
+        }
     }
 
     private void setSearchView(View view) {
