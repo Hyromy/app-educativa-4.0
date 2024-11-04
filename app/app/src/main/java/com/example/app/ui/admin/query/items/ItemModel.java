@@ -322,7 +322,7 @@ public class ItemModel {
         );
         PreguntaExamen crudPregunta = new PreguntaExamen(context);
         crudPregunta.open();
-        
+
         try {
             crudPregunta.update(pregunta);
             Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();

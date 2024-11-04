@@ -138,7 +138,7 @@ public class QueryFragment extends Fragment {
 
         String exam = null;
         for (PreguntaExamenModel pregunta : preguntas) {
-            exam = crudPregunta.getTitleFromExam(pregunta.idValue);
+            exam = crudPregunta.getTitleFromExam(pregunta);
             generateItem(view, pregunta.idValue, "D: " + exam + " -> " + pregunta.textoValue, table + "examen");
         }
     }
@@ -231,6 +231,18 @@ public class QueryFragment extends Fragment {
 
         } else if (tag.contains("contenido")) {
             delContenido(tag, context);
+
+        } else if (tag.contains("pregunta")) {
+            if (tag.contains("examen")) {
+                delPreguntaExamen(tag, context);
+            } else if (tag.contains("actividad")) {
+
+
+
+
+
+
+            }
         }
     }
 
@@ -271,6 +283,19 @@ public class QueryFragment extends Fragment {
         ContenidoModel contenido = crudContenido.read(id);
         crudContenido.delete(contenido);
         crudContenido.close();
+    }
+
+    private void delPreguntaExamen(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        PreguntaExamen crudPregunta = new PreguntaExamen(context);
+        crudPregunta.open();
+        PreguntaExamenModel pregunta = crudPregunta.read(id);
+        crudPregunta.delete(pregunta);
+        crudPregunta.close();
     }
 
     private void clearList() {

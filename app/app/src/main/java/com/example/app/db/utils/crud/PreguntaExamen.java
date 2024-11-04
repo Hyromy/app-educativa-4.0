@@ -146,7 +146,7 @@ public class PreguntaExamen extends AbstractCRUD<PreguntaExamenModel> {
         return super.colums(PreguntaExamenModel.tbName);
     }
 
-    public String getTitleFromExam(int id) {
+    public String getTitleFromExam(PreguntaExamenModel obj) {
         SQLiteDatabase db = getReadableDatabase();
         String title = null;
 
@@ -158,7 +158,7 @@ public class PreguntaExamen extends AbstractCRUD<PreguntaExamenModel> {
 
         Cursor cursor = db.rawQuery(
                 query,
-                new String[] {String.valueOf(id)}
+                new String[] {String.valueOf(obj.idValue)}
         );
 
         if (cursor != null && cursor.moveToFirst()) {
