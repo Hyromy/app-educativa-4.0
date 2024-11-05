@@ -101,12 +101,9 @@ public class ItemFragment extends Fragment {
         } else if (table.equals("pregunta_")) {
             if (itemTag.contains("examen")) {
                 drawer.extractPreguntaExamen(context, layout, id);
+
             } else if (itemTag.contains("actividad")) {
-                // pendiente
-
-
-
-
+                drawer.extractPreguntaActividad(context, layout, id);
             }
         }
     }

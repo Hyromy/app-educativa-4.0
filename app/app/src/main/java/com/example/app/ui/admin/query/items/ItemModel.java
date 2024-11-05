@@ -8,10 +8,12 @@ import android.widget.Toast;
 
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
+import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
 import com.example.app.db.utils.crud.Tema;
 
@@ -345,9 +347,62 @@ public class ItemModel {
         int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
 
         String texto = ((EditText) layout.findViewWithTag("texto")).getText().toString().trim();
+
+        PreguntaActividadModel pregunta = new PreguntaActividadModel(
+                idItem,
+                0,
+                texto
+        );
+
+        PreguntaActividad crudPregunta = new PreguntaActividad(context);
+        crudPregunta.open();
+
+        try {
+            crudPregunta.insert(pregunta);
+            Toast.makeText(context, "Registro guardado", Toast.LENGTH_SHORT).show();
+
+            spinner.setSelection(0);
+            ((EditText) layout.findViewWithTag("texto")).setText("");
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+            System.out.println(e.getMessage());
+
+        } finally {
+            crudPregunta.close();
+        }
     }
 
     public void updatePreguntaActividad(Context context, LinearLayout layout, int id) {
-        System.out.println("updatePreguntaActividad");
+        Spinner spinner = layout.findViewWithTag("contenido_spinner");
+        String selection = spinner.getSelectedItem().toString();
+        Pattern pattern = Pattern.compile("\\(\\d+\\)");
+        Matcher matcher = pattern.matcher(selection);
+        matcher.find();
+        int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
+
+        String texto = ((EditText) layout.findViewWithTag("texto")).getText().toString().trim();
+
+        PreguntaActividadModel pregunta = new PreguntaActividadModel(
+                id,
+                idItem,
+                0,
+                texto
+        );
+
+        PreguntaActividad crudPregunta = new PreguntaActividad(context);
+        crudPregunta.open();
+
+        try {
+            crudPregunta.update(pregunta);
+            Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+            System.out.println(e.getMessage());
+
+        } finally {
+            crudPregunta.close();
+        }
     }
 }

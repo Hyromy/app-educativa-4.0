@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.PreguntaActividadModel;
+import com.example.app.db.models.TemaModel;
 
 public class PreguntaActividad extends AbstractCRUD<PreguntaActividadModel> {
     public PreguntaActividad(Context context) {
@@ -169,5 +170,32 @@ public class PreguntaActividad extends AbstractCRUD<PreguntaActividadModel> {
         }
 
         return level;
+    }
+
+    public String getTitleFromTheme(PreguntaActividadModel obj) {
+        SQLiteDatabase db = getReadableDatabase();
+        String title = null;
+
+        String query = "select " + TemaModel.tbName + "." + TemaModel.titulo +
+                " from " + TemaModel.tbName +
+                " inner join " + ContenidoModel.tbName +
+                " on " + TemaModel.tbName + "." + TemaModel.id + " = " + ContenidoModel.tbName + "." + ContenidoModel.idTema +
+                " inner join " + PreguntaActividadModel.tbName +
+                " on " + ContenidoModel.tbName + "." + ContenidoModel.id + " = " + PreguntaActividadModel.tbName + "." + PreguntaActividadModel.idContenido +
+                " where " + PreguntaActividadModel.tbName + "." + PreguntaActividadModel.id + " = ?";
+
+        Cursor cursor = db.rawQuery(
+                query,
+                new String[] {String.valueOf(obj.idValue)}
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            title = cursor.getString(0);
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return title;
     }
 }

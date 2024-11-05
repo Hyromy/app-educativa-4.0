@@ -38,6 +38,17 @@ public class PreguntaActividadModel implements Serializable {
     }
 
     public PreguntaActividadModel(
+            int idContenido,
+            int idRecurso,
+            String texto
+    ) {
+        this.idValue = 0;
+        this.idContenidoValue = idContenido;
+        this.idRecursoValue = idRecurso;
+        this.textoValue = texto;
+    }
+
+    public PreguntaActividadModel(
             int id,
             int idContenido,
             int idRecurso,

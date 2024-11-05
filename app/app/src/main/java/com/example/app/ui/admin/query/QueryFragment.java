@@ -23,10 +23,12 @@ import android.widget.Toast;
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
+import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
@@ -135,11 +137,20 @@ public class QueryFragment extends Fragment {
         crudPregunta.open();
         PreguntaExamenModel[] preguntas = crudPregunta.readAll();
         crudPregunta.close();
-
         String exam = null;
         for (PreguntaExamenModel pregunta : preguntas) {
             exam = crudPregunta.getTitleFromExam(pregunta);
             generateItem(view, pregunta.idValue, "D: " + exam + " -> " + pregunta.textoValue, table + "examen");
+        }
+
+        PreguntaActividad crudActividad = new PreguntaActividad(context);
+        crudActividad.open();
+        PreguntaActividadModel[] actividades = crudActividad.readAll();
+        crudActividad.close();
+        String activity = null;
+        for (PreguntaActividadModel actividad : actividades) {
+            activity = crudActividad.getTitleFromTheme(actividad);
+            generateItem(view, actividad.idValue, "A: " + activity + " -> " + actividad.textoValue, table + "actividad");
         }
     }
 

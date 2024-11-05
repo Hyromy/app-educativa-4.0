@@ -12,14 +12,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
+import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
@@ -378,6 +379,41 @@ public class ItemsDrawer {
             }
         }
         textoET.setText(preguntaExamen.textoValue);
+    }
+
+    public void extractPreguntaActividad(Context context, LinearLayout layout, int id) {
+        RadioGroup rg = layout.findViewWithTag("rg_tipoPregunta");
+        for (int i = 0; i < rg.getChildCount(); i++) {
+            View child = rg.getChildAt(i);
+            if (child instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) child;
+                if (radioButton.getTag().equals("rb_actividad")) {
+                    radioButton.setChecked(true);
+                } else {
+                    radioButton.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        Spinner spinner = layout.findViewWithTag("contenido_spinner");
+        EditText textoET = layout.findViewWithTag("texto");
+
+        PreguntaActividad crudPreguntaActividad = new PreguntaActividad(context);
+        crudPreguntaActividad.open();
+        PreguntaActividadModel preguntaActividad = crudPreguntaActividad.read(id);
+        crudPreguntaActividad.close();
+
+        Contenido crudContenido = new Contenido(context);
+        crudContenido.open();
+        ContenidoModel[] contenidos = crudContenido.readAll();
+        crudContenido.close();
+        for (int i = 0; i < contenidos.length; i++) {
+            if (preguntaActividad.idContenidoValue == contenidos[i].idValue) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+        textoET.setText(preguntaActividad.textoValue);
     }
 
     public void clearLayout(LinearLayout layout) {
