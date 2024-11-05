@@ -24,12 +24,14 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.utils.drawer.QueryDrawer;
@@ -165,13 +167,15 @@ public class QueryFragment extends Fragment {
             generateItem(view, respuesta.idValue, "E: " + pregunta + " -> " + respuesta.textoValue, table + "examen");
         }
 
-
-
-
-
-
-
-
+        RespuestaActividad crudActividad = new RespuestaActividad(context);
+        crudActividad.open();
+        RespuestaActividadModel[] respuestasA = crudActividad.readAll();
+        crudActividad.close();
+        String actividad = null;
+        for (RespuestaActividadModel respuesta : respuestasA) {
+            actividad = crudActividad.getTextFromQuestion(respuesta);
+            generateItem(view, respuesta.idValue, "A: " + actividad + " -> " + respuesta.textoValue, table + "actividad");
+        }
     }
 
     private void setSearchView(View view) {
@@ -272,11 +276,7 @@ public class QueryFragment extends Fragment {
             if (tag.contains("examen")) {
                 delRespuestaExamen(tag, context);
             } else if (tag.contains("actividad")) {
-                // delRespuesta(tag, context);
-
-
-
-
+                delRespuestaActividad(tag, context);
             }
         }
     }
@@ -355,6 +355,19 @@ public class QueryFragment extends Fragment {
         RespuestaExamen crudRespuesta = new RespuestaExamen(context);
         crudRespuesta.open();
         RespuestaExamenModel respuesta = crudRespuesta.read(id);
+        crudRespuesta.delete(respuesta);
+        crudRespuesta.close();
+    }
+
+    private void delRespuestaActividad(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        RespuestaActividad crudRespuesta = new RespuestaActividad(context);
+        crudRespuesta.open();
+        RespuestaActividadModel respuesta = crudRespuesta.read(id);
         crudRespuesta.delete(respuesta);
         crudRespuesta.close();
     }

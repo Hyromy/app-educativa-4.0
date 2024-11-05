@@ -115,7 +115,7 @@ public class ItemsDrawer {
                     layout.addView(subLayout);
                 }
 
-                clearLayout(subLayout);
+                subLayout.removeAllViews();
 
                 if (tag.equals("rb_p_examen")) {
                     ItemFragment.table = "pregunta_examen";
@@ -332,8 +332,42 @@ public class ItemsDrawer {
     }
 
     private void loadRespuestaActividad(Context context, LinearLayout layout) {
-        TextView textView = setLabel(context, "Respuesta de actividad");
+        TextView textView = setLabel(context, "Pregunta");
         layout.addView(textView);
+
+        PreguntaActividad crudPreguntaActividad = new PreguntaActividad(context);
+        crudPreguntaActividad.open();
+        PreguntaActividadModel[] preguntasActividad = crudPreguntaActividad.readAll();
+        crudPreguntaActividad.close();
+
+        Contenido crudContenido = new Contenido(context);
+        crudContenido.open();
+        ContenidoModel[] contenidos = crudContenido.readAll();
+        crudContenido.close();
+
+        String[] items = new String[preguntasActividad.length];
+        for (int i = 0; i < preguntasActividad.length; i++) {
+            items[i] = "(" + preguntasActividad[i].idValue + ") " + preguntasActividad[i].textoValue + " [" + contenidos[preguntasActividad[i].idContenidoValue - 1].tituloValue + "]";
+        }
+        Spinner spinner = setSpinner(context, items, "pregunta_actividad");
+        layout.addView(spinner);
+
+        textView = setLabel(context, "Texto de la respuesta");
+        layout.addView(textView);
+        EditText editText = setEntry(context, 'a', "texto", 250);
+        layout.addView(editText);
+
+        textView = setLabel(context, "Respuesta correcta [poner un checkbox]");
+        layout.addView(textView);
+
+
+
+
+
+
+
+
+
     }
 
     public void extractTema(Context context, LinearLayout layout, int id) {
@@ -509,9 +543,5 @@ public class ItemsDrawer {
         }
         textoET.setText(respuestaExamen.textoValue);
         puntajeET.setText(String.valueOf(respuestaExamen.puntajeValue));
-    }
-
-    public void clearLayout(LinearLayout layout) {
-        layout.removeAllViews();
     }
 }
