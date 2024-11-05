@@ -26,7 +26,7 @@ public class ContenidoModel implements Serializable {
             "create table if not exists " + tbName + " (" +
             id + " integer primary key autoincrement, " +
             idTema + " integer not null, " +
-            titulo + " varchar(50), " +
+            titulo + " varchar(50) unique, " +
             descripcion + " varchar(100), " +
             nivel + " integer, " +
             nPreguntas + " integer, " +
