@@ -5,8 +5,6 @@ import android.content.Context;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.utils.crud.PreguntaExamen;
 
-import java.sql.SQLOutput;
-
 public class PreguntasExamen {
     private Context context;
     private PreguntaExamen crud;
@@ -94,7 +92,7 @@ public class PreguntasExamen {
                     break;
                 }
             }
-            
+
             System.out.println("Insertando pregunta: " + pregunta.getData());
             try {
                 crud.insert(pregunta);
