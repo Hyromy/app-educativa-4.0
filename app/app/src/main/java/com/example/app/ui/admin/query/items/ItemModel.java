@@ -10,11 +10,13 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 
 import java.util.regex.Matcher;
@@ -403,6 +405,90 @@ public class ItemModel {
 
         } finally {
             crudPregunta.close();
+        }
+    }
+
+    public void insertRespuestaExamen(Context context, LinearLayout layout) {
+        Spinner spinner = layout.findViewWithTag("pregunta_examen_spinner");
+        String selection = spinner.getSelectedItem().toString();
+        Pattern pattern = Pattern.compile("\\(\\d+\\)");
+        Matcher matcher = pattern.matcher(selection);
+        matcher.find();
+        int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
+
+        String texto = ((EditText) layout.findViewWithTag("texto")).getText().toString().trim();
+        String puntaje = ((EditText) layout.findViewWithTag("puntaje")).getText().toString().trim();
+
+        PreguntaExamen crudPregunta = new PreguntaExamen(context);
+        crudPregunta.open();
+        PreguntaExamenModel pregunta = crudPregunta.read(idItem);
+        crudPregunta.close();
+
+        if (idItem > 0 || !puntaje.isEmpty()) {
+            RespuestaExamenModel respuesta = new RespuestaExamenModel(
+                    idItem,
+                    0,
+                    texto,
+                    Integer.parseInt(puntaje)
+            );
+
+            RespuestaExamen crudRespuesta = new RespuestaExamen(context);
+            crudRespuesta.open();
+            try {
+                crudRespuesta.insert(respuesta);
+                Toast.makeText(context, "Registro guardado", Toast.LENGTH_SHORT).show();
+
+                spinner.setSelection(0);
+                ((EditText) layout.findViewWithTag("texto")).setText("");
+                ((EditText) layout.findViewWithTag("puntaje")).setText("");
+
+            } catch (Exception e) {
+                Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                System.out.println(e.getMessage());
+
+            } finally {
+                crudRespuesta.close();
+            }
+        } else {
+            Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void updateRespuestaExamen(Context context, LinearLayout layout, int id) {
+        Spinner spinner = layout.findViewWithTag("pregunta_examen_spinner");
+        String selection = spinner.getSelectedItem().toString();
+        Pattern pattern = Pattern.compile("\\(\\d+\\)");
+        Matcher matcher = pattern.matcher(selection);
+        matcher.find();
+        int idItem = Integer.parseInt(matcher.group().substring(1, matcher.group().length() - 1));
+
+        String texto = ((EditText) layout.findViewWithTag("texto")).getText().toString().trim();
+        String puntaje = ((EditText) layout.findViewWithTag("puntaje")).getText().toString().trim();
+
+        if (idItem > 0 || !puntaje.isEmpty()) {
+            RespuestaExamenModel respuesta = new RespuestaExamenModel(
+                    id,
+                    idItem,
+                    0,
+                    texto,
+                    Integer.parseInt(puntaje)
+            );
+
+            RespuestaExamen crudRespuesta = new RespuestaExamen(context);
+            crudRespuesta.open();
+            try {
+                crudRespuesta.update(respuesta);
+                Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+                Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
+                System.out.println(e.getMessage());
+
+            } finally {
+                crudRespuesta.close();
+            }
+        } else {
+            Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -17,11 +17,13 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
 
@@ -115,12 +117,19 @@ public class ItemsDrawer {
 
                 clearLayout(subLayout);
 
-                if (tag.equals("rb_examen")) {
+                if (tag.equals("rb_p_examen")) {
                     ItemFragment.table = "pregunta_examen";
                     loadPreguntaExamen(context, subLayout);
-                } else if (tag.equals("rb_actividad")) {
+                } else if (tag.equals("rb_p_actividad")) {
                     ItemFragment.table = "pregunta_actividad";
                     loadPreguntaActividad(context, subLayout);
+
+                } else if (tag.equals("rb_r_examen")) {
+                    ItemFragment.table = "respuesta_examen";
+                    loadRespuestaExamen(context, subLayout);
+                } else if (tag.equals("rb_r_actividad")) {
+                    ItemFragment.table = "respuesta_actividad";
+                    loadRespuestaActividad(context, subLayout);
                 }
             }
         });
@@ -218,8 +227,8 @@ public class ItemsDrawer {
         TextView textView = setLabel(context, "Tipo de pregunta");
         layout.addView(textView);
         RadioButton[] radios = {
-            setRadio(context, "Exámen", "examen"),
-            setRadio(context, "Actividad", "actividad")
+            setRadio(context, "Exámen", "p_examen"),
+            setRadio(context, "Actividad", "p_actividad")
         };
         RadioGroup rg = rGroup(context, radios, "tipoPregunta", layout, btnSave);
         layout.addView(rg);
@@ -277,6 +286,54 @@ public class ItemsDrawer {
         layout.addView(textView);
         EditText editText = setEntry(context, 'a', "texto", 250);
         layout.addView(editText);
+    }
+
+    public void loadRespuesta(Context context, LinearLayout layout, Button btnSave) {
+        TextView textView = setLabel(context, "Tipo de respuesta");
+        layout.addView(textView);
+        RadioButton[] radios = {
+                setRadio(context, "Exámen", "r_examen"),
+                setRadio(context, "Actividad", "r_actividad")
+        };
+        RadioGroup rg = rGroup(context, radios, "tipoRespuesta", layout, btnSave);
+        layout.addView(rg);
+    }
+
+    private void loadRespuestaExamen(Context context, LinearLayout layout) {
+        TextView textView = setLabel(context, "Pregunta");
+        layout.addView(textView);
+
+        PreguntaExamen crudPreguntaExamen = new PreguntaExamen(context);
+        crudPreguntaExamen.open();
+        PreguntaExamenModel[] preguntasExamen = crudPreguntaExamen.readAll();
+        crudPreguntaExamen.close();
+
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+        crudExamen.open();
+        ExamenDiagnosticoModel[] examenes = crudExamen.readAll();
+        crudExamen.close();
+
+        String[] items = new String[preguntasExamen.length];
+        for (int i = 0; i < preguntasExamen.length; i++) {
+            items[i] = "(" + preguntasExamen[i].idValue + ") " + preguntasExamen[i].textoValue + " [" + examenes[preguntasExamen[i].idExamenValue - 1].tituloValue + "]";
+        }
+        Spinner spinner = setSpinner(context, items, "pregunta_examen");
+        layout.addView(spinner);
+
+        textView = setLabel(context, "Texto de la respuesta");
+        layout.addView(textView);
+        EditText editText = setEntry(context, 'a', "texto", 250);
+        layout.addView(editText);
+
+        textView = setLabel(context, "Puntuación de respuesta");
+        layout.addView(textView);
+        editText = setEntry(context, 'n', "puntaje", 1);
+        layout.addView(editText);
+    }
+
+    private void loadRespuestaActividad(Context context, LinearLayout layout) {
+        TextView textView = setLabel(context, "Respuesta de actividad");
+        layout.addView(textView);
     }
 
     public void extractTema(Context context, LinearLayout layout, int id) {
@@ -352,7 +409,7 @@ public class ItemsDrawer {
             View child = rg.getChildAt(i);
             if (child instanceof RadioButton) {
                 RadioButton radioButton = (RadioButton) child;
-                if (radioButton.getTag().equals("rb_examen")) {
+                if (radioButton.getTag().equals("rb_p_examen")) {
                     radioButton.setChecked(true);
                 } else {
                     radioButton.setVisibility(View.GONE);
@@ -387,7 +444,7 @@ public class ItemsDrawer {
             View child = rg.getChildAt(i);
             if (child instanceof RadioButton) {
                 RadioButton radioButton = (RadioButton) child;
-                if (radioButton.getTag().equals("rb_actividad")) {
+                if (radioButton.getTag().equals("rb_p_actividad")) {
                     radioButton.setChecked(true);
                 } else {
                     radioButton.setVisibility(View.GONE);
@@ -414,6 +471,44 @@ public class ItemsDrawer {
             }
         }
         textoET.setText(preguntaActividad.textoValue);
+    }
+
+    public void extractRespuestaExamen(Context context, LinearLayout layout, int id) {
+        RadioGroup rg = layout.findViewWithTag("rg_tipoRespuesta");
+        for (int i = 0; i < rg.getChildCount(); i++) {
+            View child = rg.getChildAt(i);
+            if (child instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) child;
+                if (radioButton.getTag().equals("rb_r_examen")) {
+                    radioButton.setChecked(true);
+                } else {
+                    radioButton.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        Spinner spinner = layout.findViewWithTag("pregunta_examen_spinner");
+        EditText textoET = layout.findViewWithTag("texto");
+        EditText puntajeET = layout.findViewWithTag("puntaje");
+
+        RespuestaExamen crudRespuestaExamen = new RespuestaExamen(context);
+        crudRespuestaExamen.open();
+        RespuestaExamenModel respuestaExamen = crudRespuestaExamen.read(id);
+        crudRespuestaExamen.close();
+
+        PreguntaExamen crudPreguntaExamen = new PreguntaExamen(context);
+        crudPreguntaExamen.open();
+        PreguntaExamenModel[] preguntasExamen = crudPreguntaExamen.readAll();
+        crudPreguntaExamen.close();
+
+        for (int i = 0; i < preguntasExamen.length; i++) {
+            if (respuestaExamen.idPreguntaExamenValue == preguntasExamen[i].idValue) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+        textoET.setText(respuestaExamen.textoValue);
+        puntajeET.setText(String.valueOf(respuestaExamen.puntajeValue));
     }
 
     public void clearLayout(LinearLayout layout) {

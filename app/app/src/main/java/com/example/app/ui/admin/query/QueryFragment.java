@@ -18,20 +18,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
-import com.example.app.ui.admin.query.items.ItemFragment;
 import com.example.app.utils.drawer.QueryDrawer;
 
 import java.util.Objects;
@@ -87,7 +87,7 @@ public class QueryFragment extends Fragment {
             setPreguntaLogs(context, view);
 
         } else if (table.equals("respuesta_")) {
-            // setPreguntaLogs(context, view);
+            setRespuestaLogs(context, view);
 
         } else if (table.equals("apoyo")) {
             // setApoyoLogs(context, view);
@@ -152,6 +152,26 @@ public class QueryFragment extends Fragment {
             activity = crudActividad.getTitleFromTheme(actividad);
             generateItem(view, actividad.idValue, "A: " + activity + " -> " + actividad.textoValue, table + "actividad");
         }
+    }
+
+    private void setRespuestaLogs(Context context, View view) {
+        RespuestaExamen crudRespuesta = new RespuestaExamen(context);
+        crudRespuesta.open();
+        RespuestaExamenModel[] respuestas = crudRespuesta.readAll();
+        crudRespuesta.close();
+        String pregunta = null;
+        for (RespuestaExamenModel respuesta : respuestas) {
+            pregunta = crudRespuesta.getTextFromQuestion(respuesta);
+            generateItem(view, respuesta.idValue, "E: " + pregunta + " -> " + respuesta.textoValue, table + "examen");
+        }
+
+
+
+
+
+
+
+
     }
 
     private void setSearchView(View view) {
@@ -219,13 +239,11 @@ public class QueryFragment extends Fragment {
     }
 
     private void delItem(String tag, Context context) {
-        // encontrar contenedor padre
         Pattern pattern = Pattern.compile("(?<=_).*_[0-9]+");
         Matcher matcher = pattern.matcher(tag);
         matcher.find();
         tag = matcher.group();
 
-        // eliminar de la vista
         LinearLayout linearLayout = requireView().findViewById(R.id.linear_layout);
         View view = linearLayout.findViewWithTag(tag);
         linearLayout.removeView(view);
@@ -247,8 +265,14 @@ public class QueryFragment extends Fragment {
             if (tag.contains("examen")) {
                 delPreguntaExamen(tag, context);
             } else if (tag.contains("actividad")) {
+                delPreguntaActividad(tag, context);
+            }
 
-
+        } else if (tag.contains("respuesta")) {
+            if (tag.contains("examen")) {
+                delRespuestaExamen(tag, context);
+            } else if (tag.contains("actividad")) {
+                // delRespuesta(tag, context);
 
 
 
@@ -307,6 +331,32 @@ public class QueryFragment extends Fragment {
         PreguntaExamenModel pregunta = crudPregunta.read(id);
         crudPregunta.delete(pregunta);
         crudPregunta.close();
+    }
+
+    private void delPreguntaActividad(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        PreguntaActividad crudActividad = new PreguntaActividad(context);
+        crudActividad.open();
+        PreguntaActividadModel actividad = crudActividad.read(id);
+        crudActividad.delete(actividad);
+        crudActividad.close();
+    }
+
+    private void delRespuestaExamen(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        RespuestaExamen crudRespuesta = new RespuestaExamen(context);
+        crudRespuesta.open();
+        RespuestaExamenModel respuesta = crudRespuesta.read(id);
+        crudRespuesta.delete(respuesta);
+        crudRespuesta.close();
     }
 
     private void clearList() {

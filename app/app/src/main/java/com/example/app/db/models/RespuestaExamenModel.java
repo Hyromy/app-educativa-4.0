@@ -42,6 +42,19 @@ public class RespuestaExamenModel implements Serializable {
     }
 
     public RespuestaExamenModel(
+            int idPreguntaExamen,
+            int idRecurso,
+            String texto,
+            int puntaje
+    ) {
+        this.idValue = 0;
+        this.idPreguntaExamenValue = idPreguntaExamen;
+        this.idRecursoValue = idRecurso;
+        this.textoValue = texto;
+        this.puntajeValue = puntaje;
+    }
+
+    public RespuestaExamenModel(
             int id,
             int idPreguntaExamen,
             int idRecurso,

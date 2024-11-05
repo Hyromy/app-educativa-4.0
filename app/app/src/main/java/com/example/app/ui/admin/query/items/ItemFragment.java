@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.utils.drawer.ItemsDrawer;
@@ -84,6 +83,8 @@ public class ItemFragment extends Fragment {
         } else if (table.equals("pregunta_")) {
             drawer.loadPregunta(context, layout, view.findViewById(R.id.btn_save));
 
+        } else if (table.equals("respuesta_")) {
+            drawer.loadRespuesta(context, layout, view.findViewById(R.id.btn_save));
         }
     }
 
@@ -104,6 +105,21 @@ public class ItemFragment extends Fragment {
 
             } else if (itemTag.contains("actividad")) {
                 drawer.extractPreguntaActividad(context, layout, id);
+            }
+
+        } else if (table.equals("respuesta_")) {
+            if (itemTag.contains("examen")) {
+                drawer.extractRespuestaExamen(context, layout, id);
+
+            } else if(itemTag.contains("actividad")) {
+                //drawer.extractRespuestaActividad(context, layout, id);
+
+
+
+
+
+
+
             }
         }
     }
@@ -141,6 +157,12 @@ public class ItemFragment extends Fragment {
                     model.insertPreguntaActividad(context, layout);
                 } else {
                     model.updatePreguntaActividad(context, layout, id);
+                }
+            } else if (table.equals("respuesta_examen")) {
+                if (id <= 0) {
+                    model.insertRespuestaExamen(context, layout);
+                } else {
+                    model.updateRespuestaExamen(context, layout, id);
                 }
             }
         }
