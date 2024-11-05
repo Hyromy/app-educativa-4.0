@@ -3,7 +3,6 @@ package com.example.app.preload_data.info;
 import android.content.Context;
 
 import com.example.app.db.models.ContenidoModel;
-import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.Tema;
