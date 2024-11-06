@@ -6,6 +6,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -17,12 +18,14 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
@@ -144,6 +147,15 @@ public class ItemsDrawer {
         rb.setText(text);
 
         return rb;
+    }
+
+    private CheckBox setCheckbox(Context context, String tag, String text) {
+        CheckBox cb = new CheckBox(context);
+        cb.setId(View.generateViewId());
+        cb.setTag(tag);
+        cb.setText(text);
+
+        return cb;
     }
 
     public void loadTema(Context context, LinearLayout layout) {
@@ -357,17 +369,10 @@ public class ItemsDrawer {
         EditText editText = setEntry(context, 'a', "texto", 250);
         layout.addView(editText);
 
-        textView = setLabel(context, "Respuesta correcta [poner un checkbox]");
+        textView = setLabel(context, "Respuesta correcta");
         layout.addView(textView);
-
-
-
-
-
-
-
-
-
+        CheckBox checkBox = setCheckbox(context, "es_correcto", "Respuesta correcta");
+        layout.addView(checkBox);
     }
 
     public void extractTema(Context context, LinearLayout layout, int id) {
@@ -543,5 +548,43 @@ public class ItemsDrawer {
         }
         textoET.setText(respuestaExamen.textoValue);
         puntajeET.setText(String.valueOf(respuestaExamen.puntajeValue));
+    }
+
+    public void extractRespuestaActividad(Context context, LinearLayout layout, int id) {
+        RadioGroup rg = layout.findViewWithTag("rg_tipoRespuesta");
+        for (int i = 0; i < rg.getChildCount(); i++) {
+            View child = rg.getChildAt(i);
+            if (child instanceof RadioButton) {
+                RadioButton radioButton = (RadioButton) child;
+                if (radioButton.getTag().equals("rb_r_actividad")) {
+                    radioButton.setChecked(true);
+                } else {
+                    radioButton.setVisibility(View.GONE);
+                }
+            }
+        }
+
+        Spinner spinner = layout.findViewWithTag("pregunta_actividad_spinner");
+        EditText textoET = layout.findViewWithTag("texto");
+        CheckBox esCorrectoCB = layout.findViewWithTag("es_correcto");
+
+        RespuestaActividad crudRespuestaActividad = new RespuestaActividad(context);
+        crudRespuestaActividad.open();
+        RespuestaActividadModel respuestaActividad = crudRespuestaActividad.read(id);
+        crudRespuestaActividad.close();
+
+        PreguntaActividad crudPreguntaActividad = new PreguntaActividad(context);
+        crudPreguntaActividad.open();
+        PreguntaActividadModel[] preguntasActividad = crudPreguntaActividad.readAll();
+        crudPreguntaActividad.close();
+
+        for (int i = 0; i < preguntasActividad.length; i++) {
+            if (respuestaActividad.idPreguntaActividadValue == preguntasActividad[i].idValue) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+        textoET.setText(respuestaActividad.textoValue);
+        esCorrectoCB.setChecked(respuestaActividad.esCorrectoValue);
     }
 }

@@ -42,6 +42,19 @@ public class RespuestaActividadModel implements Serializable {
     }
 
     public RespuestaActividadModel(
+            int idPreguntaActividad,
+            int idRecurso,
+            String texto,
+            boolean esCorrecto
+    ) {
+        this.idValue = 0;
+        this.idPreguntaActividadValue = idPreguntaActividad;
+        this.idRecursoValue = idRecurso;
+        this.textoValue = texto;
+        this.esCorrectoValue = esCorrecto;
+    }
+
+    public RespuestaActividadModel(
             int id,
             int idPreguntaActividad,
             int idRecurso,

@@ -112,14 +112,7 @@ public class ItemFragment extends Fragment {
                 drawer.extractRespuestaExamen(context, layout, id);
 
             } else if(itemTag.contains("actividad")) {
-                //drawer.extractRespuestaActividad(context, layout, id);
-
-
-
-
-
-
-
+                drawer.extractRespuestaActividad(context, layout, id);
             }
         }
     }
@@ -163,6 +156,12 @@ public class ItemFragment extends Fragment {
                     model.insertRespuestaExamen(context, layout);
                 } else {
                     model.updateRespuestaExamen(context, layout, id);
+                }
+            } else if (table.equals("respuesta_actividad")) {
+                if (id <= 0) {
+                    model.insertRespuestaActividad(context, layout);
+                } else {
+                    model.updateRespuestaActividad(context, layout, id);
                 }
             }
         }
