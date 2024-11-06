@@ -10,5 +10,6 @@ public class Run {
         new Examenes(context);
         new Contenidos(context);
         new PreguntasExamen(context);
+        new RespuestasExamen(context);
     }
 }
