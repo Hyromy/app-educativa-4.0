@@ -84,4 +84,10 @@
         android:name="com.example.app.ui.admin.query.items.ItemFragment"
         android:label="Crear o Editar"
         tools:layout="@layout/fragment_item"/>
+
+    <fragment
+        android:id="@+id/nav_debug"
+        android:name="com.example.app.ui.debug.Debug"
+        android:label="Depuracion"
+        tools:layout="@layout/fragment_debug" />
 </navigation>

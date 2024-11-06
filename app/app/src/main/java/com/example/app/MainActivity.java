@@ -15,7 +15,6 @@ import com.example.app.db.models.views.UserViewModel;
 import com.example.app.welcome_views.Welcome;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,8 +24,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.app.databinding.ActivityMainBinding;
-
-import com.example.app.db.utils.crud.Usuario;
 
 public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
@@ -45,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView userMatricula;
 
     private UsuarioModel usuario;
-    private Usuario crudUsuario;
 
     private UserViewModel userViewModel;
 
     private int[] fragmentsId = {
             R.id.nav_profile,
             R.id.nav_themes,
-            R.id.nav_admin
+            R.id.nav_admin,
+            R.id.nav_debug
     };
 
     @Override
@@ -145,7 +142,9 @@ public class MainActivity extends AppCompatActivity {
             if (!usuario.tipoAdministradorValue) {
                 NavigationView navigationView = findViewById(R.id.nav_view);
                 Menu navMenu = navigationView.getMenu();
+
                 navMenu.findItem(R.id.nav_admin).setVisible(false);
+                navMenu.findItem(R.id.nav_debug).setVisible(false);
             }
 
         } else {
