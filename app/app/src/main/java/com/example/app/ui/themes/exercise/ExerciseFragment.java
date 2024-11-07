@@ -88,16 +88,24 @@ public class ExerciseFragment extends Fragment {
         if (isTest) {
             screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
                 if (isSelectedAnswer()) {
-                    nextQuestion();
+                    nextQuestion(true);
                 } else {
-                    Toast.makeText(getContext(), "Selecciona una respuesta", Toast.LENGTH_SHORT).show();
+                    notSelectedAnswer();
                 }
             });
         } else {
             screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Función aún no implementada", Toast.LENGTH_SHORT).show();
+                if (isSelectedAnswer()) {
+                    nextQuestion(false);
+                } else {
+                    notSelectedAnswer();
+                }
             });
         }
+    }
+
+    private void notSelectedAnswer() {
+        Toast.makeText(getContext(), "Selecciona una respuesta", Toast.LENGTH_SHORT).show();
     }
 
     private boolean isSelectedAnswer() {
@@ -113,11 +121,16 @@ public class ExerciseFragment extends Fragment {
         }
     }
 
-    private void nextQuestion() {
+    private void nextQuestion(boolean isTest) {
         clearLayout();
         iQuestion++;
         setCurrentQuestionOnHeader(iQuestion + 1);
-        loadCurrentQuestion(preguntasExamen);
+
+        if (isTest) {
+            loadCurrentQuestion(preguntasExamen);
+        } else {
+            loadCurrentQuestion(preguntasActividad);
+        }
     }
 
     private void setMaxQuestionsOnHeader(int maxQuestions) {
@@ -212,7 +225,7 @@ public class ExerciseFragment extends Fragment {
         if (isTest) {
             showResults();
         } else {
-
+            Toast.makeText(getContext(), "Resultados: (" + score + "/" + maxScore + ")", Toast.LENGTH_SHORT).show();
         }
 
         exit();
