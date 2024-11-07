@@ -74,9 +74,6 @@ public class ExcerciseModel {
         return output;
     }
 
-    /*
-     * pendiente por probar
-     */
     public RespuestaExamenModel[] getRespuestasFromPregunta(PreguntaExamenModel pregunta) {
         ArrayList<RespuestaExamenModel> respuestas = new ArrayList<>();
 
@@ -92,5 +89,15 @@ public class ExcerciseModel {
         }
         Collections.shuffle(respuestas);
         return respuestas.toArray(new RespuestaExamenModel[0]);
+    }
+
+    public int getMaxScoreFromAnswers(RespuestaExamenModel[] respuestas) {
+        int maxScore = 0;
+        for (RespuestaExamenModel respuesta : respuestas) {
+            if (respuesta.puntajeValue > maxScore) {
+                maxScore = respuesta.puntajeValue;
+            }
+        }
+        return maxScore;
     }
 }

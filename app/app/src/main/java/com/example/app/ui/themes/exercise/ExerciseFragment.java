@@ -15,13 +15,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaExamenModel;
-import com.example.app.db.utils.crud.RespuestaExamen;
+import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.utils.drawer.ExcerciseDrawer;
 
 import java.util.Objects;
@@ -34,6 +37,7 @@ public class ExerciseFragment extends Fragment {
     private LinearLayout headerLayout;
     private LinearLayout screenLayout;
     private int iQuestion = 0;
+    private int score = 0;
     private int maxScore = 0;
 
     private PreguntaExamenModel[] preguntas;
@@ -51,6 +55,7 @@ public class ExerciseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Objects.requireNonNull(((AppCompatActivity) requireActivity()).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -75,11 +80,32 @@ public class ExerciseFragment extends Fragment {
 
     private void setNextButton() {
         screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
-            clearLayout();
-            iQuestion++;
-            setCurrentQuestionOnHeader(iQuestion + 1);
-            loadCurrentQuestion(preguntas);
+            if (getScoreFromSelectedAnswer()) {
+                nextQuestion();
+            } else {
+                Toast.makeText(getContext(), "Selecciona una respuesta", Toast.LENGTH_SHORT).show();
+            }
         });
+    }
+
+    private boolean getScoreFromSelectedAnswer() {
+        RadioGroup rg = screenLayout.findViewWithTag("rg_answers");
+        int selectedId = rg.getCheckedRadioButtonId();
+        if (selectedId != -1) {
+            RadioButton rb = rg.findViewById(selectedId);
+            score += Integer.parseInt(rb.getTag().toString());
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void nextQuestion() {
+        clearLayout();
+        iQuestion++;
+        setCurrentQuestionOnHeader(iQuestion + 1);
+        loadCurrentQuestion(preguntas);
     }
 
     private void setMaxQuestionsOnHeader(int maxQuestions) {
@@ -119,12 +145,18 @@ public class ExerciseFragment extends Fragment {
     private void loadCurrentQuestion(PreguntaExamenModel[] preguntas) {
         if (iQuestion < preguntas.length) {
             loadQuestion(preguntas[iQuestion]);
+            RespuestaExamenModel[] respuestas = model.getRespuestasFromPregunta(preguntas[iQuestion]);
+            maxScore += model.getMaxScoreFromAnswers(respuestas);
+
+            RadioGroup rg = drawer.setRadioGroup(drawer.setRadioButtons(respuestas), "answers");
+            layout.addView(rg);
         } else {
             endQuestions();
         }
     }
 
     private void endQuestions() {
+        Toast.makeText(getContext(), "Resultados del cuestionario: " + score + "/" + maxScore, Toast.LENGTH_SHORT).show();
         NavController navController = Navigation.findNavController(requireView());
         navController.navigateUp();
     }
