@@ -11,5 +11,6 @@ public class Run {
         new Contenidos(context);
         new PreguntasExamen(context);
         new RespuestasExamen(context);
+        new PreguntasActividad(context);
     }
 }

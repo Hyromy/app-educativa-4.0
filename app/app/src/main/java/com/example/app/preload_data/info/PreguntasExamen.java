@@ -88,7 +88,7 @@ public class PreguntasExamen {
 
         for (PreguntaExamenModel pregunta: preguntas) {
             for (PreguntaExamenModel preguntaExistente: preguntasExistentes) {
-                if (preguntaExistente.textoValue.equals(pregunta.textoValue)) {
+                if (preguntaExistente.idValue == pregunta.idValue) {
                     break;
                 }
             }

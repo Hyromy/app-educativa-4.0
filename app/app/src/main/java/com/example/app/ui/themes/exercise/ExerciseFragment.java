@@ -37,6 +37,7 @@ public class ExerciseFragment extends Fragment {
     private LinearLayout layout;
     private LinearLayout headerLayout;
     private LinearLayout screenLayout;
+
     private int iQuestion = 0;
     private int score = 0;
     private int maxScore = 0;
@@ -69,7 +70,6 @@ public class ExerciseFragment extends Fragment {
             screenLayout = view.findViewById(R.id.screen_layout);
 
             Context context = getContext();
-            setNextButton();
             drawer = new ExcerciseDrawer(context);
             load(context);
         }
@@ -81,17 +81,23 @@ public class ExerciseFragment extends Fragment {
         }
     }
 
-    private void setNextButton() {
-        screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
-            if (getScoreFromSelectedAnswer()) {
-                nextQuestion();
-            } else {
-                Toast.makeText(getContext(), "Selecciona una respuesta", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void setNextButton(boolean isTest) {
+        if (isTest) {
+            screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
+                if (isSelectedAnswer()) {
+                    nextQuestion();
+                } else {
+                    Toast.makeText(getContext(), "Selecciona una respuesta", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            screenLayout.findViewById(R.id.btn_next).setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Función aún no implementada", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
-    private boolean getScoreFromSelectedAnswer() {
+    private boolean isSelectedAnswer() {
         RadioGroup rg = screenLayout.findViewWithTag("rg_answers");
         int selectedId = rg.getCheckedRadioButtonId();
         if (selectedId != -1) {
@@ -127,16 +133,25 @@ public class ExerciseFragment extends Fragment {
         model = new ExcerciseModel(context, dataTag);
 
         if (dataTag.startsWith("t")) {
+            setNextButton(true);
+
             ExamenDiagnosticoModel examen = model.getExamenDiagnostico();
             setToolbarTitle(examen.tituloValue);
 
-            preguntas = model.getPreguntasFromExamen(examen);
-            levels = examen.nivelMaximoValue;
-            questions = examen.nPreguntasValue;
-            
-            loadExamen(examen, preguntas);
+            try {
+                preguntas = model.getPreguntasFromExamen(examen);
+                levels = examen.nivelMaximoValue;
+                questions = examen.nPreguntasValue;
+
+                loadExamen(examen, preguntas);
+            } catch (Exception e) {
+                Toast.makeText(context, "Ocurrió un problema al cargar el exámen", Toast.LENGTH_SHORT).show();
+                exit();
+            }
 
         } else if (dataTag.startsWith("c")) {
+            setNextButton(false);
+
             ContenidoModel contenido = model.getContenido();
             setToolbarTitle(contenido.tituloValue);
         }
