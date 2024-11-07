@@ -25,6 +25,7 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.RespuestaExamenModel;
+import com.example.app.utils.Teacher;
 import com.example.app.utils.drawer.ExcerciseDrawer;
 
 import java.util.Objects;
@@ -39,6 +40,8 @@ public class ExerciseFragment extends Fragment {
     private int iQuestion = 0;
     private int score = 0;
     private int maxScore = 0;
+    private int levels = 0;
+    private int questions = 0;
 
     private PreguntaExamenModel[] preguntas;
 
@@ -128,6 +131,9 @@ public class ExerciseFragment extends Fragment {
             setToolbarTitle(examen.tituloValue);
 
             preguntas = model.getPreguntasFromExamen(examen);
+            levels = examen.nivelMaximoValue;
+            questions = examen.nPreguntasValue;
+            
             loadExamen(examen, preguntas);
 
         } else if (dataTag.startsWith("c")) {
@@ -156,7 +162,23 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void endQuestions() {
-        Toast.makeText(getContext(), "Resultados del cuestionario: " + score + "/" + maxScore, Toast.LENGTH_SHORT).show();
+        showResults();
+        exit();
+    }
+
+    private void showResults() {
+        Teacher teacher = new Teacher();
+        int level = teacher.knowledgeLevel(
+                levels,
+                questions,
+                maxScore / questions,
+                score
+        );
+        String message = "Resultados: (" + score + "/" + maxScore + ") Nv." + level;
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void exit() {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigateUp();
     }
