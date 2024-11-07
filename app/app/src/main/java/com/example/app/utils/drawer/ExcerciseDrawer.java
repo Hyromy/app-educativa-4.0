@@ -6,6 +6,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 
 public class ExcerciseDrawer {
@@ -45,6 +46,28 @@ public class ExcerciseDrawer {
             rb = new RadioButton(context);
             rb.setId(View.generateViewId());
             rb.setTag(String.valueOf(answers[i].puntajeValue));
+            rb.setText(answers[i].textoValue);
+
+            rbs[i] = rb;
+        }
+
+        return rbs;
+    }
+
+    public RadioButton[] setRadioButtons(RespuestaActividadModel[] answers) {
+        int size = answers.length;
+        RadioButton rbs[] = new RadioButton[size];
+
+        RadioButton rb;
+        for (int i = 0; i < size; i++) {
+            rb = new RadioButton(context);
+            rb.setId(View.generateViewId());
+
+            if (answers[i].esCorrectoValue) {
+                rb.setTag("1");
+            } else {
+                rb.setTag("0");
+            }
             rb.setText(answers[i].textoValue);
 
             rbs[i] = rb;

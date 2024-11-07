@@ -23,7 +23,9 @@ import android.widget.Toast;
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.utils.Teacher;
 import com.example.app.utils.drawer.ExcerciseDrawer;
@@ -44,7 +46,8 @@ public class ExerciseFragment extends Fragment {
     private int levels = 0;
     private int questions = 0;
 
-    private PreguntaExamenModel[] preguntas;
+    private PreguntaExamenModel[] preguntasExamen;
+    private PreguntaActividadModel[] preguntasActividad;
 
     public static ExerciseFragment newInstance() {
         return new ExerciseFragment();
@@ -114,7 +117,7 @@ public class ExerciseFragment extends Fragment {
         clearLayout();
         iQuestion++;
         setCurrentQuestionOnHeader(iQuestion + 1);
-        loadCurrentQuestion(preguntas);
+        loadCurrentQuestion(preguntasExamen);
     }
 
     private void setMaxQuestionsOnHeader(int maxQuestions) {
@@ -139,11 +142,11 @@ public class ExerciseFragment extends Fragment {
             setToolbarTitle(examen.tituloValue);
 
             try {
-                preguntas = model.getPreguntasFromExamen(examen);
+                preguntasExamen = model.getPreguntasFromExamen(examen);
                 levels = examen.nivelMaximoValue;
                 questions = examen.nPreguntasValue;
 
-                loadExamen(examen, preguntas);
+                loadExamen(examen, preguntasExamen);
             } catch (Exception e) {
                 Toast.makeText(context, "Ocurrió un problema al cargar el exámen", Toast.LENGTH_SHORT).show();
                 exit();
@@ -154,12 +157,28 @@ public class ExerciseFragment extends Fragment {
 
             ContenidoModel contenido = model.getContenido();
             setToolbarTitle(contenido.tituloValue);
+
+            try {
+                preguntasActividad = model.getPreguntasFromActividad(contenido);
+                questions = contenido.nPreguntasValue;
+
+                loadActividad(contenido, preguntasActividad);
+            } catch (Exception e) {
+                Toast.makeText(context, "Ocurrió un problema al cargar la actividad", Toast.LENGTH_SHORT).show();
+                exit();
+            }
         }
     }
 
     private void loadExamen(ExamenDiagnosticoModel examen, PreguntaExamenModel[] preguntas) {
         setCurrentQuestionOnHeader(1);
         setMaxQuestionsOnHeader(examen.nPreguntasValue);
+        loadCurrentQuestion(preguntas);
+    }
+
+    private void loadActividad(ContenidoModel contenido, PreguntaActividadModel[] preguntas) {
+        setCurrentQuestionOnHeader(1);
+        setMaxQuestionsOnHeader(contenido.nPreguntasValue);
         loadCurrentQuestion(preguntas);
     }
 
@@ -172,12 +191,30 @@ public class ExerciseFragment extends Fragment {
             RadioGroup rg = drawer.setRadioGroup(drawer.setRadioButtons(respuestas), "answers");
             layout.addView(rg);
         } else {
-            endQuestions();
+            endQuestions(true);
         }
     }
 
-    private void endQuestions() {
-        showResults();
+    private void loadCurrentQuestion(PreguntaActividadModel[] preguntas) {
+        if (iQuestion < preguntas.length) {
+            loadQuestion(preguntas[iQuestion]);
+            RespuestaActividadModel[] respuestas = model.getRespuestasFromPregunta(preguntas[iQuestion]);
+            maxScore += model.getMaxScoreFromAnswers(respuestas);
+
+            RadioGroup rg = drawer.setRadioGroup(drawer.setRadioButtons(respuestas), "answers");
+            layout.addView(rg);
+        } else {
+            endQuestions(false);
+        }
+    }
+
+    private void endQuestions(boolean isTest) {
+        if (isTest) {
+            showResults();
+        } else {
+
+        }
+
         exit();
     }
 
@@ -199,6 +236,11 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void loadQuestion(PreguntaExamenModel pregunta) {
+        TextView tv = drawer.setTextView(pregunta.textoValue);
+        layout.addView(tv);
+    }
+
+    private void loadQuestion(PreguntaActividadModel pregunta) {
         TextView tv = drawer.setTextView(pregunta.textoValue);
         layout.addView(tv);
     }
