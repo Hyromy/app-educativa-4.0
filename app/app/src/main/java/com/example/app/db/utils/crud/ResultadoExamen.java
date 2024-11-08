@@ -146,4 +146,30 @@ public class ResultadoExamen extends AbstractCRUD<ResultadoExamenModel> {
     public String[] colums() {
         return super.colums(ResultadoExamenModel.tbName);
     }
+
+    public boolean existLogFrom(int idUsuario, int idExamen) {
+        SQLiteDatabase db = getReadableDatabase();
+        boolean exist = false;
+
+        Cursor cursor = db.query(
+            ResultadoExamenModel.tbName,
+            new String[] {ResultadoExamenModel.id},
+            ResultadoExamenModel.idUsuario + " = ? AND " + ResultadoExamenModel.idExamen + " = ?",
+            new String[] {String.valueOf(idUsuario), String.valueOf(idExamen)},
+            null,
+            null,
+            null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            if (cursor.getInt(0) > 0){
+                exist = true;
+            }
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return exist;
+    }
 }

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.example.app.R;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.models.views.UserViewModel;
@@ -109,6 +108,7 @@ public class ThemesFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("tema", tema);
+                bundle.putSerializable("usuario", usuario);
 
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_nav_themes_to_nav_theme, bundle);

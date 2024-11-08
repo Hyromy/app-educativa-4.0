@@ -42,6 +42,19 @@ public class ResultadoExamenModel implements Serializable {
     }
 
     public ResultadoExamenModel(
+            int idUsuario,
+            int idExamen,
+            int puntajeObtenido,
+            int nivelObtenido
+    ) {
+        this.idValue = 0;
+        this.idUsuarioValue = idUsuario;
+        this.idExamenValue = idExamen;
+        this.puntajeObtenidoValue = puntajeObtenido;
+        this.nivelObtenidoValue = nivelObtenido;
+    }
+
+    public ResultadoExamenModel(
             int id,
             int idUsuario,
             int idExamen,

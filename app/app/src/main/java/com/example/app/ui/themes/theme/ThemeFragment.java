@@ -27,16 +27,13 @@ import java.util.Objects;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.TemaModel;
+import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
-import com.example.app.ui.themes.exercise.*;
-import com.example.app.utils.*;
-
-import org.w3c.dom.Text;
 
 public class ThemeFragment extends Fragment {
-    private ThemeViewModel mViewModel;
     private TemaModel tema;
+    private UsuarioModel usuario;
     private LinearLayout layoutTheme;
 
     public static ThemeFragment newInstance() {
@@ -58,6 +55,7 @@ public class ThemeFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             tema = (TemaModel) bundle.getSerializable("tema");
+            usuario = (UsuarioModel) bundle.getSerializable("usuario");
             setToolbarTitle(tema.tituloValue);
         }
 
@@ -66,13 +64,6 @@ public class ThemeFragment extends Fragment {
         Context context = getContext();
         findAndSetExamn(context, tema);
         findAndSetExercises(context, tema);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ThemeViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     private void setToolbarTitle(String title) {
@@ -188,6 +179,7 @@ public class ThemeFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("testTag", tag);
+                bundle.putSerializable("usuario", usuario);
 
                 NavController navController = Navigation.findNavController(view);
                 navController.navigate(R.id.action_nav_theme_to_nav_exercise, bundle);

@@ -27,12 +27,17 @@ import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
 import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
+import com.example.app.db.models.ResultadoExamenModel;
+import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.utils.crud.ResultadoExamen;
 import com.example.app.utils.Teacher;
 import com.example.app.utils.drawer.ExcerciseDrawer;
 
 import java.util.Objects;
 
 public class ExerciseFragment extends Fragment {
+    private UsuarioModel usuario;
+
     private String dataTag = null;
     private ExcerciseModel model;
     private ExcerciseDrawer drawer;
@@ -67,6 +72,7 @@ public class ExerciseFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             dataTag = bundle.getString("testTag");
+            usuario = (UsuarioModel) bundle.getSerializable("usuario");
 
             layout = view.findViewById(R.id.layout);
             headerLayout = view.findViewById(R.id.header_layout);
@@ -222,10 +228,24 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void endQuestions(boolean isTest) {
+        boolean isAdmin = usuario.tipoAdministradorValue;
         if (isTest) {
-            showResults();
+            if (isAdmin) {
+                showResults();
+            } else {
+                setLogOfcompleteTest();
+            }
         } else {
-            Toast.makeText(getContext(), "Resultados: (" + score + "/" + maxScore + ")", Toast.LENGTH_SHORT).show();
+            if (!isAdmin) {
+                if (isClearActivity()) {
+                    Toast.makeText(getContext(), "Actividad completa", Toast.LENGTH_SHORT).show();
+                } else {
+                    String msg = "Sigue practicando, tuviste " + (maxScore - score) + " errores";
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Resultados: (" + score + "/" + maxScore + ")", Toast.LENGTH_SHORT).show();
+            }
         }
 
         exit();
@@ -241,6 +261,55 @@ public class ExerciseFragment extends Fragment {
         );
         String message = "Resultados: (" + score + "/" + maxScore + ") Nv." + level;
         Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void setLogOfcompleteTest() {
+        int idUsuario = usuario.idValue;
+        int idExamen = preguntasExamen[0].idExamenValue;
+
+        ResultadoExamen crud = new ResultadoExamen(getContext());
+        crud.open();
+        if (!crud.existLogFrom(idUsuario, idExamen)) {
+            Teacher teacher = new Teacher();
+            int level = teacher.knowledgeLevel(
+                    levels,
+                    questions,
+                    maxScore / questions,
+                    score
+            );
+
+            ResultadoExamenModel resultado = new ResultadoExamenModel(
+                    idUsuario,
+                    idExamen,
+                    score,
+                    level
+            );
+            crud.insert(resultado);
+
+            String msg = "Exámen completado, resultado: (" + level + "/" + levels + ")";
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "ya hiciste este examen", Toast.LENGTH_SHORT).show();
+        }
+        crud.close();
+    }
+
+    private boolean isClearActivity() {
+        boolean isClear = false;
+        if (score == maxScore) {
+            isClear = true;
+
+            // guardar en la base de datos
+
+
+
+
+
+            
+
+        }
+
+        return isClear;
     }
 
     private void exit() {
