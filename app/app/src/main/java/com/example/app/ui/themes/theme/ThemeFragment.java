@@ -1,7 +1,6 @@
 package com.example.app.ui.themes.theme;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -30,6 +29,7 @@ import com.example.app.db.models.TemaModel;
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
+import com.example.app.db.utils.crud.ResultadoExamen;
 
 public class ThemeFragment extends Fragment {
     private TemaModel tema;
@@ -60,10 +60,16 @@ public class ThemeFragment extends Fragment {
         }
 
         setThemeData(view);
-
         Context context = getContext();
-        findAndSetExamn(context, tema);
-        findAndSetExercises(context, tema);
+        boolean resultTestLog = userHaveResultTestLog(context);
+        if (!resultTestLog) {
+            findAndSetExamn(context, tema);
+            if (usuario.tipoAdministradorValue) {
+                findAndSetExercises(context, tema);
+            }
+        } else if (resultTestLog) {
+            findAndSetExercises(context, tema);
+        }
     }
 
     private void setToolbarTitle(String title) {
@@ -185,5 +191,19 @@ public class ThemeFragment extends Fragment {
                 navController.navigate(R.id.action_nav_theme_to_nav_exercise, bundle);
             }
         };
+    }
+
+    private boolean userHaveResultTestLog(Context context) {
+        ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+        crudExamen.open();
+        int idTema = crudExamen.getIdBy(ExamenDiagnosticoModel.idTema, String.valueOf(tema.idValue));
+        crudExamen.close();
+
+        ResultadoExamen crudResultado = new ResultadoExamen(context);
+        crudResultado.open();
+        boolean log = crudResultado.existLogFrom(usuario.idValue, idTema);
+        crudResultado.close();
+
+        return log;
     }
 }
