@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.app.R;
 
@@ -25,6 +24,7 @@ import java.util.Objects;
 
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.ResultadoExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Contenido;
@@ -104,6 +104,19 @@ public class ThemeFragment extends Fragment {
     }
 
     private void findAndSetExercises(Context context, TemaModel tema) {
+        int level = 0;
+        ResultadoExamen crudResultadoExamen = new ResultadoExamen(context);
+        crudResultadoExamen.open();
+        if (crudResultadoExamen.existLogFrom(usuario.idValue, tema.idValue)) {
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            crudExamen.open();
+            int examenId = crudExamen.getIdBy(ExamenDiagnosticoModel.idTema, String.valueOf(tema.idValue));
+            ResultadoExamenModel resultado = crudResultadoExamen.getLogFromForeignKey(usuario.idValue, examenId);
+            level = resultado.nivelObtenidoValue;
+            crudExamen.close();
+        }
+        crudResultadoExamen.close();
+
         ContenidoModel contenido = null;
 
         Contenido crudContenido = new Contenido(context);
@@ -112,7 +125,14 @@ public class ThemeFragment extends Fragment {
         crudContenido.close();
 
         for (ContenidoModel iContenido : contenidos) {
-            if (iContenido.idTemaValue == tema.idValue) {
+            if (iContenido.idTemaValue == tema.idValue
+                    && level <= iContenido.nivelValue) {
+                /*
+                adicionalmente tengo que omitir los contenidos que ya han sido completados
+
+                en caso de que todos los contenidos esten completos desbloquear el examen diagnostico y los contenidos en su totalidad
+                 */
+
                 contenido = iContenido;
                 setActivityFrame(context, contenido.tituloValue, contenido.descripcionValue, String.valueOf(contenido.idValue));
             }

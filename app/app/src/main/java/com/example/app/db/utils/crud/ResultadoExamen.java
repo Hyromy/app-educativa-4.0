@@ -170,4 +170,34 @@ public class ResultadoExamen extends AbstractCRUD<ResultadoExamenModel> {
 
         return exist;
     }
+
+    public ResultadoExamenModel getLogFromForeignKey(int idUsuario, int idExamen) {
+        SQLiteDatabase db = getReadableDatabase();
+        ResultadoExamenModel resultadoExamen = null;
+
+        Cursor cursor = db.query(
+            ResultadoExamenModel.tbName,
+            colums(),
+            ResultadoExamenModel.idUsuario + " = ? AND " + ResultadoExamenModel.idExamen + " = ?",
+            new String[] {String.valueOf(idUsuario), String.valueOf(idExamen)},
+            null,
+            null,
+            null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            resultadoExamen = new ResultadoExamenModel(
+                cursor.getInt(0),
+                cursor.getInt(1),
+                cursor.getInt(2),
+                cursor.getInt(3),
+                cursor.getInt(4)
+            );
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return resultadoExamen;
+    }
 }
