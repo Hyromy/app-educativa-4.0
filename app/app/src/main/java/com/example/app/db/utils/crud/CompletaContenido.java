@@ -139,4 +139,28 @@ public class CompletaContenido extends AbstractCRUD<CompletaContenidoModel> {
     public String[] colums() {
         return super.colums(CompletaContenidoModel.tbName);
     }
+
+    public boolean existLogFrom(int idUsuario, int idContenido) {
+        SQLiteDatabase db = getReadableDatabase();
+        boolean exist = false;
+
+        Cursor cursor = db.query(
+            CompletaContenidoModel.tbName,
+            new String[] {CompletaContenidoModel.id},
+            CompletaContenidoModel.idUsuario + " = ? AND " + CompletaContenidoModel.idContenido + " = ?",
+            new String[] {String.valueOf(idUsuario), String.valueOf(idContenido)},
+            null,
+            null,
+            null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            exist = cursor.getInt(0) > 0;
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return exist;
+    }
 }

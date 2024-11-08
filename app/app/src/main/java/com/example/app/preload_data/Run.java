@@ -5,7 +5,7 @@ import com.example.app.preload_data.info.*;
 
 public class Run {
     public Run(Context context) {
-        new Admins(context);
+        new Usuarios(context);
         new Temas(context);
         new Examenes(context);
         new Contenidos(context);

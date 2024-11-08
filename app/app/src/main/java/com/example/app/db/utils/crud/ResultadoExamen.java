@@ -162,9 +162,7 @@ public class ResultadoExamen extends AbstractCRUD<ResultadoExamenModel> {
         );
 
         if (cursor != null && cursor.moveToFirst()) {
-            if (cursor.getInt(0) > 0){
-                exist = true;
-            }
+            exist = cursor.getInt(0) > 0;
             cursor.close();
         } else if (cursor != null) {
             cursor.close();

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.db.models.CompletaContenidoModel;
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
@@ -29,6 +30,7 @@ import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.ResultadoExamenModel;
 import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.utils.crud.CompletaContenido;
 import com.example.app.db.utils.crud.ResultadoExamen;
 import com.example.app.utils.Teacher;
 import com.example.app.utils.drawer.ExcerciseDrawer;
@@ -237,9 +239,7 @@ public class ExerciseFragment extends Fragment {
             }
         } else {
             if (!isAdmin) {
-                if (isClearActivity()) {
-                    Toast.makeText(getContext(), "Actividad completa", Toast.LENGTH_SHORT).show();
-                } else {
+                if (!isClearActivity()) {
                     String msg = "Sigue practicando, tuviste " + (maxScore - score) + " errores";
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                 }
@@ -299,14 +299,25 @@ public class ExerciseFragment extends Fragment {
         if (score == maxScore) {
             isClear = true;
 
-            // guardar en la base de datos
+            int idUsuario = usuario.idValue;
+            int idContenido = preguntasActividad[0].idContenidoValue;
 
+            CompletaContenido crud = new CompletaContenido(getContext());
+            crud.open();
+            if (!crud.existLogFrom(idUsuario, idContenido)) {
+                CompletaContenidoModel log = new CompletaContenidoModel(
+                        idUsuario,
+                        idContenido
+                );
 
+                crud.insert(log);
 
-
-
-
-
+                String msg = "Actividad completada";
+                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "ya hiciste esta actividad", Toast.LENGTH_SHORT).show();
+            }
+            crud.close();
         }
 
         return isClear;

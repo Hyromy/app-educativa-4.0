@@ -34,6 +34,15 @@ public class CompletaContenidoModel  implements Serializable {
     }
 
     public CompletaContenidoModel(
+            int idUsuario,
+            int idContenido
+    ) {
+        this.idValue = 0;
+        this.idUsuarioValue = idUsuario;
+        this.idContenidoValue = idContenido;
+    }
+
+    public CompletaContenidoModel(
             int id,
             int idUsuario,
             int idContenido
