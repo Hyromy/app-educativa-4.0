@@ -16,12 +16,24 @@ public class ExcerciseDrawer {
         this.context = context;
     }
 
-    public TextView setTextView(String text) {
-        TextView tv = new TextView(context);
-        tv.setText(text);
-        tv.setTextSize(20);
+    public TextView[] setTextViews(String text) {
+        String[] lines = text.split("\n", -1);
+        TextView[] tvs = new TextView[lines.length];
+        TextView tv;
+        for (int i = 0; i < lines.length; i++) {
+            tv = new TextView(context);
+            tv.setText(lines[i]);
+            tv.setTextSize(20);
 
-        return tv;
+            if (i == 0) {
+                tv.setPadding(0, 0, 0, 32);
+            } else {
+                tv.setPadding(32, 0, 0, 0);
+            }
+            tvs[i] = tv;
+        }
+
+        return tvs;
     }
 
     public RadioGroup setRadioGroup(RadioButton[] rbs, String tag) {

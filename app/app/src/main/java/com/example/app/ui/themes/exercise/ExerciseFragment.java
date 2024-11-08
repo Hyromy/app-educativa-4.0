@@ -329,12 +329,16 @@ public class ExerciseFragment extends Fragment {
     }
 
     private void loadQuestion(PreguntaExamenModel pregunta) {
-        TextView tv = drawer.setTextView(pregunta.textoValue);
-        layout.addView(tv);
+        TextView tvs[] = drawer.setTextViews(pregunta.textoValue);
+        for (int i = 0; i < tvs.length; i++) {
+            layout.addView(tvs[i]);
+        }
     }
 
     private void loadQuestion(PreguntaActividadModel pregunta) {
-        TextView tv = drawer.setTextView(pregunta.textoValue);
-        layout.addView(tv);
+        TextView tvs[] = drawer.setTextViews(pregunta.textoValue);
+        for (TextView tv : tvs) {
+            layout.addView(tv);
+        }
     }
 }

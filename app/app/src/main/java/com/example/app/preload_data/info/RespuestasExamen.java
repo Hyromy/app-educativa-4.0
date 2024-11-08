@@ -180,10 +180,10 @@ public class RespuestasExamen {
                 new RespuestaExamenModel(123, 31, 0, p, 1),
                 new RespuestaExamenModel(124, 31, 0, p, 0),
 
-                new RespuestaExamenModel(125, 32, 0, p, 3),
-                new RespuestaExamenModel(126, 32, 0, p, 2),
-                new RespuestaExamenModel(127, 32, 0, p, 1),
-                new RespuestaExamenModel(128, 32, 0, p, 0),
+                new RespuestaExamenModel(125, 32, 0, "D, I, D, I, D, I, I, I, D, D, D, I", 3),
+                new RespuestaExamenModel(126, 32, 0, "D, I, D, I, I, I, I, I, D, D, D, I", 2),
+                new RespuestaExamenModel(127, 32, 0, "D, I, D, I, D, I, I, D, I, D, D, I", 1),
+                new RespuestaExamenModel(128, 32, 0, "D, I, I, I, I, I, I, I, D, D, I, I", 0),
 
                 new RespuestaExamenModel(129, 33, 0, p, 3),
                 new RespuestaExamenModel(130, 33, 0, p, 2),
