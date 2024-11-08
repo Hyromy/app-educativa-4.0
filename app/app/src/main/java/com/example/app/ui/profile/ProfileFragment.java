@@ -18,12 +18,10 @@ import android.widget.Toast;
 import com.example.app.R;
 import com.example.app.db.models.views.UserViewModel;
 import com.example.app.ui.themes.ThemesFragment;
-import com.example.app.ui.themes.ThemesViewModel;
 
 import com.example.app.db.models.UsuarioModel;
 
 public class ProfileFragment extends Fragment {
-    private ThemesViewModel mViewModel;
     private UserViewModel userViewModel;
     private UsuarioModel usuario;
 
@@ -56,13 +54,6 @@ public class ProfileFragment extends Fragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ThemesViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     private void setWidgets(View view) {

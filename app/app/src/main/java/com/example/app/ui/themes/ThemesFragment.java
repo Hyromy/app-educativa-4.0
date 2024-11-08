@@ -24,7 +24,6 @@ import com.example.app.db.models.UsuarioModel;
 import com.example.app.db.utils.crud.Tema;
 
 public class ThemesFragment extends Fragment {
-    private ThemesViewModel mViewModel;
     private UserViewModel userViewModel;
     private UsuarioModel usuario;
 
@@ -64,13 +63,6 @@ public class ThemesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ThemesViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     private void setWidgets(View view) {
