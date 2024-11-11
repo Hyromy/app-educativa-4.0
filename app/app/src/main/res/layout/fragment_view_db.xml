@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.debug.view_db.ViewDBFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/btn_tb_usuario"
+                android:tag="usuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb usuario"/>
+
+            <Button
+                android:id="@+id/btn_tb_tema"
+                android:tag="tema"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb tema"/>
+
+            <Button
+                android:id="@+id/btn_tb_recurso"
+                android:tag="recurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb recurso"
+                android:backgroundTint="@color/red"
+                android:layout_marginBottom="32dp"/>
+
+
+
+            <Button
+                android:id="@+id/btn_tb_contenido"
+                android:tag="contenido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb contenido"/>
+
+            <Button
+                android:id="@+id/btn_tb_examen_diagnostico"
+                android:tag="examen_diagnostico"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb examen_diagnostico"
+                android:layout_marginBottom="32dp"/>
+
+
+
+            <Button
+                android:id="@+id/btn_tb_resultado_examen"
+                android:tag="resultado_examen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb resultado_examen"/>
+
+            <Button
+                android:id="@+id/btn_tb_completa_contenido"
+                android:tag="completa_contenido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb completa_contenido"/>
+
+            <Button
+                android:id="@+id/btn_tb_pregunta_examen"
+                android:tag="pregunta_examen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb pregunta_examen"/>
+
+            <Button
+                android:id="@+id/btn_tb_pregunta_actividad"
+                android:tag="pregunta_actividad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb pregunta_actividad"/>
+
+            <Button
+                android:id="@+id/btn_tb_apoyo"
+                android:tag="apoyo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb apoyo"
+                android:backgroundTint="@color/red"
+                android:layout_marginBottom="32dp"/>
+
+            <Button
+                android:id="@+id/btn_tb_respuesta_examen"
+                android:tag="respuesta_examen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb respuesta_examen"/>
+
+            <Button
+                android:id="@+id/btn_tb_respuesta_actividad"
+                android:tag="respuesta_actividad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb respuesta_actividad"/>
+
+            <Button
+                android:id="@+id/btn_tb_parrafo"
+                android:tag="parrafo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="tb parrafo"
+                android:backgroundTint="@color/red"/>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

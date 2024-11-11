@@ -5,10 +5,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.debug.Debug">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="64dp"
-        android:text="Fragmento de depuracion" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/btn_gen_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Generar datos de prueba"
+                android:backgroundTint="@color/red"/>
+
+            <Button
+                android:id="@+id/btn_view_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ver base de datos"/>
+
+            <Button
+                android:id="@+id/btn_del_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Borrar todos los datos"
+                android:backgroundTint="@color/red"/>
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

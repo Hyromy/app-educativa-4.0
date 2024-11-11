@@ -89,5 +89,27 @@
         android:id="@+id/nav_debug"
         android:name="com.example.app.ui.debug.Debug"
         android:label="Depuracion"
-        tools:layout="@layout/fragment_debug" />
+        tools:layout="@layout/fragment_debug">
+
+        <action
+            android:id="@+id/action_nav_debug_to_nav_view_db"
+            app:destination="@id/nav_view_db"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_view_db"
+        android:name="com.example.app.ui.debug.view_db.ViewDBFragment"
+        android:label="Ver base de datos"
+        tools:layout="@layout/fragment_view_db">
+
+        <action
+            android:id="@+id/action_nav_view_db_to_nav_view_table"
+            app:destination="@id/nav_view_table"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_view_table"
+        android:name="com.example.app.ui.debug.view_db.view_table.ViewTableFragment"
+        android:label="Ver tabla"
+        tools:layout="@layout/fragment_view_table"/>
 </navigation>

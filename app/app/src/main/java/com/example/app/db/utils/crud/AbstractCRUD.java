@@ -30,7 +30,7 @@ public abstract class AbstractCRUD<Table> {
         return dbHelper.getReadableDatabase();
     }
 
-    protected int nextId(String tableName, String idColumn) {
+    public int nextId(String tableName, String idColumn) {
         SQLiteDatabase db = getReadableDatabase();
         int id = 0;
 
@@ -46,7 +46,7 @@ public abstract class AbstractCRUD<Table> {
         return id;
     }
 
-    protected String[] colums(String tableName) {
+    public String[] colums(String tableName) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
         String[] colums = new String[cursor.getCount()];
@@ -64,7 +64,7 @@ public abstract class AbstractCRUD<Table> {
         return colums;
     }
 
-    protected int[] readAllIds(String table, String id) {
+    public int[] readAllIds(String table, String id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(
                 table,
@@ -86,6 +86,65 @@ public abstract class AbstractCRUD<Table> {
         }
 
         return ids;
+    }
+
+    public String[] getStringLogFromId(String table, String id, int idValue) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                table,
+                colums(table),
+                id + " = ?",
+                new String[] {String.valueOf(idValue)},
+                null,
+                null,
+                null
+        );
+
+        String log[] = new String[cursor.getColumnCount()];
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getColumnCount(); i++) {
+                log[i] = cursor.getString(i);
+            }
+        }
+        cursor.close();
+
+        return log;
+    }
+
+    public String[][] getStringLogs(String table) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+                table,
+                colums(table),
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        int size = cursor.getCount();
+        String[][] logs = new String[size][cursor.getColumnCount()];
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < cursor.getColumnCount(); j++) {
+                    logs[i][j] = cursor.getString(j);
+                }
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+
+        return logs;
+    }
+
+    public int count(String table) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
     }
 
     protected abstract int getIdBy(String arg, String value);
