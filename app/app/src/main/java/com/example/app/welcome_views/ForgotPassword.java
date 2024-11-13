@@ -1,6 +1,6 @@
 package com.example.app.welcome_views;
 
-import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +14,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app.R;
+import com.example.app.exceptions.EmptyInputException;
+import com.example.app.exceptions.UserNotFoundException;
 
 public class ForgotPassword extends AppCompatActivity {
     private long backPressedTime;
@@ -39,15 +41,7 @@ public class ForgotPassword extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        findViewById(R.id.btn_set_new_password).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                showAlertAndContinue("Restablecer contraseña", "Función aún no disponible", () -> {
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), Welcome.class);
-                    startActivity(intent);
-                });
-            }
-        });
+        findViewById(R.id.btn_set_new_password).setOnClickListener(resetPassListener());
 
         findViewById(R.id.btn_to_sign_in).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -71,13 +65,64 @@ public class ForgotPassword extends AppCompatActivity {
         backPressedTime = System.currentTimeMillis();
     }
 
-    private void showAlertAndContinue(String title, String message, Runnable onContinue) {
-        runOnUiThread(() -> {
-            AlertDialog.Builder alert = new AlertDialog.Builder(ForgotPassword.this);
-            alert.setTitle(title);
-            alert.setMessage(message);
-            alert.setPositiveButton(android.R.string.yes, (dialog, which) -> onContinue.run());
-            alert.show();
-        });
+    private View.OnClickListener resetPassListener() {
+        Context context = getApplicationContext();
+
+        return new View.OnClickListener() {
+            public void onClick(View view) {
+                try {
+                    inputsNotEmtpy();
+                    findUser();
+                    passwordAreSame();
+
+                    resetPass();
+
+                } catch (EmptyInputException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                } catch (UserNotFoundException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                } catch (IllegalArgumentException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    System.out.println(e);
+                    Toast.makeText(context, "Ocurrió un problema, intentalo más tarde", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+    }
+
+    private void inputsNotEmtpy() throws EmptyInputException {
+        if (findViewById(R.id.matricula).toString().isEmpty() &&
+            findViewById(R.id.input_new_password).toString().isEmpty() &&
+            findViewById(R.id.input_password_confirm).toString().isEmpty()) {
+            throw new EmptyInputException("completa todos los campos");
+        }
+
+        if (findViewById(R.id.matricula).toString().isEmpty()) {
+            throw new EmptyInputException("Ingresa tu matrícula");
+        }
+
+        if (findViewById(R.id.input_new_password).toString().isEmpty()) {
+            throw new EmptyInputException("Ingresa tu nueva contraseña");
+        }
+
+        if (findViewById(R.id.input_password_confirm).toString().isEmpty()) {
+            throw new EmptyInputException("Confirma tu nueva contraseña");
+        }
+    }
+
+    private void findUser() throws UserNotFoundException {
+        throw new UserNotFoundException("(no implementado) Usuario no encontrado");
+    }
+
+    public void passwordAreSame() throws IllegalArgumentException {
+        throw new IllegalArgumentException("(no implementado) Las contraseñas no coinciden");
+    }
+
+    private void resetPass() {
+        Toast.makeText(getApplicationContext(), "(no implementado) Contraseña cambiada", Toast.LENGTH_SHORT).show();
     }
 }
