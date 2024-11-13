@@ -19,7 +19,7 @@ public class ViewTableModel {
             case "contenido":
                 return new Contenido(context);
 
-            case "examen_diagnostico:":
+            case "examen_diagnostico":
                 return new ExamenDiagnostico(context);
 
             case "resultado_examen":
