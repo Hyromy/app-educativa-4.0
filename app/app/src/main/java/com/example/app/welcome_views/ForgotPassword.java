@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,12 +15,20 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.app.R;
-import com.example.app.exceptions.EmptyInputException;
-import com.example.app.exceptions.UserNotFoundException;
+import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.utils.crud.Usuario;
+import com.example.app.exceptions.UserRegistrationException;
 
 public class ForgotPassword extends AppCompatActivity {
+    private ForgotPasswordModel model = new ForgotPasswordModel();
+
     private long backPressedTime;
     private Toast backToast;
+    private Usuario crud;
+
+    EditText Matricula;
+    EditText NewPassword;
+    EditText PasswordConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,59 +79,48 @@ public class ForgotPassword extends AppCompatActivity {
 
         return new View.OnClickListener() {
             public void onClick(View view) {
+                Matricula = findViewById(R.id.matricula);
+                NewPassword = findViewById(R.id.input_new_password);
+                PasswordConfirm = findViewById(R.id.input_password_confirm);
+
+                String matricula = Matricula.getText().toString();
+                String newPassword = NewPassword.getText().toString();
+                String passwordConfirm = PasswordConfirm.getText().toString();
+
+                crud = new Usuario(context);
+                crud.open();
+
                 try {
-                    inputsNotEmtpy();
-                    findUser();
-                    passwordAreSame();
+                    model.inputsNotEmtpy(matricula, newPassword, passwordConfirm);
 
-                    resetPass();
+                    UsuarioModel usuario = model.findUser(crud, matricula);
 
-                } catch (EmptyInputException e) {
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    model.passwordAreSame(newPassword, passwordConfirm);
 
-                } catch (UserNotFoundException e) {
-                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    model.validate(usuario.matriculaValue, newPassword);
+                    model.resetPass(usuario, newPassword, crud, context);
+                    clear();
 
                 } catch (IllegalArgumentException e) {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 
+                } catch (UserRegistrationException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+
                 } catch (Exception e) {
-                    System.out.println(e);
+                    System.out.println(e.getMessage());
                     Toast.makeText(context, "Ocurrió un problema, intentalo más tarde", Toast.LENGTH_SHORT).show();
+
+                } finally {
+                    crud.close();
                 }
             }
         };
     }
 
-    private void inputsNotEmtpy() throws EmptyInputException {
-        if (findViewById(R.id.matricula).toString().isEmpty() &&
-            findViewById(R.id.input_new_password).toString().isEmpty() &&
-            findViewById(R.id.input_password_confirm).toString().isEmpty()) {
-            throw new EmptyInputException("completa todos los campos");
-        }
-
-        if (findViewById(R.id.matricula).toString().isEmpty()) {
-            throw new EmptyInputException("Ingresa tu matrícula");
-        }
-
-        if (findViewById(R.id.input_new_password).toString().isEmpty()) {
-            throw new EmptyInputException("Ingresa tu nueva contraseña");
-        }
-
-        if (findViewById(R.id.input_password_confirm).toString().isEmpty()) {
-            throw new EmptyInputException("Confirma tu nueva contraseña");
-        }
-    }
-
-    private void findUser() throws UserNotFoundException {
-        throw new UserNotFoundException("(no implementado) Usuario no encontrado");
-    }
-
-    public void passwordAreSame() throws IllegalArgumentException {
-        throw new IllegalArgumentException("(no implementado) Las contraseñas no coinciden");
-    }
-
-    private void resetPass() {
-        Toast.makeText(getApplicationContext(), "(no implementado) Contraseña cambiada", Toast.LENGTH_SHORT).show();
+    private void clear() {
+        Matricula.setText("");
+        NewPassword.setText("");
+        PasswordConfirm.setText("");
     }
 }
