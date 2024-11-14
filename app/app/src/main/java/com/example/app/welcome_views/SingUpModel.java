@@ -14,7 +14,7 @@ public class SingUpModel {
         }
     }
 
-    protected void validateName(String name) throws UserRegistrationException {
+    public void validateName(String name) throws UserRegistrationException {
         if (name.length() < 3) {
             throw new UserRegistrationException("Los nombres y apellidos deben tener 3 letras o más");
 
@@ -23,7 +23,7 @@ public class SingUpModel {
         }
     }
 
-    protected void validatePassword(String password) throws UserRegistrationException {
+    public void validatePassword(String password) throws UserRegistrationException {
         String pwd = "La contraseña ";
         String msg = pwd + "debe contener ";
         String emsg = pwd + "no puede contener ";

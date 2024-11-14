@@ -17,9 +17,10 @@ import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.db.models.views.UserViewModel;
-import com.example.app.ui.themes.ThemesFragment;
 
 import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.utils.crud.Usuario;
+import com.example.app.utils.Encryptor;
 
 public class ProfileFragment extends Fragment {
     private UserViewModel userViewModel;
@@ -32,9 +33,7 @@ public class ProfileFragment extends Fragment {
     private EditText userNewPassword;
     private EditText userConfirmPassword;
 
-    public static ThemesFragment newInstance() {
-        return new ThemesFragment();
-    }
+    private ProfileModel model = new ProfileModel();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -74,12 +73,45 @@ public class ProfileFragment extends Fragment {
 
     private void setListeners(View view) {
         view.findViewById(R.id.btn_clear).setOnClickListener(v -> {
-            clear();
-            setInfoInWidgets();
+            clearAndSet();
         });
 
         view.findViewById(R.id.btn_save).setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Función aún no disponible", Toast.LENGTH_SHORT).show();
+            String nombre = userName.getText().toString();
+            String aPaterno = userSurname.getText().toString();
+            String aMaterno = userSurname2.getText().toString();
+
+            String newPassword = userNewPassword.getText().toString();
+            String confirmPassword = userConfirmPassword.getText().toString();
+
+            Usuario crud = new Usuario(getContext());
+            crud.open();
+
+            try {
+                model.validateNames(nombre, aPaterno, aMaterno);
+                usuario.nombreValue = nombre;
+                usuario.aPaternoValue = aPaterno;
+                usuario.aMaternoValue = aMaterno;
+
+                if (!newPassword.isEmpty() || !confirmPassword.isEmpty()) {
+                    model.validatePasswords(newPassword, confirmPassword);
+
+                    Encryptor encryptor = new Encryptor();
+                    newPassword = encryptor.toHash(newPassword, usuario.matriculaValue, usuario.idValue);
+
+                    this.usuario.contrasenaValue = newPassword;
+                }
+
+                crud.update(this.usuario);
+                clearAndSet();
+                Toast.makeText(getContext(), "Datos actualizados (los cambios pueden tardar)", Toast.LENGTH_LONG).show();
+
+            } catch (Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            } finally {
+                crud.close();
+            }
         });
     }
 
@@ -89,5 +121,10 @@ public class ProfileFragment extends Fragment {
         userSurname2.setText("");
         userNewPassword.setText("");
         userConfirmPassword.setText("");
+    }
+
+    private void clearAndSet() {
+        clear();
+        setInfoInWidgets();
     }
 }
