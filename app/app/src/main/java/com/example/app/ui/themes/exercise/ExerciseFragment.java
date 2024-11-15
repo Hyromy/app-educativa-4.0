@@ -266,9 +266,13 @@ public class ExerciseFragment extends Fragment {
     private void setLogOfcompleteTest() {
         int idUsuario = usuario.idValue;
         int idExamen = preguntasExamen[0].idExamenValue;
+        Context context = getContext();
 
-        ResultadoExamen crud = new ResultadoExamen(getContext());
+        ResultadoExamen crud = new ResultadoExamen(context);
         crud.open();
+
+        CompletaContenido crud2 = new CompletaContenido(context);
+        crud2.open();
         if (!crud.existLogFrom(idUsuario, idExamen)) {
             Teacher teacher = new Teacher();
             int level = teacher.knowledgeLevel(
@@ -286,12 +290,21 @@ public class ExerciseFragment extends Fragment {
             );
             crud.insert(resultado);
 
+            int[] contentsId = crud2.getLevelsContentFromTestAnswer(preguntasExamen[0]);
+            for (int i = 0; i < level; i++) {
+                crud2.insert(new CompletaContenidoModel(
+                        idUsuario,
+                        contentsId[i]
+                ));
+            }
+
             String msg = "Exámen completado, resultado: (" + level + "/" + levels + ")";
-            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "ya hiciste este examen", Toast.LENGTH_SHORT).show();
         }
         crud.close();
+        crud2.close();
     }
 
     private boolean isClearActivity() {

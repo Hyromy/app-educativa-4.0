@@ -29,10 +29,6 @@ public class ItemFragment extends Fragment {
 
     private ItemModel model = new ItemModel();
 
-    public static ItemFragment newInstance() {
-        return new ItemFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -133,11 +129,6 @@ public class ItemFragment extends Fragment {
                 } else {
                     model.updateExamenDiagnostico(context, layout, id);
                 }
-
-
-
-
-                // modificando este
             } else if (table.equals("contenido")) {
                 if (id <= 0) {
                     model.insertContenido(context, layout);

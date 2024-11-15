@@ -27,6 +27,7 @@ import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.ResultadoExamenModel;
 import com.example.app.db.models.TemaModel;
 import com.example.app.db.models.UsuarioModel;
+import com.example.app.db.utils.crud.CompletaContenido;
 import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.ResultadoExamen;
@@ -124,14 +125,19 @@ public class ThemeFragment extends Fragment {
         ContenidoModel[] contenidos = crudContenido.readAll();
         crudContenido.close();
 
-        for (ContenidoModel iContenido : contenidos) {
-            if (iContenido.idTemaValue == tema.idValue
-                    && level <= iContenido.nivelValue) {
-                /*
-                adicionalmente tengo que omitir los contenidos que ya han sido completados
+        CompletaContenido crudCompletaContenido = new CompletaContenido(context);
+        crudCompletaContenido.open();
+        int[] ids = crudCompletaContenido.getIdContentsCompletedByUser(usuario);
+        crudCompletaContenido.close();
 
-                en caso de que todos los contenidos esten completos desbloquear el examen diagnostico y los contenidos en su totalidad
-                 */
+        mainLoop:
+        for (ContenidoModel iContenido : contenidos) {
+            if (iContenido.idTemaValue == tema.idValue) {
+                for (int idCompletado : ids) {
+                    if (idCompletado == iContenido.idValue) {
+                        continue mainLoop;
+                    }
+                }
 
                 contenido = iContenido;
                 setActivityFrame(context, contenido.tituloValue, contenido.descripcionValue, String.valueOf(contenido.idValue));

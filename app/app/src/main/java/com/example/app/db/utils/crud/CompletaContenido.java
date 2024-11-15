@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.app.db.models.CompletaContenidoModel;
+import com.example.app.db.models.ContenidoModel;
+import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.TemaModel;
+import com.example.app.db.models.UsuarioModel;
 
 public class CompletaContenido extends AbstractCRUD<CompletaContenidoModel> {
     public CompletaContenido(Context context) {
@@ -162,5 +167,48 @@ public class CompletaContenido extends AbstractCRUD<CompletaContenidoModel> {
         }
 
         return exist;
+    }
+
+    public int[] getLevelsContentFromTestAnswer(PreguntaExamenModel pregunta) {
+        String sql = "select " + ContenidoModel.tbName + "." + ContenidoModel.id + " from " + ContenidoModel.tbName +
+            " inner join " + TemaModel.tbName + " on " + ContenidoModel.tbName + "." + ContenidoModel.idTema + " = " + TemaModel.tbName + "." + TemaModel.id +
+            " inner join " + ExamenDiagnosticoModel.tbName + " on " + TemaModel.tbName + "." + TemaModel.id + " = " + ExamenDiagnosticoModel.tbName + "." + ExamenDiagnosticoModel.idTema +
+            " inner join " + PreguntaExamenModel.tbName + " on " + ExamenDiagnosticoModel.tbName + "." + ExamenDiagnosticoModel.id + " = " + PreguntaExamenModel.tbName + "." + PreguntaExamenModel.idExamen +
+            " where " + PreguntaExamenModel.tbName + "." + PreguntaExamenModel.id + " = ?" +
+            " order by " + ContenidoModel.tbName + "." + ContenidoModel.nivel + " asc";
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(sql, new String[] {String.valueOf(pregunta.idValue)});
+        int size = cursor.getCount();
+        int[] ids = new int[size];
+
+        for (int i = 0; i < size; i++) {
+            cursor.moveToPosition(i);
+            ids[i] = cursor.getInt(0);
+        }
+
+        return ids;
+    }
+
+    public int[] getIdContentsCompletedByUser(UsuarioModel usuario) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(
+            CompletaContenidoModel.tbName,
+            new String[] {CompletaContenidoModel.id},
+            CompletaContenidoModel.idUsuario + " = ?",
+            new String[] {String.valueOf(usuario.idValue)},
+            null,
+            null,
+            null
+        );
+        int size = cursor.getCount();
+        int[] ids = new int[size];
+
+        for(int i = 0; i < size; i++) {
+            cursor.moveToPosition(i);
+            ids[i] = cursor.getInt(0);
+        }
+
+        return ids;
     }
 }

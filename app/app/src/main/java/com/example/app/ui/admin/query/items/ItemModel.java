@@ -193,14 +193,6 @@ public class ItemModel {
         }
     }
 
-
-
-
-
-
-
-
-
     public void insertContenido(Context context, LinearLayout layout) {
         Spinner spinnerT = layout.findViewWithTag("tema_spinner");
         int idItem = getIdSelectionFromSpinner(spinnerT);
@@ -257,16 +249,6 @@ public class ItemModel {
             Toast.makeText(context, "Complete todos los campos", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-
-
-
-
-
-
-
 
     public void updateContenido(Context context, LinearLayout layout, int id) {
         int idItem = getIdSelectionFromSpinner(layout, "tema_spinner");
