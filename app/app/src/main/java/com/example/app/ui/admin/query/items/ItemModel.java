@@ -193,18 +193,26 @@ public class ItemModel {
         }
     }
 
+
+
+
+
+
+
+
+
     public void insertContenido(Context context, LinearLayout layout) {
-        Spinner spinner = layout.findViewWithTag("tema_spinner");
-        int idItem = getIdSelectionFromSpinner(spinner);
+        Spinner spinnerT = layout.findViewWithTag("tema_spinner");
+        int idItem = getIdSelectionFromSpinner(spinnerT);
         String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
         String descripcion = ((EditText) layout.findViewWithTag("descripcion")).getText().toString().trim();
 
-        // reemplazar por un spinner
-        int nivelContenido = Integer.parseInt(((EditText) layout.findViewWithTag("nivel_contenido")).getText().toString().trim());
+        Spinner spinnerN = layout.findViewWithTag("nivel_contenido_spinner");
+        int nivelContenido = getIdSelectionFromSpinner(spinnerN);
 
         int nPreguntas = Integer.parseInt(((EditText) layout.findViewWithTag("n_preguntas")).getText().toString().trim());
 
-        if (idItem > 0 || nivelContenido > 0 || nPreguntas > 0) {
+        if (idItem > 0 || nPreguntas > 0) {
             Contenido crudContenido = new Contenido(context);
             ContenidoModel contenido = new ContenidoModel(
                     idItem,
@@ -214,15 +222,29 @@ public class ItemModel {
                     nPreguntas
             );
             crudContenido.open();
+
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            crudExamen.open();
+            int idExamen = crudExamen.getIdBy(ExamenDiagnosticoModel.idTema, String.valueOf(idItem));
+            ExamenDiagnosticoModel examen = crudExamen.read(idExamen);
+            crudExamen.close();
+
             try {
+                if (examen.nivelMaximoValue < nivelContenido) {
+                    throw new IllegalArgumentException("El nivel de contenido maximo debe ser de " + examen.nivelMaximoValue + " o menor");
+                }
+
                 crudContenido.insert(contenido);
                 Toast.makeText(context, "Registro guardado", Toast.LENGTH_SHORT).show();
 
-                spinner.setSelection(0);
+                spinnerT.setSelection(0);
+                spinnerN.setSelection(0);
                 ((EditText) layout.findViewWithTag("titulo")).setText("");
                 ((EditText) layout.findViewWithTag("descripcion")).setText("");
-                ((EditText) layout.findViewWithTag("nivel_contenido")).setText("");
                 ((EditText) layout.findViewWithTag("n_preguntas")).setText("");
+
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {
                 Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();
@@ -236,17 +258,27 @@ public class ItemModel {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
     public void updateContenido(Context context, LinearLayout layout, int id) {
         int idItem = getIdSelectionFromSpinner(layout, "tema_spinner");
         String titulo = ((EditText) layout.findViewWithTag("titulo")).getText().toString().trim();
         String descripcion = ((EditText) layout.findViewWithTag("descripcion")).getText().toString().trim();
 
-        // reemplazar por un spinner
-        int nivelContenido = Integer.parseInt(((EditText) layout.findViewWithTag("nivel_contenido")).getText().toString().trim());
+        Spinner spinner = layout.findViewWithTag("nivel_contenido_spinner");
+        int nivelContenido = getIdSelectionFromSpinner(spinner);
 
         int nPreguntas = Integer.parseInt(((EditText) layout.findViewWithTag("n_preguntas")).getText().toString().trim());
 
-        if (idItem > 0 || nivelContenido > 0 || nPreguntas > 0) {
+        if (idItem > 0 || nPreguntas > 0) {
             Contenido crudContenido = new Contenido(context);
             ContenidoModel contenido = new ContenidoModel(
                     id,
@@ -257,9 +289,23 @@ public class ItemModel {
                     nPreguntas
             );
             crudContenido.open();
+
+            ExamenDiagnostico crudExamen = new ExamenDiagnostico(context);
+            crudExamen.open();
+            int idExamen = crudExamen.getIdBy(ExamenDiagnosticoModel.idTema, String.valueOf(idItem));
+            ExamenDiagnosticoModel examen = crudExamen.read(idExamen);
+            crudExamen.close();
+
             try {
+                if (examen.nivelMaximoValue < nivelContenido) {
+                    throw new IllegalArgumentException("El nivel de contenido maximo debe ser de " + examen.nivelMaximoValue + " o menor");
+                }
+
                 crudContenido.update(contenido);
                 Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();
+
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {
                 Toast.makeText(context, "Error al guardar", Toast.LENGTH_SHORT).show();

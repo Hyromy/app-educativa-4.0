@@ -133,6 +133,11 @@ public class ItemFragment extends Fragment {
                 } else {
                     model.updateExamenDiagnostico(context, layout, id);
                 }
+
+
+
+
+                // modificando este
             } else if (table.equals("contenido")) {
                 if (id <= 0) {
                     model.insertContenido(context, layout);

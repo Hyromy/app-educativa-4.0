@@ -224,10 +224,14 @@ public class ItemsDrawer {
         editText = setEntry(context, 'a', "descripcion", 100);
         layout.addView(editText);
 
-        textView = setLabel(context, "Nivel del contenido [reemplazar por un spinner]");
+        textView = setLabel(context, "Nivel del contenido");
         layout.addView(textView);
-        editText = setEntry(context, 'n', "nivel_contenido", 1);
-        layout.addView(editText);
+        String[] strA = new String[10];
+        for (int i = 0; i < 10; i++) {
+            strA[i] = "(" + i + ")";
+        }
+        spinner = setSpinner(context, strA, "nivel_contenido");
+        layout.addView(spinner);
 
         textView = setLabel(context, "Número de preguntas");
         layout.addView(textView);
@@ -418,7 +422,7 @@ public class ItemsDrawer {
         Spinner spinner = layout.findViewWithTag("tema_spinner");
         EditText tituloET = layout.findViewWithTag("titulo");
         EditText descripcionET = layout.findViewWithTag("descripcion");
-        EditText nivelContenidoET = layout.findViewWithTag("nivel_contenido");
+        Spinner nivelContenidoS = layout.findViewWithTag("nivel_contenido_spinner");
         EditText nPreguntasET = layout.findViewWithTag("n_preguntas");
 
         Contenido crudContenido = new Contenido(context);
@@ -438,7 +442,7 @@ public class ItemsDrawer {
         }
         tituloET.setText(contenido.tituloValue);
         descripcionET.setText(contenido.descripcionValue);
-        nivelContenidoET.setText(String.valueOf(contenido.nivelValue));
+        nivelContenidoS.setSelection(contenido.nivelValue);
         nPreguntasET.setText(String.valueOf(contenido.nPreguntasValue));
     }
 
