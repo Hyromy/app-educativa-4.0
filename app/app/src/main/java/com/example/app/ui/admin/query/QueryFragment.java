@@ -180,7 +180,14 @@ public class QueryFragment extends Fragment {
     }
 
     private void setRecursoLogs(Context context, View view) {
-        Toast.makeText(context, "Este es el query", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
     }
 
     private void setSearchView(View view) {

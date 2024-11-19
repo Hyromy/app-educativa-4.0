@@ -39,8 +39,6 @@ public class ItemFragment extends Fragment {
             result -> {
                 if (imageHelper != null) {
                     String name = imageHelper.handleActivityResult(result.getResultCode(), result.getData());
-
-                    Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
                 }
             }
     );
@@ -185,6 +183,12 @@ public class ItemFragment extends Fragment {
                     model.insertRespuestaActividad(context, layout);
                 } else {
                     model.updateRespuestaActividad(context, layout, id);
+                }
+            } else if (table.equals("recurso")) {
+                if (id <= 0) {
+                    model.insertRecurso(context, layout, imageHelper);
+                } else {
+                    //model.updateRecurso(context, layout, id);
                 }
             }
         }

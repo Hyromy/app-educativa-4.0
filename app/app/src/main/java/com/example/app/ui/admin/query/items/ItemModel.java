@@ -1,8 +1,12 @@
 package com.example.app.ui.admin.query.items;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Environment;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -11,6 +15,7 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RecursoModel;
 import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
@@ -18,14 +23,21 @@ import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.Recurso;
 import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
+import com.example.app.utils.ImageHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemModel {
+    private ImageHelper imageHelper;
+
     private int getIdSelectionFromSpinner(LinearLayout layout, String tag) {
         Spinner spinner = layout.findViewWithTag(tag);
         String selection = spinner.getSelectedItem().toString();
@@ -537,6 +549,54 @@ public class ItemModel {
 
         } finally {
             crudRespuesta.close();
+        }
+    }
+
+    public void insertRecurso(Context context, LinearLayout layout, ImageHelper imageHelper) {
+        ImageView imageView = layout.findViewWithTag("recurso_img");
+        if (imageView.getDrawable() != null) {
+            String fileName = imageHelper.getImageFileName();
+            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+
+            fileName = filenameSplitter(fileName)[0];
+
+            try {
+                insertImgInDB(context, fileName);
+                insertImgInStorage(context, bitmap, fileName);
+
+                Toast.makeText(context, "Imagen guardada", Toast.LENGTH_SHORT).show();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String[] filenameSplitter(String fileName) {
+        Pattern pattern = Pattern.compile("^(.*?)(\\.[^.]*$|$)");
+        Matcher matcher = pattern.matcher(fileName);
+        matcher.find();
+        return new String[] {matcher.group(1), matcher.group(2)};
+    }
+
+    private void insertImgInDB(Context context, String fileName) {
+        RecursoModel recurso = new RecursoModel(fileName, "jpeg", "img");
+        Recurso crudRecurso = new Recurso(context);
+        crudRecurso.open();
+        crudRecurso.insert(recurso);
+        crudRecurso.close();
+    }
+
+    private void insertImgInStorage(Context context, Bitmap bitmap, String fileName) throws IOException {
+        File storageDir = context.getFilesDir();
+        File imageFile = new File(storageDir, fileName + ".jpeg");
+
+        try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
         }
     }
 }

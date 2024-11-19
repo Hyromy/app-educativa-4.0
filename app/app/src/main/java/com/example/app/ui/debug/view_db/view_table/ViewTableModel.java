@@ -14,7 +14,7 @@ public class ViewTableModel {
                 return new Tema(context);
 
             case "recurso":
-                return null;
+                return new Recurso(context);
 
             case "contenido":
                 return new Contenido(context);

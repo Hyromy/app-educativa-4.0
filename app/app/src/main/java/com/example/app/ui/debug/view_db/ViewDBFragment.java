@@ -77,7 +77,7 @@ public class ViewDBFragment extends Fragment {
         btnRespuestaActividad = view.findViewById(R.id.btn_tb_respuesta_actividad);
         btnParrafo = view.findViewById(R.id.btn_tb_parrafo);
 
-        notImplemented = new Button[] {btnRecurso, btnApoyo, btnParrafo};
+        notImplemented = new Button[] {btnApoyo, btnParrafo};
     }
 
     public void setListeners() {

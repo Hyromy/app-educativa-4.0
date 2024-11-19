@@ -21,7 +21,7 @@ public class RecursoModel implements Serializable {
     public static final String createTable =
             "create table if not exists " + tbName + " (" +
             id + " integer primary key autoincrement, " +
-            nombre + " varchar(32), " +
+            nombre + " varchar(32) unique, " +
             extension + " varchar(5), " +
             tipo + " varchar(24))";
 
@@ -33,6 +33,17 @@ public class RecursoModel implements Serializable {
         this.nombreValue = null;
         this.extensionValue = null;
         this.tipoValue = null;
+    }
+
+    public RecursoModel(
+            String nombre,
+            String extension,
+            String tipo
+    ) {
+        this.idValue = 0;
+        this.nombreValue = nombre;
+        this.extensionValue = extension;
+        this.tipoValue = tipo;
     }
 
     public RecursoModel(
