@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.app.db.models.ExamenDiagnosticoModel;
+import com.example.app.db.models.RecursoModel;
 
-public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
+public class Recurso extends AbstractCRUD<RecursoModel> {
     private Context context;
 
-    public ExamenDiagnostico(Context context) {
+    public Recurso(Context context) {
         super(context);
         this.context = context;
     }
@@ -21,7 +21,7 @@ public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
         int id = 0;
 
         Cursor cursor = db.query(
-            ExamenDiagnosticoModel.tbName,
+            RecursoModel.tbName,
             colums(),
             arg + " = ?",
             new String[] {value},
@@ -41,27 +41,26 @@ public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
     }
 
     @Override
-    public long insert(ExamenDiagnosticoModel obj) {
+    public long insert(RecursoModel obj) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ExamenDiagnosticoModel.idTema, obj.idTemaValue);
-        values.put(ExamenDiagnosticoModel.titulo, obj.tituloValue);
-        values.put(ExamenDiagnosticoModel.nPreguntas, obj.nPreguntasValue);
-        values.put(ExamenDiagnosticoModel.nivelMaximo, obj.nivelMaximoValue);
+        values.put(RecursoModel.nombre, obj.nombreValue);
+        values.put(RecursoModel.extension, obj.extensionValue);
+        values.put(RecursoModel.tipo, obj.tipoValue);
 
-        return db.insert(ExamenDiagnosticoModel.tbName, null, values);
+        return db.insert(RecursoModel.tbName, null, values);
     }
 
     @Override
-    public ExamenDiagnosticoModel read(int id) {
+    public RecursoModel read(int id) {
         SQLiteDatabase db = getReadableDatabase();
-        ExamenDiagnosticoModel examenDiagnostico = null;
+        RecursoModel recurso = null;
 
         Cursor cursor = db.query(
-            ExamenDiagnosticoModel.tbName,
+            RecursoModel.tbName,
             colums(),
-            ExamenDiagnosticoModel.id + " = ?",
+            RecursoModel.id + " = ?",
             new String[] {String.valueOf(id)},
             null,
             null,
@@ -69,26 +68,25 @@ public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
         );
 
         if (cursor != null && cursor.moveToFirst()) {
-            examenDiagnostico = new ExamenDiagnosticoModel(
+            recurso = new RecursoModel(
                 cursor.getInt(0),
-                cursor.getInt(1),
+                cursor.getString(1),
                 cursor.getString(2),
-                cursor.getInt(3),
-                cursor.getInt(4)
+                cursor.getString(3)
             );
             cursor.close();
         } else if (cursor != null) {
             cursor.close();
         }
 
-        return examenDiagnostico;
+        return recurso;
     }
 
     @Override
-    public ExamenDiagnosticoModel[] readAll() {
+    public RecursoModel[] readAll() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.query(
-            ExamenDiagnosticoModel.tbName,
+            RecursoModel.tbName,
             colums(),
             null,
             null,
@@ -96,65 +94,58 @@ public class ExamenDiagnostico extends AbstractCRUD<ExamenDiagnosticoModel> {
             null,
             null
         );
-
         int size = cursor.getCount();
-        ExamenDiagnosticoModel[] examenesDiagnostico = new ExamenDiagnosticoModel[size];
+        RecursoModel[] recursos = new RecursoModel[size];
 
         if (cursor.moveToFirst()) {
             for (int i = 0; i < size; i++) {
-                examenesDiagnostico[i] = new ExamenDiagnosticoModel(
+                recursos[i] = new RecursoModel(
                     cursor.getInt(0),
-                    cursor.getInt(1),
+                    cursor.getString(1),
                     cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getInt(4)
+                    cursor.getString(3)
                 );
                 cursor.moveToNext();
             }
         }
         cursor.close();
 
-        return examenesDiagnostico;
+        return recursos;
     }
 
     @Override
-    public int update(ExamenDiagnosticoModel obj) {
+    public int update(RecursoModel obj) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(ExamenDiagnosticoModel.idTema, obj.idTemaValue);
-        values.put(ExamenDiagnosticoModel.titulo, obj.tituloValue);
-        values.put(ExamenDiagnosticoModel.nPreguntas, obj.nPreguntasValue);
-        values.put(ExamenDiagnosticoModel.nivelMaximo, obj.nivelMaximoValue);
+        values.put(RecursoModel.nombre, obj.nombreValue);
+        values.put(RecursoModel.extension, obj.extensionValue);
+        values.put(RecursoModel.tipo, obj.tipoValue);
 
         return db.update(
-            ExamenDiagnosticoModel.tbName,
+            RecursoModel.tbName,
             values,
-            ExamenDiagnosticoModel.id + " = ?",
+            RecursoModel.id + " = ?",
             new String[] {String.valueOf(obj.idValue)}
         );
     }
 
     @Override
-    public int delete(ExamenDiagnosticoModel obj) {
+    public int delete(RecursoModel obj) {
         SQLiteDatabase db = getWritableDatabase();
 
         return db.delete(
-            ExamenDiagnosticoModel.tbName,
-            ExamenDiagnosticoModel.id + " = ?",
+            RecursoModel.tbName,
+            RecursoModel.id + " = ?",
             new String[] {String.valueOf(obj.idValue)}
         );
     }
 
     public int nextId() {
-        return super.nextId(ExamenDiagnosticoModel.tbName, ExamenDiagnosticoModel.id);
+        return super.nextId(RecursoModel.tbName, RecursoModel.id);
     }
 
     public String[] colums() {
-        return super.colums(ExamenDiagnosticoModel.tbName);
-    }
-
-    public int[] realAllIds() {
-        return super.readAllIds(ExamenDiagnosticoModel.tbName, ExamenDiagnosticoModel.id);
+        return super.colums(RecursoModel.tbName);
     }
 }
