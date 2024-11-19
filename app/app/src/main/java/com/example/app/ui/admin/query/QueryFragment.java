@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.R;
 import com.example.app.db.models.ContenidoModel;
@@ -95,7 +96,7 @@ public class QueryFragment extends Fragment {
             // setApoyoLogs(context, view);
 
         } else if (table.equals("recurso")) {
-            // setRecursoLogs(context, view);
+            setRecursoLogs(context, view);
         }
     }
 
@@ -176,6 +177,10 @@ public class QueryFragment extends Fragment {
             actividad = crudActividad.getTextFromQuestion(respuesta);
             generateItem(view, respuesta.idValue, "A: " + actividad + " -> " + respuesta.textoValue, table + "actividad");
         }
+    }
+
+    private void setRecursoLogs(Context context, View view) {
+        Toast.makeText(context, "Este es el query", Toast.LENGTH_SHORT).show();
     }
 
     private void setSearchView(View view) {

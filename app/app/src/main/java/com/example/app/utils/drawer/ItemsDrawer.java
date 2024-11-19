@@ -8,11 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
@@ -29,6 +31,7 @@ import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
+import com.example.app.utils.ImageHelper;
 
 public class ItemsDrawer {
     private LinearLayout subLayout;
@@ -156,6 +159,24 @@ public class ItemsDrawer {
         cb.setText(text);
 
         return cb;
+    }
+
+    private ImageView setImage(Context context, String tag) {
+        ImageView img = new ImageView(context);
+        img.setId(View.generateViewId());
+        img.setTag(tag + "_img");
+
+        return img;
+    }
+
+    private Button setButton(Context context, String text, String tag, View.OnClickListener listener) {
+        Button btn = new Button(context);
+        btn.setId(View.generateViewId());
+        btn.setTag(tag + "_btn");
+        btn.setText(text);
+        btn.setOnClickListener(listener);
+
+        return btn;
     }
 
     public void loadTema(Context context, LinearLayout layout) {
@@ -377,6 +398,13 @@ public class ItemsDrawer {
         layout.addView(textView);
         CheckBox checkBox = setCheckbox(context, "es_correcto", "Respuesta correcta");
         layout.addView(checkBox);
+    }
+
+    public void loadRecurso(Context context, LinearLayout layout) {
+        ImageView imageView = setImage(context, "recurso");
+        layout.addView(imageView);
+        Button btn = setButton(context, "seleccionar imagen", "select_image", null);
+        layout.addView(btn);
     }
 
     public void extractTema(Context context, LinearLayout layout, int id) {

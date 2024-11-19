@@ -1,8 +1,11 @@
 package com.example.app.ui.admin.query.items;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,9 +16,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.app.R;
+import com.example.app.utils.ImageHelper;
 import com.example.app.utils.drawer.ItemsDrawer;
 
 public class ItemFragment extends Fragment {
@@ -24,10 +30,20 @@ public class ItemFragment extends Fragment {
     private String itemTag;
     private LinearLayout layout;
     private Button btnSave;
-
     private ItemsDrawer drawer = new ItemsDrawer();
-
     private ItemModel model = new ItemModel();
+    private ImageHelper imageHelper;
+
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (imageHelper != null) {
+                    String name = imageHelper.handleActivityResult(result.getResultCode(), result.getData());
+
+                    Toast.makeText(getContext(), name, Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -56,6 +72,14 @@ public class ItemFragment extends Fragment {
             } else {
                 setToolbarTitle("Crear registro");
             }
+
+            if (table.equals("recurso")) {
+                ImageView imageView = view.findViewWithTag("recurso_img");
+                imageHelper = new ImageHelper(getContext(), imageView, activityResultLauncher);
+
+                Button btnImage = view.findViewWithTag("select_image_btn");
+                btnImage.setOnClickListener(v -> imageHelper.openImageChooser());
+            }
         }
     }
 
@@ -81,6 +105,9 @@ public class ItemFragment extends Fragment {
 
         } else if (table.equals("respuesta_")) {
             drawer.loadRespuesta(context, layout, view.findViewById(R.id.btn_save));
+
+        } else if (table.equals("recurso")) {
+            drawer.loadRecurso(context, layout);
         }
     }
 
