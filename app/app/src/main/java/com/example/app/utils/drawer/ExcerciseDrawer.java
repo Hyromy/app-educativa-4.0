@@ -1,13 +1,24 @@
 package com.example.app.utils.drawer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.example.app.R;
 import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
+import com.example.app.db.utils.crud.Recurso;
+
+import java.io.File;
 
 public class ExcerciseDrawer {
     private Context context;
@@ -86,5 +97,42 @@ public class ExcerciseDrawer {
         }
 
         return rbs;
+    }
+
+    public ImageView setImageView(int recursoId) {
+        Recurso crudRecurso = new Recurso(context);
+        crudRecurso.open();
+        String fileName = crudRecurso.getFileNameById(recursoId);
+        crudRecurso.close();
+
+        File storageDir = context.getFilesDir();
+        File imageFile = new File(storageDir, fileName);
+
+        ImageView iv = new ImageView(context);
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            iv.setImageBitmap(bitmap);
+        } else {
+            fileName = crudRecurso.read(recursoId).nombreValue;
+
+            int resId = context.getResources().getIdentifier(fileName, "drawable", context.getPackageName());
+            if (resId != 0) {
+                iv.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), resId, null));
+            } else {
+                iv.setImageResource(R.drawable.ic_image_not_found);
+            }
+        }
+
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        iv.setLayoutParams(params);
+
+        iv.setPadding(0, 0, 0, 32);
+        iv.setAdjustViewBounds(true);
+        iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        return iv;
     }
 }

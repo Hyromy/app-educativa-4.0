@@ -7,6 +7,8 @@ public class Run {
     public Run(Context context) {
         new Usuarios(context);
         new Temas(context);
+        new Recursos(context);
+
         new Examenes(context);
         new Contenidos(context);
         new PreguntasExamen(context);

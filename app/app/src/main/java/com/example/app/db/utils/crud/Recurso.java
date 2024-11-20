@@ -148,4 +148,27 @@ public class Recurso extends AbstractCRUD<RecursoModel> {
     public String[] colums() {
         return super.colums(RecursoModel.tbName);
     }
+
+    public String getFileNameById(int id) {
+        SQLiteDatabase db = getReadableDatabase();
+        String name = null;
+        Cursor cursor = db.query(
+            RecursoModel.tbName,
+            new String[] {RecursoModel.nombre, RecursoModel.extension},
+            RecursoModel.id + " = ?",
+            new String[] {String.valueOf(id)},
+            null,
+            null,
+            null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            name = cursor.getString(0) + "." + cursor.getString(1);
+            cursor.close();
+        } else if (cursor != null) {
+            cursor.close();
+        }
+
+        return name;
+    }
 }

@@ -345,6 +345,10 @@ public class ExerciseFragment extends Fragment {
         TextView tvs[] = drawer.setTextViews(pregunta.textoValue);
         for (int i = 0; i < tvs.length; i++) {
             layout.addView(tvs[i]);
+
+            if (pregunta.idRecursoValue > 0) {
+                layout.addView(drawer.setImageView(pregunta.idRecursoValue));
+            }
         }
     }
 
@@ -352,6 +356,10 @@ public class ExerciseFragment extends Fragment {
         TextView tvs[] = drawer.setTextViews(pregunta.textoValue);
         for (TextView tv : tvs) {
             layout.addView(tv);
+
+            if (pregunta.idRecursoValue > 0) {
+                layout.addView(drawer.setImageView(pregunta.idRecursoValue));
+            }
         }
     }
 }

@@ -3,16 +3,20 @@ package com.example.app.preload_data.info;
 import android.content.Context;
 
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RecursoModel;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.Recurso;
 
 public class PreguntasExamen {
     private Context context;
     private PreguntaExamen crud;
+    private Recurso curdRecurso;
     private PreguntaExamenModel[] preguntas;
 
     public PreguntasExamen(Context context) {
         this.context = context;
         this.crud = new PreguntaExamen(this.context);
+        this.curdRecurso = new Recurso(this.context);
 
         run();
     }
@@ -20,18 +24,20 @@ public class PreguntasExamen {
     public void run() {
         System.out.println("Creando preguntas de examen...");
         crud.open();
+        curdRecurso.open();
 
         String sigFigura = "Determina la figura que completa la sucesión";
         String sigAnalogia = "Determina la figura que completa la analogía";
         String pendiente = "[enunciado]";
+
         preguntas = new PreguntaExamenModel[] {
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
-                new PreguntaExamenModel(1, 0, sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigFigura),
                 new PreguntaExamenModel(1, 0, "Determina las letras que completan la suseción.\nQ, A, Z, W, S, ?, E, ?, ?, R"),
                 new PreguntaExamenModel(1, 0, "Determina la combinación de caracteres que puede completar la sucesión.\nVW, IXW, IXS, IXS, ?, IIA, IID"),
                 new PreguntaExamenModel(1, 0, "Determina el número que completa la sucesión.\n1, 2, 5, 12, 30, 75, ?"),
@@ -41,13 +47,13 @@ public class PreguntasExamen {
                 new PreguntaExamenModel(1, 0, "Determina el número que completa la sucesión.\n0, 2, 6, 14, 30, ?"),
                 new PreguntaExamenModel(1, 0, "Determina la respuesta correcta al siguiente planteamiento.\n14892 = 3\n41762 = 1\n29408 = 4\n24715 = 0\n46298 = ?"),
 
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
-                new PreguntaExamenModel(1, 0, sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), sigAnalogia),
                 new PreguntaExamenModel(1, 0, "Luz es a ver, como sonido es a..."),
                 new PreguntaExamenModel(1, 0, "Pulsera es a accesorio, así como bota es a..."),
                 new PreguntaExamenModel(1, 0, "Ovíparo es a huevo, así como vivíparo es a..."),
@@ -57,26 +63,27 @@ public class PreguntasExamen {
                 new PreguntaExamenModel(1, 0, "Bin es a 2, así Hex es a..."),
                 new PreguntaExamenModel(1, 0, "Tiempo es a vida, así como Viento es a..."),
 
-                new PreguntaExamenModel(1, 0, "Se tiene el siguiente plegable de un dado, ¿Cuál de las siguientes figuras corresponde al plano original?"),
-                new PreguntaExamenModel(1, 0, "Una hormiga azul se encuentra en un laberinto y desea salir, la hormiga está mirando en dirección norte y solo puede ir a la izquierda o derecha solo cuando tiene una pared justo delante de ella, determine la ruta que debe de seguir para salir (interprétese “D” como derecha e “I” como izquierda)"),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente),
-                new PreguntaExamenModel(1, 0, pendiente)
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), "Se tiene el siguiente plegable de un dado, ¿Cuál de las siguientes figuras corresponde al plano original?"),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), "Una hormiga azul se encuentra en un laberinto y desea salir, la hormiga está mirando en dirección norte y solo puede ir a la izquierda o derecha solo cuando tiene una pared justo delante de ella, determine la ruta que debe de seguir para salir (interprétese “D” como derecha e “I” como izquierda)"),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente),
+                new PreguntaExamenModel(1, curdRecurso.getIdBy(RecursoModel.nombre, "cat"), pendiente)
         };
 
         createPreguntas(preguntas);
 
         crud.close();
+        curdRecurso.close();
         System.out.println("Preguntas de examen creadas...");
     }
 
