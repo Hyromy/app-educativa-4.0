@@ -135,6 +135,9 @@ public class ItemFragment extends Fragment {
             } else if(itemTag.contains("actividad")) {
                 drawer.extractRespuestaActividad(context, layout, id);
             }
+        } else if (table.equals("recurso")) {
+            // en implementacion
+            drawer.extractRecurso(context, layout, id);
         }
     }
 
@@ -188,6 +191,7 @@ public class ItemFragment extends Fragment {
                 if (id <= 0) {
                     model.insertRecurso(context, layout, imageHelper);
                 } else {
+                    Toast.makeText(context, "actualizando papi", Toast.LENGTH_SHORT).show();
                     //model.updateRecurso(context, layout, id);
                 }
             }

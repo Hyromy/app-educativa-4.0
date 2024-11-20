@@ -1,6 +1,8 @@
 package com.example.app.utils.drawer;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
@@ -16,10 +18,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.res.ResourcesCompat;
+
 import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RecursoModel;
 import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
@@ -27,11 +32,14 @@ import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.Recurso;
 import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
 import com.example.app.ui.admin.query.items.ItemFragment;
 import com.example.app.utils.ImageHelper;
+
+import java.io.File;
 
 public class ItemsDrawer {
     private LinearLayout subLayout;
@@ -618,5 +626,30 @@ public class ItemsDrawer {
         }
         textoET.setText(respuestaActividad.textoValue);
         esCorrectoCB.setChecked(respuestaActividad.esCorrectoValue);
+    }
+
+    public void extractRecurso(Context context, LinearLayout layout, int id) {
+        Recurso crudRecurso = new Recurso(context);
+        crudRecurso.open();
+        RecursoModel recurso = crudRecurso.read(id);
+        crudRecurso.close();
+
+        String fileName = recurso.nombreValue + "." + recurso.extensionValue;
+        File storageDir = context.getFilesDir();
+        File imageFile = new File(storageDir, fileName);
+
+        ImageView imageView = layout.findViewWithTag("recurso_img");
+
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            imageView.setImageBitmap(bitmap);
+        } else {
+            int resId = context.getResources().getIdentifier(recurso.nombreValue, "drawable", context.getPackageName());
+            if (resId != 0) {
+                imageView.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), resId, null));
+            } else {
+                Toast.makeText(context, "No se encontró la imagen", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

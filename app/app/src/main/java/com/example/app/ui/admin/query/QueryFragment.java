@@ -25,6 +25,7 @@ import com.example.app.db.models.ContenidoModel;
 import com.example.app.db.models.ExamenDiagnosticoModel;
 import com.example.app.db.models.PreguntaActividadModel;
 import com.example.app.db.models.PreguntaExamenModel;
+import com.example.app.db.models.RecursoModel;
 import com.example.app.db.models.RespuestaActividadModel;
 import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.models.TemaModel;
@@ -32,6 +33,7 @@ import com.example.app.db.utils.crud.Contenido;
 import com.example.app.db.utils.crud.ExamenDiagnostico;
 import com.example.app.db.utils.crud.PreguntaActividad;
 import com.example.app.db.utils.crud.PreguntaExamen;
+import com.example.app.db.utils.crud.Recurso;
 import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
@@ -180,14 +182,16 @@ public class QueryFragment extends Fragment {
     }
 
     private void setRecursoLogs(Context context, View view) {
+        Recurso crudRecurso = new Recurso(context);
+        crudRecurso.open();
+        RecursoModel[] recursos = crudRecurso.readAll();
+        crudRecurso.close();
+        String title = null;
 
-
-
-
-
-
-
-
+        for (RecursoModel recurso : recursos) {
+            title = recurso.nombreValue + "." + recurso.extensionValue;
+            generateItem(view, recurso.idValue, title, table);
+        }
     }
 
     private void setSearchView(View view) {

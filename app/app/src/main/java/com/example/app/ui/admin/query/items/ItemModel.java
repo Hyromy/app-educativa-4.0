@@ -565,7 +565,7 @@ public class ItemModel {
                 insertImgInStorage(context, bitmap, fileName);
 
                 Toast.makeText(context, "Imagen guardada", Toast.LENGTH_SHORT).show();
-                
+
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
