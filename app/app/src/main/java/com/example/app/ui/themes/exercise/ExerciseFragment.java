@@ -169,6 +169,8 @@ public class ExerciseFragment extends Fragment {
 
                 loadExamen(examen, preguntasExamen);
             } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error al cargar examen: " + e.getMessage() + " => " + e.getCause());
                 Toast.makeText(context, "Ocurrió un problema al cargar el exámen", Toast.LENGTH_SHORT).show();
                 exit();
             }

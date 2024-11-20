@@ -2,17 +2,21 @@ package com.example.app.preload_data.info;
 
 import android.content.Context;
 
+import com.example.app.db.models.RecursoModel;
 import com.example.app.db.models.RespuestaExamenModel;
+import com.example.app.db.utils.crud.Recurso;
 import com.example.app.db.utils.crud.RespuestaExamen;
 
 public class RespuestasExamen {
     private Context context;
     private RespuestaExamen crud;
+    private Recurso crudRecurso;
     private RespuestaExamenModel[] respuestas;
 
     public RespuestasExamen(Context context) {
         this.context = context;
         this.crud = new RespuestaExamen(this.context);
+        this.crudRecurso = new Recurso(this.context);
 
         run();
     }
@@ -20,45 +24,46 @@ public class RespuestasExamen {
     public void run() {
         System.out.println("Creando respuestas de examen...");
         crud.open();
+        crudRecurso.open();
 
         String img = "[IMAGEN]";
         String p = "[Pendiente]";
 
         respuestas = new RespuestaExamenModel[] {
-                new RespuestaExamenModel(1, 1, 0, img, 3),
-                new RespuestaExamenModel(2, 1, 0, img, 2),
-                new RespuestaExamenModel(3, 1, 0, img, 1),
-                new RespuestaExamenModel(4, 1, 0, img, 0),
+                new RespuestaExamenModel(1, 1, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(2, 1, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(3, 1, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(4, 1, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(5, 2, 0, img, 3),
-                new RespuestaExamenModel(6, 2, 0, img, 2),
-                new RespuestaExamenModel(7, 2, 0, img, 1),
-                new RespuestaExamenModel(8, 2, 0, img, 0),
+                new RespuestaExamenModel(5, 2, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(6, 2, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(7, 2, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(8, 2, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(9, 3, 0, img, 3),
-                new RespuestaExamenModel(10, 3, 0, img, 2),
-                new RespuestaExamenModel(11, 3, 0, img, 1),
-                new RespuestaExamenModel(12, 3, 0, img, 0),
+                new RespuestaExamenModel(9, 3, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(10, 3, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(11, 3, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(12, 3, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(13, 4, 0, img, 3),
-                new RespuestaExamenModel(14, 4, 0, img, 2),
-                new RespuestaExamenModel(15, 4, 0, img, 1),
-                new RespuestaExamenModel(16, 4, 0, img, 0),
+                new RespuestaExamenModel(13, 4, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(14, 4, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(15, 4, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(16, 4, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(17, 5, 0, img, 3),
-                new RespuestaExamenModel(18, 5, 0, img, 2),
-                new RespuestaExamenModel(19, 5, 0, img, 1),
-                new RespuestaExamenModel(20, 5, 0, img, 0),
+                new RespuestaExamenModel(17, 5, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(18, 5, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(19, 5, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(20, 5, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(21, 6, 0, img, 3),
-                new RespuestaExamenModel(22, 6, 0, img, 2),
-                new RespuestaExamenModel(23, 6, 0, img, 1),
-                new RespuestaExamenModel(24, 6, 0, img, 0),
+                new RespuestaExamenModel(21, 6, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(22, 6, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(23, 6, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(24, 6, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(25, 7, 0, img, 3),
-                new RespuestaExamenModel(26, 7, 0, img, 2),
-                new RespuestaExamenModel(27, 7, 0, img, 1),
-                new RespuestaExamenModel(28, 7, 0, img, 0),
+                new RespuestaExamenModel(25, 7, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(26, 7, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(27, 7, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(28, 7, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
                 new RespuestaExamenModel(29, 8, 0, "X, D, C", 3),
                 new RespuestaExamenModel(30, 8, 0, "C, X, D", 2),
@@ -100,45 +105,45 @@ public class RespuestasExamen {
                 new RespuestaExamenModel(59, 15, 0, "0", 1),
                 new RespuestaExamenModel(60, 15, 0, "8", 0),
 
-                new RespuestaExamenModel(61, 16, 0, img, 3),
-                new RespuestaExamenModel(62, 16, 0, img, 2),
-                new RespuestaExamenModel(63, 16, 0, img, 1),
-                new RespuestaExamenModel(64, 16, 0, img, 0),
+                new RespuestaExamenModel(61, 16, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(62, 16, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(63, 16, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(64, 16, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(65, 17, 0, img, 3),
-                new RespuestaExamenModel(66, 17, 0, img, 2),
-                new RespuestaExamenModel(67, 17, 0, img, 1),
-                new RespuestaExamenModel(68, 17, 0, img, 0),
+                new RespuestaExamenModel(65, 17, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(66, 17, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(67, 17, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(68, 17, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(69, 18, 0, img, 3),
-                new RespuestaExamenModel(70, 18, 0, img, 2),
-                new RespuestaExamenModel(71, 18, 0, img, 1),
-                new RespuestaExamenModel(72, 18, 0, img, 0),
+                new RespuestaExamenModel(69, 18, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(70, 18, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(71, 18, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(72, 18, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(73, 19, 0, img, 3),
-                new RespuestaExamenModel(74, 19, 0, img, 2),
-                new RespuestaExamenModel(75, 19, 0, img, 1),
-                new RespuestaExamenModel(76, 19, 0, img, 0),
+                new RespuestaExamenModel(73, 19, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(74, 19, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(75, 19, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(76, 19, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(77, 20, 0, img, 3),
-                new RespuestaExamenModel(78, 20, 0, img, 2),
-                new RespuestaExamenModel(79, 20, 0, img, 1),
-                new RespuestaExamenModel(80, 20, 0, img, 0),
+                new RespuestaExamenModel(77, 20, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(78, 20, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(79, 20, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(80, 20, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(81, 21, 0, img, 3),
-                new RespuestaExamenModel(82, 21, 0, img, 2),
-                new RespuestaExamenModel(83, 21, 0, img, 1),
-                new RespuestaExamenModel(84, 21, 0, img, 0),
+                new RespuestaExamenModel(81, 21, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(82, 21, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(83, 21, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(84, 21, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(85, 22, 0, img, 3),
-                new RespuestaExamenModel(86, 22, 0, img, 2),
-                new RespuestaExamenModel(87, 22, 0, img, 1),
-                new RespuestaExamenModel(88, 22, 0, img, 0),
+                new RespuestaExamenModel(85, 22, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 3),
+                new RespuestaExamenModel(86, 22, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 2),
+                new RespuestaExamenModel(87, 22, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 1),
+                new RespuestaExamenModel(88, 22, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), img, 0),
 
-                new RespuestaExamenModel(89, 23, 0, "Escuchar", 3),
-                new RespuestaExamenModel(90, 23, 0, "Ruido", 2),
-                new RespuestaExamenModel(91, 23, 0, "Percatarse", 1),
-                new RespuestaExamenModel(92, 23, 0, "Oreja", 0),
+                new RespuestaExamenModel(89, 23, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), "Escuchar", 3),
+                new RespuestaExamenModel(90, 23, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), "Ruido", 2),
+                new RespuestaExamenModel(91, 23, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), "Percatarse", 1),
+                new RespuestaExamenModel(92, 23, crudRecurso.getIdBy(RecursoModel.nombre, "cat"), "Oreja", 0),
 
                 new RespuestaExamenModel(93, 24, 0, "Calzado", 3),
                 new RespuestaExamenModel(94, 24, 0, "Pelota", 2),
@@ -254,6 +259,7 @@ public class RespuestasExamen {
         createRespuestas(respuestas);
 
         crud.close();
+        crudRecurso.close();
         System.out.println("Respuestas de examen creadas.");
     }
 

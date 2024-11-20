@@ -3,9 +3,11 @@ package com.example.app.utils.drawer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.example.app.db.models.RespuestaExamenModel;
 import com.example.app.db.utils.crud.Recurso;
 
 import java.io.File;
+import java.sql.SQLOutput;
 
 public class ExcerciseDrawer {
     private Context context;
@@ -47,42 +50,71 @@ public class ExcerciseDrawer {
         return tvs;
     }
 
-    public RadioGroup setRadioGroup(RadioButton[] rbs, String tag) {
+    public RadioGroup setRadioGroup(LinearLayout[] layouts, String tag) {
         RadioGroup rg = new RadioGroup(context);
         rg.setOrientation(RadioGroup.VERTICAL);
         rg.setTag("rg_" + tag);
         rg.setPadding(32, 32, 0, 0);
 
-        for (RadioButton rb : rbs) {
+        for (LinearLayout layout : layouts) {
+            int childCount = layout.getChildCount();
+            View[] children = new View[childCount];
+            for (int i = 0; i < childCount; i++) {
+                children[i] = layout.getChildAt(i);
+            }
+
+            layout.removeAllViews();
+
+            RadioButton rb = (RadioButton) children[0];
             rg.addView(rb);
+
+            for (int i = 1; i < children.length; i++) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        512,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                children[i].setLayoutParams(params);
+                rg.addView(children[i]);
+            }
         }
 
         return rg;
     }
 
-    public RadioButton[] setRadioButtons(RespuestaExamenModel[] answers) {
+    public LinearLayout[] setRadioButtons(RespuestaExamenModel[] answers) {
         int size = answers.length;
-        RadioButton rbs[] = new RadioButton[size];
+        LinearLayout layouts[] = new LinearLayout[size];
 
         RadioButton rb;
         for (int i = 0; i < size; i++) {
+            LinearLayout layout = new LinearLayout(context);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
             rb = new RadioButton(context);
             rb.setId(View.generateViewId());
             rb.setTag(String.valueOf(answers[i].puntajeValue));
             rb.setText(answers[i].textoValue);
 
-            rbs[i] = rb;
+            layout.addView(rb);
+            if (answers[i].idRecursoValue > 0) {
+                ImageView iv = setImageView(answers[i].idRecursoValue);
+                layout.addView(iv);
+            }
+            layouts[i] = layout;
         }
 
-        return rbs;
+        return layouts;
     }
 
-    public RadioButton[] setRadioButtons(RespuestaActividadModel[] answers) {
+    public LinearLayout[] setRadioButtons(RespuestaActividadModel[] answers) {
         int size = answers.length;
-        RadioButton rbs[] = new RadioButton[size];
+        LinearLayout layouts[] = new LinearLayout[size];
 
         RadioButton rb;
         for (int i = 0; i < size; i++) {
+            LinearLayout layout = new LinearLayout(context);
+            layout.setOrientation(LinearLayout.VERTICAL);
+
             rb = new RadioButton(context);
             rb.setId(View.generateViewId());
 
@@ -93,10 +125,15 @@ public class ExcerciseDrawer {
             }
             rb.setText(answers[i].textoValue);
 
-            rbs[i] = rb;
+            layout.addView(rb);
+            if (answers[i].idRecursoValue > 0) {
+                ImageView iv = setImageView(answers[i].idRecursoValue);
+                layout.addView(iv);
+            }
+            layouts[i] = layout;
         }
 
-        return rbs;
+        return layouts;
     }
 
     public ImageView setImageView(int recursoId) {
