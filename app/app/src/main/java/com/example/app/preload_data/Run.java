@@ -9,11 +9,13 @@ public class Run {
         new Temas(context);
         new Recursos(context);
 
-        new Examenes(context);
         new Contenidos(context);
+        new Examenes(context);
+
         new PreguntasExamen(context);
-        new RespuestasExamen(context);
         new PreguntasActividad(context);
+
+        new RespuestasExamen(context);
         new RespuestasActividad(context);
     }
 }
