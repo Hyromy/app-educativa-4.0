@@ -191,8 +191,8 @@ public class ItemFragment extends Fragment {
                 if (id <= 0) {
                     model.insertRecurso(context, layout, imageHelper);
                 } else {
-                    Toast.makeText(context, "actualizando papi", Toast.LENGTH_SHORT).show();
-                    //model.updateRecurso(context, layout, id);
+                    Toast.makeText(context, "Función no disponible", Toast.LENGTH_SHORT).show();
+                    //model.updateRecurso(context, layout, id, imageHelper);
                 }
             }
         }

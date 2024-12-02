@@ -294,6 +294,8 @@ public class QueryFragment extends Fragment {
             } else if (tag.contains("actividad")) {
                 delRespuestaActividad(tag, context);
             }
+        } else if (tag.contains("recurso")) {
+            delRecurso(tag, context);
         }
     }
 
@@ -386,6 +388,19 @@ public class QueryFragment extends Fragment {
         RespuestaActividadModel respuesta = crudRespuesta.read(id);
         crudRespuesta.delete(respuesta);
         crudRespuesta.close();
+    }
+
+    private void delRecurso(String tag, Context context) {
+        Pattern pattern = Pattern.compile("[0-9]+");
+        Matcher matcher = pattern.matcher(tag);
+        matcher.find();
+        int id = Integer.parseInt(matcher.group());
+
+        Recurso crudRecurso = new Recurso(context);
+        crudRecurso.open();
+        RecursoModel recurso = crudRecurso.read(id);
+        crudRecurso.delete(recurso);
+        crudRecurso.close();
     }
 
     private void clearList() {
