@@ -3,7 +3,6 @@ package com.example.app.ui.admin.query.items;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Environment;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -568,7 +567,38 @@ public class ItemModel {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Ocurrió un problema al guardar la imagen", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(context, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void updateRecurso(Context context, LinearLayout layout, int id, ImageHelper imageHelper) {
+        ImageView imageView = layout.findViewWithTag("recurso_img");
+        if (imageView.getDrawable() != null) {
+            Recurso crudRecurso = new Recurso(context);
+            crudRecurso.open();
+
+            try {
+                RecursoModel recurso = crudRecurso.read(id);
+                deleteImgFromStorage(context, recurso);
+
+                String fileName = imageHelper.getImageFileName();
+                fileName = filenameSplitter(fileName)[0];
+                recurso.nombreValue = fileName;
+                crudRecurso.update(recurso);
+
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                insertImgInStorage(context, bitmap, fileName);
+
+                Toast.makeText(context, "Imagen actualizada", Toast.LENGTH_SHORT).show();
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Ocurrió un problema al actualizar la imagen", Toast.LENGTH_SHORT).show();
+            } finally {
+                crudRecurso.close();
             }
         } else {
             Toast.makeText(context, "Seleccione una imagen", Toast.LENGTH_SHORT).show();
@@ -597,6 +627,15 @@ public class ItemModel {
         try (FileOutputStream fos = new FileOutputStream(imageFile)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
+        }
+    }
+
+    public void deleteImgFromStorage(Context context, RecursoModel recurso) {
+        File storageDir = context.getFilesDir();
+        File imageFile = new File(storageDir, recurso.nombreValue + "." + recurso.extensionValue);
+
+        if (imageFile.exists()) {
+            imageFile.delete();
         }
     }
 }

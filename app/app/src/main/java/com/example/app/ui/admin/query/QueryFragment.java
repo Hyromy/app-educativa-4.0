@@ -37,6 +37,7 @@ import com.example.app.db.utils.crud.Recurso;
 import com.example.app.db.utils.crud.RespuestaActividad;
 import com.example.app.db.utils.crud.RespuestaExamen;
 import com.example.app.db.utils.crud.Tema;
+import com.example.app.ui.admin.query.items.ItemModel;
 import com.example.app.utils.drawer.QueryDrawer;
 
 import java.util.Objects;
@@ -399,6 +400,10 @@ public class QueryFragment extends Fragment {
         Recurso crudRecurso = new Recurso(context);
         crudRecurso.open();
         RecursoModel recurso = crudRecurso.read(id);
+
+        ItemModel itemModel = new ItemModel();
+        itemModel.deleteImgFromStorage(context, recurso);
+
         crudRecurso.delete(recurso);
         crudRecurso.close();
     }
